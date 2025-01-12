@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('First_name');
             $table->string('Last_name');
             $table->string('Email')->unique();
-            $table->string('password');
-            $table->string('phone');
-            $table->enum("role",array("Admin","Client","Product Manager"));
+            $table->string('Password');
+            $table->string('Phone');
+            $table->enum("Role",array("Admin","Client","Product Manager"));
             $table->string("avatar");
             $table->timestamps();
         });
