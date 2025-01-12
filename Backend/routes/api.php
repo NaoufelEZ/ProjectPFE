@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\authController;
+use App\Http\Controllers\useController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use app\Http\Controllers\userController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,14 @@ use app\Http\Controllers\userController;
 */
 Route::middleware('authenticateApiKey')->group(function(){
     // user Controller
-    Route::controller(userController::class)->group(function(){
+    Route::controller(authController::class)->group(function(){
         // Add user
         Route::post("/register","store");
+        Route::post("/login","login");
+        Route::get("/logout","logout")->middleware("auth:sanctum");
+    });
+    Route::controller(useController::class)->group(function(){
+        // Add user
+        Route::get("/users","index");
     });
 });
