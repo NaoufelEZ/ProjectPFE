@@ -14,7 +14,7 @@ use app\Http\Controllers\userController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware("authenticateApiKey")->group(function(){
+Route::middleware('authenticateApiKey')->group(function(){
     // user Controller
     Route::controller(userController::class)->group(function(){
         // Add user
