@@ -21,10 +21,15 @@ Route::middleware('authenticateApiKey')->group(function(){
         // Add user
         Route::post("/register","store");
         Route::post("/login","login");
-        Route::get("/logout","logout")->middleware("auth:sanctum");
+        Route::middleware("auth:sanctum")->group(function(){
+            Route::get("/logout","logout");
+            Route::get("/user","user");
+        });
     });
     Route::controller(useController::class)->group(function(){
         // Add user
-        Route::get("/users","index");
+        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+            Route::get("/users","index");
+        });
     });
 });
