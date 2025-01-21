@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\authController;
+use App\Http\Controllers\optController;
+use App\Http\Controllers\otpController;
 use App\Http\Controllers\useController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +32,12 @@ Route::middleware('authenticateApiKey')->group(function(){
         // Add user
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::get("/users","index");
+        });
+    });
+    Route::controller(otpController::class)->group(function(){
+        Route::middleware("auth:sanctum")->group(function(){
+            Route::post("/seed","seedOtp");
+            Route::post("/storeotp","storeOtp");
         });
     });
 });

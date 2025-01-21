@@ -13,7 +13,5 @@ class useController extends Controller
             return response()->json(["data"=>$user,"status"=>200], 200);
         }
         return response()->json(["data"=>"Users are Empty","status"=>404], 404);
-
-
     }
 }

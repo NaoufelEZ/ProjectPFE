@@ -20,14 +20,17 @@ class authController extends Controller
             "phone"=>"required|digits:8",
         ]);
         if($validUser){
-            User::create([
-                "first_name"=>$validUser["First_name"],
-                "last_name"=>$validUser["Last_name"],
-                "email"=>$validUser["Email"],
-                "password"=>Hash::make($validUser["Password"]),
-                "phone"=>$validUser["Phone"],
+            $user = User::create([
+                "first_name"=>$validUser["first_name"],
+                "last_name"=>$validUser["last_name"],
+                "email"=>$validUser["email"],
+                "password"=>Hash::make($validUser["password"]),
+                "phone"=>$validUser["phone"],
                 "role"=>"Client",
             ]);
+            $newUserId = $user->id;
+            $otpController = new otpController;
+            $otpController->seedRegister($user->email, $user->first_name, $newUserId);
             return response()->json(["data"=>"user add","status"=>"200"], 200);
         }
     }catch(ValidationException $e){
