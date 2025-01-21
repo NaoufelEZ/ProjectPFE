@@ -30,13 +30,13 @@ Route::middleware('authenticateApiKey')->group(function(){
     });
     Route::controller(useController::class)->group(function(){
         // Add user
-        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+        Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
             Route::get("/users","index");
         });
     });
     Route::controller(otpController::class)->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
-            Route::post("/seed","seedOtp");
+            Route::post("/send","sendOtp");
             Route::post("/storeotp","storeOtp");
         });
     });

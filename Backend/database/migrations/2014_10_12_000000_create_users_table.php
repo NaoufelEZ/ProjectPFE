@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name',25);
             $table->string('email')->unique();
             $table->string('password',64);
-            $table->boolean('password_verify');
+            $table->boolean('email_verify')->default(false);
             $table->string('phone',8);
             $table->enum("role",array("Admin","Client","Product Manager"));
             $table->string("avatar",70)->default("default-avatar.png");

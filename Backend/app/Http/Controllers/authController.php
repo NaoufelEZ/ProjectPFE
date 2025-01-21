@@ -30,7 +30,7 @@ class authController extends Controller
             ]);
             $newUserId = $user->id;
             $otpController = new otpController;
-            $otpController->seedRegister($user->email, $user->first_name, $newUserId);
+            $otpController->sendRegister($user->email, $user->first_name, $newUserId);
             return response()->json(["data"=>"user add","status"=>"200"], 200);
         }
     }catch(ValidationException $e){
