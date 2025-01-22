@@ -22,7 +22,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     Route::controller(authController::class)->group(function(){
         // Add user
         Route::post("/register","store");
-        Route::post("/login","login");
+        Route::get("/login","login");
         Route::middleware("auth:sanctum")->group(function(){
             Route::get("/logout","logout");
             Route::get("/user","user");
@@ -36,7 +36,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     });
     Route::controller(otpController::class)->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
-            Route::post("/send","sendOtp");
+            Route::get("/send","sendOtp");
             Route::post("/storeotp","storeOtp");
         });
     });
