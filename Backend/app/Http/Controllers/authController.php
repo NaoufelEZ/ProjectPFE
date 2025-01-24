@@ -28,10 +28,11 @@ class authController extends Controller
                 "phone"=>$validUser["phone"],
                 "role"=>"Client",
             ]);
+            $token =  $user->createToken("auth-token")->plainTextToken;
             $newUserId = $user->id;
             $otpController = new otpController;
             $otpController->sendRegister($user->email, $user->first_name, $newUserId);
-            return response()->json(["data"=>"user add","status"=>"200"], 200);
+            return response()->json(["data"=>"user add","token"=>$token,"status"=>"200"], 200);
         }
     }catch(ValidationException $e){
         return response()->json(["data"=>$e->errors(),"status"=>"422"], 422);
