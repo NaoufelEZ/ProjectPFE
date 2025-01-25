@@ -23,7 +23,6 @@ const Header = () => {
   }).then((data)=>setUsers(data.data.data)).catch((err)=>console.log(err))
 }
   },[]);
-  console.log(users);
   const handleLogout = ()=>{
     axios.get("http://127.0.0.1:8000/api/v1/logout",{
       params:{
@@ -34,12 +33,27 @@ const Header = () => {
       },
     }).then(cookie.remove("auth"),nav("/"));
   }
+  const handleSend = ()=>{
+    try{
+    axios.post("http://127.0.0.1:8000/api/v1/send",
+      {
+      apiKey:ApiKey,
+      },
+      {
+      headers :{
+        Authorization: `Bearer ${user}`,
+      }
+    });
+    }catch(err){
+      console.log(err);
+    }
+  }
   return (
     <>
     {users ? (users.email_verify === 0 ?
     <div className="verify bg-light d-flex justify-content-between align-items-center">
       <span>you not verify your account</span>
-      <Link className=" text-decoration-none" to="/verify">Verify Account</Link>
+      <Link onClick={handleSend} className=" text-decoration-none" to="/verify">Verify Account</Link>
     </div> : "" )
      : ""}
     <header className="w-100 p-3">
