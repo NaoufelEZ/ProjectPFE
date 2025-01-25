@@ -49,7 +49,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     // otp Controller
     Route::controller(otpController::class)->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
-            Route::get("/send","sendOtp");
+            Route::post("/send","sendOtp");
             Route::put("/storeotp","storeOtp");
         });
     });
