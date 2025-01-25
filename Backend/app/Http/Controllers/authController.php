@@ -32,7 +32,7 @@ class authController extends Controller
             $newUserId = $user->id;
             $otpController = new otpController;
             $otpController->sendRegister($user->email, $user->first_name, $newUserId);
-            return response()->json(["data"=>"user add","token"=>$token,"status"=>"200"], 200);
+            return response()->json(["data"=>"user add","token"=>$token,"status"=>201], 201);
         }
     }catch(ValidationException $e){
         return response()->json(["data"=>$e->errors(),"status"=>"422"], 422);
