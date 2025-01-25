@@ -3,6 +3,7 @@
 use App\Http\Controllers\authController;
 use App\Http\Controllers\optController;
 use App\Http\Controllers\otpController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\useController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -53,4 +54,12 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::put("/storeotp","storeOtp");
         });
     });
+    Route::controller(ProductController::class)->group(function(){
+        Route::get("/products","index");
+        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+            Route::post("/product/add","store");
+            
+        });
+    });
+    
 });
