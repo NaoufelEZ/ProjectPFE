@@ -46,7 +46,7 @@ class otpController extends Controller
         else if($code == $otp->otp_code){
             $otp->delete();
             $user->update([
-                "email_verify"=>1,
+                "email_verify"=>true,
             ]);
             return response()->json(['data' => 'OTP verified',"status"=>200], 200);;
         }
