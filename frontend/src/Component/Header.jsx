@@ -37,8 +37,9 @@ const Header = () => {
   return (
     <>
     {users ? (users.email_verify === 0 ?
-    <div className="p-2 bg-light">
-      <p>you not verify your account</p>
+    <div className="verify bg-light d-flex justify-content-between align-items-center">
+      <span>you not verify your account</span>
+      <Link className=" text-decoration-none" to="/verify">Verify Account</Link>
     </div> : "" )
      : ""}
     <header className="w-100 p-3">
