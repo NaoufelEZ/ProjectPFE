@@ -1,0 +1,6 @@
+.leftBar ul li{
+    display: block;
+}
+.leftBar ul li a{
+    text-decoration: none;
+}
