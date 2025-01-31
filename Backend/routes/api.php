@@ -49,17 +49,21 @@ Route::middleware('authenticateApiKey')->group(function(){
     });
     // otp Controller
     Route::controller(otpController::class)->group(function(){
+        Route::post("/register_send","sendRegister");
+        Route::put("/register_send_verify/{hash}","verifySendRegister");
+        Route::get("/register_Url_verify/{hash}","verifyUrlRegister");
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/send","sendOtp");
-            Route::put("/storeotp","storeOtp");
+            Route::put("/store_otp","storeOtp");
         });
     });
     Route::controller(ProductController::class)->group(function(){
         Route::get("/products","index");
+        Route::get("products/product/{id}","product");
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::post("/product/add","store");
-            
+
         });
     });
-    
+
 });
