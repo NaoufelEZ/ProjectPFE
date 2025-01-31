@@ -13,6 +13,7 @@ class Otp extends Model
     protected $fillable = [
         "user_id",
         "otp_code",
+        "hash",
         "created_at",
         "expiry_at",
     ];
