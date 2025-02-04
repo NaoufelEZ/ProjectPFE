@@ -13,10 +13,10 @@ class authController extends Controller
     public function store(request $request){
         try{
         $validUser = $request->validate([
-            "first_name"=>"required|String|min:3",
-            "last_name"=>"required|String|min:3",
-            "email"=>"required|email|unique:users",
-            "password"=>"required|String|min:6",
+            "first_name"=>"required|string|min:3",
+            "last_name"=>"required|string|min:3",
+            "email"=>"required|email|unique:users,email",
+            "password"=>"required|string|min:6",
             "phone"=>"required|digits:8",
         ]);
         if($validUser){
@@ -34,7 +34,7 @@ class authController extends Controller
             return response()->json(["data"=>"User Add","hash"=>$hash,"status"=>201], 201);
         }
     }catch(ValidationException $e){
-        return response()->json(["data"=>$e->errors(),"status"=>"422"], 422);
+        return response()->json(["data"=>$e->errors(),"status"=>422], 422);
     }
     }
     public function login(request $request){
