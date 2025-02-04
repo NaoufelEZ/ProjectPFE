@@ -6,10 +6,11 @@ import { ring2 } from 'ldrs'
 import "./productStyle.css";
 import Header from "../../../Components/Header";
 import { Button } from "react-bootstrap";
-
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const Product = () => {
-    ring2.register()
+    ring2.register();
     const {id} = useParams();
     const [data,setData] = useState();
     const [loading,setLoading] = useState(true);
@@ -46,21 +47,47 @@ const Product = () => {
         }).catch(()=>nav("/"));
     },[id,nav,color]);
     const handleClick = ()=>{
+        const items = JSON.parse(localStorage.getItem("card")) || [];
         const newItem = {
             "id":id,
             "color":color,
             "size":selectedSize,
             "count":count
         }
-        setSelect(prev => [...prev,newItem]);
-        localStorage.setItem("card",JSON.stringify(select));
+        const existingItem = items.find(item => 
+            item.id === newItem.id &&
+            item.color === newItem.color &&
+            item.size === newItem.size
+        );
+        if(!existingItem){
+            setSelect(prev => [...prev,newItem]);
+            localStorage.setItem("card",JSON.stringify(select));
+        }
+        else{
+        const MySwal = withReactContent(Swal)
+    const Toast = MySwal.mixin({
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = MySwal.stopTimer;
+          toast.onmouseleave = MySwal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Required quantity exceeds the available quantity!"
+      });
+    }
     }
     const dataFetch = data ? 
-    <div className="d-flex">
+    <div className="d-flex w-100 bg-dark text-light">
         <div>
             <img width={500} src={`${IMAGEURL}/images/products/${selectedImage}`} alt="product"/>
         </div>
-        <div className="w-100 bg-dark text-light mb-4">
+        <div className="w-100 mb-4">
             <p>{data.title}</p>
             <p>{data.price}DT</p>
             <p>Color</p>

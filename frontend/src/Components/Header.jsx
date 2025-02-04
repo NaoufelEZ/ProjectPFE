@@ -6,8 +6,14 @@ import { ApiKey } from "../Api/Api";
 import { Dropdown } from "react-bootstrap";
 import "./headerStyle.css";
 import logo from "../Assets/images/logo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
+import Card from "./Card";
+
 const Header = () => {
   const [users,setUsers] = useState();
+  const [showCard, setShowCard] = useState(false);
+
   const cookie = new Cookies();
   const user = cookie.get("auth");
   const nav = useNavigate();
@@ -20,9 +26,9 @@ const Header = () => {
       headers: {
         Authorization: `Bearer ${user}`, 
       },
-  }).then((data)=>setUsers(data.data.data)).catch((err)=>console.log(err))
+  }).then((data)=>setUsers(data.data.data)).catch(()=>{cookie.remove("auth",{ path: "/" });nav("/")});
 }
-  },[]);
+  },[user]);
   const handleLogout = ()=>{
     axios.get("http://127.0.0.1:8000/api/v1/logout",{
       params:{
@@ -48,6 +54,9 @@ const Header = () => {
       console.log(err);
     }
   }
+  const handleShowCard = () =>{
+    setShowCard(prev => !prev);
+  }
   return (
     <>
     {users ? (users.email_verify === 0 ?
@@ -70,9 +79,10 @@ const Header = () => {
             </div>
               {!user ?
             <div>
+              <FontAwesomeIcon onClick={handleShowCard} role="button" icon={faBagShopping} />
               <Link className="p-3 text-decoration-none" to="/login">Login</Link>
               <Link className="p-3 text-decoration-none" to="/register">Register</Link>
-            </div>
+            </div>            
               :  users ? 
               <Dropdown className="d-inline mx-2 bg-transparent">
               <Dropdown.Toggle id="dropdown-autoclose-true">
@@ -85,7 +95,11 @@ const Header = () => {
               </Dropdown>
             : "Loading..."
               }
+              
         </nav>
+        <div>
+         {showCard && <Card />}
+          </div>
     </header>
     </>
   )

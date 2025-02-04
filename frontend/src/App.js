@@ -11,10 +11,12 @@ import Products from "./Pages/public/Products/Products";
 import Product from "./Pages/public/Products/Product";
 import ReqLogin from "./Pages/Auth/ReqLogin.jsx";
 import AuthOtp from "./Pages/public/Otp/AuthOtp.jsx";
+import Card from "./Components/Card.jsx";
 
 function App() {
   return (
     <Routes>
+      <Route path="/cart" element={<Card />} />
       <Route path="/products" element={<Products />} />
       <Route path="/product/:id" element={<Product/>} />
       <Route path="/" element={<Home/>} />

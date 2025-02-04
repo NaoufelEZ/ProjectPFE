@@ -4,64 +4,85 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { ApiKey } from "../../Api/Api";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+const RegisterSchema = Yup.object().shape({
+  first_name:Yup.string().matches(/^[a-zA-Z]+$/,"First Name should be a alpha").min(3,"First Name Should Be At Less 3 Letter").required("First Name required"),
+  last_name:Yup.string().matches(/^[a-zA-Z]+$/,"Last Name should be a alpha").min(3,"Last Name Should Be At Less 3 Letter").required("Last Name required"),
+  email:Yup.string().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/,"Invalid email address").required("Email required"),
+  password:Yup.string().min(6,"Last NameShould Be At Less 6 Letter").required("Password required"),
+  phone:Yup.string().matches(/^\d{8}$/,"phone should be a number").required("Phone Number required"),
+});
 
-
-const Register = () => {
+const RegisterTest = () => {
     const nav = useNavigate();
-    const [fName,setFname] = useState();
-    const [lName,setLname] = useState();
-    const [email,setEmail] = useState();
-    const [password,setPassword] = useState();
-    const [phone,setPhone] = useState();
     const [loading,setLodging] = useState(false);
-    const  handleSubmit = async (e)=>{
-        e.preventDefault();
-        setLodging(true);
-        try{
-         const res = await axios.post("http://127.0.0.1:8000/api/v1/register",
+    const [emailError,setEmailError] = useState(false);
+  const formik = useFormik({
+    initialValues:{
+      first_name:"",
+      last_name:"",
+      email:"",
+      password:"",
+      phone:"",
+    },
+    validationSchema:RegisterSchema,
+    onSubmit: async (value)=>{
+        try{ 
+            setLodging(true);
+            const res = await axios.post("http://127.0.0.1:8000/api/v1/register",{
+                apiKey:ApiKey,
+                first_name : value.first_name,
+                last_name : value.last_name,
+                email : value.email,
+                phone : value.phone,
+                password : value.password,
+            }, 
             {
-                "apiKey":ApiKey,
-                "first_name" : fName,
-                "last_name" : lName,
-                "email" : email,
-                "phone" : phone,
-                "password" : password,
-            },
-            {
-            headers : {
-              "Accept": "application/json",
+                headers : {
+                    "Accept": "application/json",
+                }
             }
-        }
         )
-        const link = res.data.hash;
-        nav(`/verify/${link}`);
-    }catch(err){
-        setLodging(false);
-        console.log(err);
+            const link = res.data.hash;
+            nav(`/verify/${link}`);
+        }catch(error){
+            if(error.response.status === 422){
+                setEmailError(true)
+            }
+        }finally{setLodging(false);};
     }
-    }
-    
+  });
   return (
     <div className="d-flex justify-content-center align-items-center">
-    <Form onSubmit={handleSubmit} className='w-50'>
+    <Form onSubmit={formik.handleSubmit} className='w-50'>
     <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>First Name</Form.Label>
-      <Form.Control onChange={(e)=>setFname(e.target.value)} name='fName'  value={fName} type="text" placeholder="Enter First Name" />
-      <Form.Label>Last Name</Form.Label>
-      <Form.Control onChange={(e)=>setLname(e.target.value)} name='lName' value={lName} type="text" placeholder="Enter Last Name" />
+      <Form.Control name="first_name" onChange={formik.handleChange} value={formik.values.first_name} type="text" placeholder="Enter First Name" />
     </Form.Group>
+      <div className="text-danger">{formik.touched.first_name && formik.errors.first_name ? formik.errors.first_name : null }</div>
+    <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Label>Last Name</Form.Label>
+      <Form.Control name='last_name' onChange={formik.handleChange} value={formik.values.last_name} type="text" placeholder="Enter Last Name" />
+    </Form.Group>
+      <div className="text-danger">{formik.touched.last_name && formik.errors.last_name ? formik.errors.last_name : null}</div>
     <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Email address</Form.Label>
-      <Form.Control onChange={(e)=>setEmail(e.target.value)} name='email' value={email} type="email" placeholder="Enter email" />
+      <Form.Control name='email' onChange={formik.handleChange} value={formik.values.email} type="text" placeholder="Enter email" />
     </Form.Group>
+    <div className="text-danger">{formik.touched.email && formik.errors.email ? formik.errors.email : null}</div>
+    <div className="text-danger">{emailError && "Email is already exist"}</div>
+
     <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Phone</Form.Label>
-      <Form.Control onChange={(e)=>setPhone(e.target.value)} name='phone' value={phone} type="text" placeholder="Enter email" />
+      <Form.Control name='phone' onChange={formik.handleChange} value={formik.values.phone} type="text" placeholder="Enter email" />
     </Form.Group>
+    <div className="text-danger">{formik.touched.phone && formik.errors.phone ? formik.errors.phone : null}</div>
     <Form.Group className="mb-3" controlId="formBasicPassword">
       <Form.Label>Password</Form.Label>
-      <Form.Control onChange={(e)=>setPassword(e.target.value)} name='password' value={password} type="password" placeholder="Password" />
+      <Form.Control name='password' onChange={formik.handleChange} value={formik.values.password} type="password" placeholder="Password" />
     </Form.Group>
+    <div className="text-danger">{formik.touched.password && formik.errors.password ? formik.errors.password : null}</div>
     <Button variant="primary" type="submit">
       Submit
     </Button>
@@ -71,4 +92,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default RegisterTest
