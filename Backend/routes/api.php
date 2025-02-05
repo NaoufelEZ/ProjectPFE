@@ -51,7 +51,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     Route::controller(otpController::class)->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/send","sendOtp");
-            Route::put("/storeotp","storeOtp");
+            Route::post("/storeotp","storeOtp");
         });
     });
     Route::controller(ProductController::class)->group(function(){
