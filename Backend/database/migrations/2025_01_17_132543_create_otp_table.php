@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("user_id");
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
-            $table->String("otp_code",6);
+            $table->string("otp_code",6);
+            $table->string("hash",20)->default(NULL);
             $table->timestamp("created_at")->useCurrent();
             $table->timestamp("expiry_at")->nullable();
         });

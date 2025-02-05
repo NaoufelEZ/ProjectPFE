@@ -5,9 +5,15 @@ import Cookies from "universal-cookie"
 import { ApiKey } from "../Api/Api";
 import { Dropdown } from "react-bootstrap";
 import "./headerStyle.css";
-import logo from "../Assit/images/logo.png";
+import logo from "../Assets/images/logo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
+import Card from "./Card";
+
 const Header = () => {
   const [users,setUsers] = useState();
+  const [showCard, setShowCard] = useState(false);
+
   const cookie = new Cookies();
   const user = cookie.get("auth");
   const nav = useNavigate();
@@ -20,9 +26,9 @@ const Header = () => {
       headers: {
         Authorization: `Bearer ${user}`, 
       },
-  }).then((data)=>setUsers(data.data.data)).catch((err)=>console.log(err))
+  }).then((data)=>setUsers(data.data.data)).catch(()=>{cookie.remove("auth",{ path: "/" });nav("/")});
 }
-  },[]);
+  },[user]);
   const handleLogout = ()=>{
     axios.get("http://127.0.0.1:8000/api/v1/logout",{
       params:{
@@ -31,7 +37,7 @@ const Header = () => {
       headers: {
         Authorization: `Bearer ${user}`, 
       },
-    }).then(cookie.remove("auth"),nav("/"));
+    }).then(()=>{cookie.remove("auth",{ path: "/" });nav("/")});
   }
   const handleSend = ()=>{
     try{
@@ -43,17 +49,20 @@ const Header = () => {
       headers :{
         Authorization: `Bearer ${user}`,
       }
-    });
+    }).then(nav("/auth/verify"));
     }catch(err){
       console.log(err);
     }
+  }
+  const handleShowCard = () =>{
+    setShowCard(prev => !prev);
   }
   return (
     <>
     {users ? (users.email_verify === 0 ?
     <div className="verify bg-light d-flex justify-content-between align-items-center">
       <span>you not verify your account</span>
-      <Link onClick={handleSend} className=" text-decoration-none" to="/verify">Verify Account</Link>
+      <div role="button" onClick={handleSend}>Verify Account</div>
     </div> : "" )
      : ""}
     <header className="w-100 p-3">
@@ -70,25 +79,27 @@ const Header = () => {
             </div>
               {!user ?
             <div>
+              <FontAwesomeIcon onClick={handleShowCard} role="button" icon={faBagShopping} />
               <Link className="p-3 text-decoration-none" to="/login">Login</Link>
               <Link className="p-3 text-decoration-none" to="/register">Register</Link>
-            </div>
+            </div>            
               :  users ? 
               <Dropdown className="d-inline mx-2 bg-transparent">
               <Dropdown.Toggle id="dropdown-autoclose-true">
-              {/* {users.first_name} */}
-
               <img className=" rounded-circle" width={50} src={`http://127.0.0.1:8000/images/avatars/${users.avatar}`} alt="prof"/>
               </Dropdown.Toggle>
-
               <Dropdown.Menu>
-            <Dropdown.Item href="/setting">Setting</Dropdown.Item>
-            <Dropdown.Item onClick={handleLogout} href="#">Logout</Dropdown.Item>
-            </Dropdown.Menu>
-            </Dropdown>
+              <Dropdown.Item href="/setting">Setting</Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout} href="#">Logout</Dropdown.Item>
+              </Dropdown.Menu>
+              </Dropdown>
             : "Loading..."
               }
+              
         </nav>
+        <div>
+         {showCard && <Card />}
+          </div>
     </header>
     </>
   )
