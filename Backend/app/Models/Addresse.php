@@ -13,6 +13,7 @@ class Addresse extends Model
         "id",
         "user_id",
         "address",
+        "state",
         "zip",
         "street",
     ];

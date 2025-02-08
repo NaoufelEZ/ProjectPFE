@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('phone',8);
             $table->enum("role",array("Admin","Client","Product Manager","Delivery Personal"));
             $table->string("avatar",70)->default("default-avatar.png");
+            $table->timetamp("banned")->useCurrent()->add();
             $table->timestamps();
         });
     }

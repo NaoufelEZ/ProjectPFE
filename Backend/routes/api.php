@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\optController;
 use App\Http\Controllers\otpController;
@@ -54,11 +55,8 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::get("/register_Url_verify/{hash}","verifyUrlRegister");
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/send","sendOtp");
-<<<<<<< HEAD
             Route::post("/storeotp","storeOtp");
-=======
             Route::put("/store_otp","storeOtp");
->>>>>>> c5c586e7daa6b1357c77586ec2788ae573c9384c
         });
     });
     Route::controller(ProductController::class)->group(function(){
@@ -68,6 +66,16 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::post("/product/add","store");
 
         });
+    });
+    Route::controller(AddressController::class)->group(function(){
+        Route::middleware("auth:sanctum")->group(function(){
+            Route::post("/address/add","store");
+            Route::get("/address","index");
+            Route::get("/address/{id}","show");
+            Route::put("/address/update/{id}","update");
+            Route::delete("/address/delete/{id}","delete");
+        });
+        
     });
 
 });
