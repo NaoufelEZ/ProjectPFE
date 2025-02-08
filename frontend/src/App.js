@@ -12,10 +12,12 @@ import Product from "./Pages/public/Products/Product";
 import ReqLogin from "./Pages/Auth/ReqLogin.jsx";
 import AuthOtp from "./Pages/public/Otp/AuthOtp.jsx";
 import Card from "./Components/Card.jsx";
+import HeaderTest from "./Components/HeaderTest.jsx";
 
 function App() {
   return (
     <Routes>
+      <Route path="/test" element={<HeaderTest />} />
       <Route path="/cart" element={<Card />} />
       <Route path="/products" element={<Products />} />
       <Route path="/product/:id" element={<Product/>} />

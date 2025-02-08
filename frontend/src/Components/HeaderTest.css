@@ -1,0 +1,20 @@
+
+svg{
+    font-size: 10px;
+    transition: .5s ease-in-out
+}
+.rotate-180{
+    transform: rotate(180deg);
+}
+.mega {
+    transition: .5s ease-in-out;
+    opacity: 0;
+    transform: translateY(-20px);
+    visibility: hidden;
+}
+
+.mega.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
