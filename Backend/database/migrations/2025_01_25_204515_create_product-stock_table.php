@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create("product-stock",function(Blueprint $table){
             $table->id();
             $table->unsignedBigInteger("product_id");
-            $table->foreign("product_id")->references("id")->on("products");
+            $table->foreign("product_id")->references("id")->on("products")->onDelete("cascade");
             $table->string("color",50);
             $table->string("product_picture");
             $table->string("size");

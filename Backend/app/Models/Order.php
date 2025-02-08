@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User as ModelsUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Models\user;
@@ -16,7 +17,4 @@ class Order extends Model
         "quantity",
     ];
     public $timestamps = false;
-    public function order(){
-
-    }
 }

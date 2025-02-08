@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password',64);
             $table->boolean('email_verify')->default(false);
             $table->string('phone',8);
-            $table->enum("role",array("Admin","Client","Product Manager"));
+            $table->enum("role",array("Admin","Client","Product Manager","Delivery Personal"));
             $table->string("avatar",70)->default("default-avatar.png");
             $table->timestamps();
         });
