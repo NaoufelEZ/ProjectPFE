@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react"
 import { ApiKey } from "../../../Api/Api";
 import "./productStyle.css";
+import Header from "../../../Components/Header";
 
 const Products = () => {
     const [data,setData] = useState();
@@ -18,6 +19,8 @@ const Products = () => {
     },[]);
     console.log(data);
   return (
+    <>
+    <Header />
     <main>
     {data ? 
         data.map((e,key)=>(
@@ -28,6 +31,7 @@ const Products = () => {
     ))
     : "loading"}
     </main>
+    </>
   )
 }
 

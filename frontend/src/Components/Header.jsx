@@ -6,8 +6,6 @@ import { ApiKey } from "../Api/Api";
 import { Dropdown } from "react-bootstrap";
 import "./headerStyle.css";
 import logo from "../Assets/images/logo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import Card from "./Card";
 
 const Header = () => {
@@ -78,9 +76,7 @@ const Header = () => {
                 </ul>
             </div>
               {!user ?
-            <div>
-              <FontAwesomeIcon onClick={handleShowCard} role="button" icon={faBagShopping} />
-              <Link className="p-3 text-decoration-none" to="/login">Login</Link>
+            <div>              <Link className="p-3 text-decoration-none" to="/login">Login</Link>
               <Link className="p-3 text-decoration-none" to="/register">Register</Link>
             </div>            
               :  users ? 
