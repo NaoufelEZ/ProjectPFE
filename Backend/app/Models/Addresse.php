@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use App\Models\User as ModelsUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Models\user;
 
-class Order extends Model
+class Addresse extends Model
 {
     use HasFactory;
-    protected $table = "orders";
+    protected $table = "addresses";
     protected $fillable = [
+        "id",
         "user_id",
-        "product_id",
-        "quantity",
+        "address",
+        "zip",
+        "street",
     ];
-    public $timestamps = false;
 }

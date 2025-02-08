@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
-use App\Models\User as ModelsUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Models\user;
 
-class Order extends Model
+class Comment extends Model
 {
     use HasFactory;
-    protected $table = "orders";
+    protected $table =  "comments";
     protected $fillable = [
+        "id",
         "user_id",
         "product_id",
-        "quantity",
+        "comment",
     ];
-    public $timestamps = false;
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
 }
