@@ -16,5 +16,6 @@ class Addresse extends Model
         "state",
         "zip",
         "street",
+        "is-default"
     ];
 }

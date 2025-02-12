@@ -40,7 +40,11 @@ class forgetPassword extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'Mail.password',
+            with:[
+                "name" => $this->name,
+                "code" => $this->code
+            ]
         );
     }
 

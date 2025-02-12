@@ -26,7 +26,8 @@ class User extends Authenticatable
         'email_verify',
         'phone',
         'role',
-        'avatar'
+        'avatar',
+        'banned_chat'
     ];
 
     /**

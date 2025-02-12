@@ -7,6 +7,8 @@ use App\Http\Controllers\otpController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\useController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistController;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Profiler\Profile;
@@ -21,11 +23,14 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+// Route::get("/test/{id}",[otpController::class,"test"]);
+
 Route::middleware('authenticateApiKey')->group(function(){
     // auth Controller
     Route::controller(authController::class)->group(function(){
-        // Add user
+        // register user
         Route::post("/register","store");
+        // login
         Route::post("/login","login");
         Route::middleware("auth:sanctum")->group(function(){
             Route::get("/logout","logout");
@@ -50,6 +55,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     });
     // otp Controller
     Route::controller(otpController::class)->group(function(){
+        // email
         Route::post("/register_send","sendRegister");
         Route::put("/register_send_verify/{hash}","verifySendRegister");
         Route::get("/register_Url_verify/{hash}","verifyUrlRegister");
@@ -58,7 +64,12 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::post("/storeotp","storeOtp");
             Route::put("/store_otp","storeOtp");
         });
+        // password
+        Route::post("/password/seed","seedPassword");
+        Route::put("/password_verify/{token}","passwordCodeVerify");
+        Route::get("/password_verify_token/{token}","passwordTokenVerify");
     });
+    // Products
     Route::controller(ProductController::class)->group(function(){
         Route::get("/products","index");
         Route::get("products/product/{id}","product");
@@ -67,6 +78,7 @@ Route::middleware('authenticateApiKey')->group(function(){
 
         });
     });
+    // addresses
     Route::controller(AddressController::class)->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/address/add","store");
@@ -75,7 +87,15 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::put("/address/update/{id}","update");
             Route::delete("/address/delete/{id}","delete");
         });
-        
+    });
+
+    // Wishlist
+    Route::controller(WishlistController::class)->group(function(){
+        Route::middleware("auth:sanctum")->group(function(){
+            Route::get("wishlist","index");
+            Route::post("wishlist/add/{id}","store");
+            Route::delete("wishlist/delete/{id}","delete");
+        });
     });
 
 });
