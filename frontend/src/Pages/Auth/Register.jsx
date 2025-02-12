@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ApiKey } from "../../Api/Api";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Loading from '../../Components/Loading';
 const RegisterSchema = Yup.object().shape({
   first_name:Yup.string().matches(/^[a-zA-Z]+$/,"First Name should be a alpha").min(3,"First Name Should Be At Less 3 Letter").required("First Name required"),
   last_name:Yup.string().matches(/^[a-zA-Z]+$/,"Last Name should be a alpha").min(3,"Last Name Should Be At Less 3 Letter").required("Last Name required"),
@@ -54,6 +55,8 @@ const RegisterTest = () => {
     }
   });
   return (
+    <>
+    {loading ? <Loading /> : 
     <div className="d-flex justify-content-center align-items-center">
     <Form onSubmit={formik.handleSubmit} className='w-50'>
     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -87,8 +90,9 @@ const RegisterTest = () => {
       Submit
     </Button>
   </Form>
-  {loading ? "loading" : ""}
   </div>
+    }
+  </>
   )
 }
 

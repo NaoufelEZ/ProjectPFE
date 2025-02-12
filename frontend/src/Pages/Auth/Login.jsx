@@ -5,14 +5,17 @@ import { Button, Form } from "react-bootstrap";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 import { ApiKey } from "../../Api/Api";
+import Loading from "../../Components/Loading";
 const Login = () => {
   const [email,setEmail] = useState();
   const [password,setPassword] = useState();
   const [error,setError] = useState(false);
+  const [loading,setLoading] = useState(false);
   const cookie = new Cookies();
   const nav = useNavigate();
     const handleSubmit = async (e)=>{
       e.preventDefault();
+      setLoading(true);
       try{
         await axios.post("http://127.0.0.1:8000/api/v1/login",
           {
@@ -28,10 +31,13 @@ const Login = () => {
       ).then((data)=>{cookie.set("auth",data.data.token);nav("/")})
       }catch(err){
         setError(true);
+        setLoading(false);
       }
       }
 
   return (
+    <>
+    {loading ? <Loading /> :
     <div className="d-flex justify-content-center align-items-center flex-column">
     <Form onSubmit={handleSubmit} className='w-50'>
     <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -48,6 +54,8 @@ const Login = () => {
   </Form>
   {error ? <div className="p-3 bg-danger text-white rounded-3">Email or Password are Wrong</div> : ""}
   </div>
+    }
+  </>
   )
 }
 

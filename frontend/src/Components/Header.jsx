@@ -76,13 +76,13 @@ const Header = () => {
                 </ul>
             </div>
               {!user ?
-            <div>              <Link className="p-3 text-decoration-none" to="/login">Login</Link>
+            <div><Link className="p-3 text-decoration-none" to="/login">Login</Link>
               <Link className="p-3 text-decoration-none" to="/register">Register</Link>
             </div>            
               :  users ? 
               <Dropdown className="d-inline mx-2 bg-transparent">
               <Dropdown.Toggle id="dropdown-autoclose-true">
-              <img className=" rounded-circle" width={50} src={`http://127.0.0.1:8000/images/avatars/${users.avatar}`} alt="prof"/>
+              <img className="rounded-circle" width={50} src={`http://127.0.0.1:8000/images/avatars/${users.avatar}`} alt="prof"/>
               </Dropdown.Toggle>
               <Dropdown.Menu>
               <Dropdown.Item href="/setting">Setting</Dropdown.Item>

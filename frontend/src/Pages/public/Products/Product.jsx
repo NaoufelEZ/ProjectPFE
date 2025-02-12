@@ -2,17 +2,18 @@ import { useEffect, useState } from "react"
 import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import {  useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { ring2 } from 'ldrs'
 import "./productStyle.css";
 import Header from "../../../Components/Header";
 import { Button } from "react-bootstrap";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Loading from "../../../Components/Loading";
+import Err404 from "../Errors/Err404";
 
 const Product = () => {
-    ring2.register();
     const {id} = useParams();
     const [data,setData] = useState();
+    const [error,setError] = useState(false);
     const [loading,setLoading] = useState(true);
     const [uniqueColor,setUniqueColor] = useState();
     const [selectedImage,setSelectedImage] = useState();
@@ -44,7 +45,7 @@ const Product = () => {
                     setSize([...new Set(sizeColor.map((e)=>e.size))]);
                 
             }
-        }).catch(()=>nav("/"));
+        }).catch(()=>setError(true)).finally(()=>setLoading(false));
     },[id,nav,color]);
     const handleClick = ()=>{
         const items = JSON.parse(localStorage.getItem("card")) || [];
@@ -85,7 +86,7 @@ const Product = () => {
     const dataFetch = data ? 
     <div className="d-flex w-100 bg-dark text-light">
         <div>
-            <img width={500} src={`${IMAGEURL}/images/products/${selectedImage}`} alt="product"/>
+            <img width={500} src={`${IMAGEURL}/products/${selectedImage}`} alt="product"/>
         </div>
         <div className="w-100 mb-4">
             <p>{data.title}</p>
@@ -115,16 +116,8 @@ const Product = () => {
   return (
     <div>
     <Header />
-        {loading ? 
-        <l-ring-2
-            size="40"
-            stroke="5"
-            stroke-length="0.25"
-            bg-opacity="0.1"
-            speed="0.8" 
-            color="black" 
-            ></l-ring-2>
-            : dataFetch}
+        {loading ? <Loading />
+            : (error ? <Err404 /> : dataFetch)}
     </div>
   )
 }
