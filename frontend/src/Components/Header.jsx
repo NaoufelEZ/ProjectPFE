@@ -18,11 +18,9 @@ const Header = () => {
   useEffect(()=>{
     if(user){
     axios.get("http://127.0.0.1:8000/api/v1/user",{
-      params:{
-        apiKey: ApiKey,
-      },
       headers: {
         Authorization: `Bearer ${user}`, 
+        "x-api-key":ApiKey,
       },
   }).then((data)=>setUsers(data.data.data)).catch(()=>{cookie.remove("auth",{ path: "/" });nav("/")});
 }

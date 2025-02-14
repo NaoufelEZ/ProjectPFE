@@ -12,11 +12,9 @@ const OtpVerify = () => {
   const nav = useNavigate();
   useEffect(()=>{
       axios.get(`${APIURL}/register_Url_verify/${hash}`,{
-        params:{
-          apiKey:ApiKey,
-        },
         headers:{
           "Accept": "application/json",
+          "x-api-key":ApiKey,
         }
     }).catch(()=>nav("/",{replace:true}));
   },[nav,hash])
@@ -24,12 +22,12 @@ const OtpVerify = () => {
     e.preventDefault();
     try{
     await axios.put(`${APIURL}/register_send_verify/${hash}`,{
-      apiKey:ApiKey,
       code:otp
     },
     {
     headers:{
       "Accept": "application/json",
+      "x-api-key":ApiKey,
     }
   })
   nav("/login",{replace:true});

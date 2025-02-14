@@ -12,11 +12,9 @@ const AvatarIcons = (props) => {
     const nav = useNavigate();
   const handleLogout = ()=>{
     axios.get(`${APIURL}/logout`,{
-      params:{
-        apiKey: ApiKey
-      },
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        "x-api-key":ApiKey,
       }
     })
   .then(()=>cookie.remove("auth"))

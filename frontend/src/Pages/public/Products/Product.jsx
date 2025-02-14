@@ -28,8 +28,9 @@ const Product = () => {
     const nav = useNavigate();
     useEffect(()=>{
         axios.get(`${APIURL}/products/product/${id}`,{
-            params:{
-                apiKey: ApiKey,
+            headers:{
+                Accept:"application/json",
+                "x-api-key":ApiKey
             }
         }).then((data)=>{
             setData(data.data.data);

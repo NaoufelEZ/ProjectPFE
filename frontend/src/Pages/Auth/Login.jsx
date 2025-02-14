@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ApiKey } from "../../Api/Api";
 import Loading from "../../Components/Loading";
 const Login = () => {
@@ -19,13 +19,13 @@ const Login = () => {
       try{
         await axios.post("http://127.0.0.1:8000/api/v1/login",
           {
-              apiKey:ApiKey,
               email : email,
               password : password,
           },
           {
           headers : {
             "Accept": "application/json",
+            "x-api-key":ApiKey,
           }
       }
       ).then((data)=>{cookie.set("auth",data.data.token);nav("/")})
@@ -47,6 +47,9 @@ const Login = () => {
     <Form.Group className="mb-3" controlId="formBasicPassword">
       <Form.Label>Password</Form.Label>
       <Form.Control onChange={(e)=>setPassword(e.target.value)} name='password' value={password} type="password" placeholder="Password" />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Link to={"/forget_password"}>Forget Password</Link>
     </Form.Group>
     <Button variant="primary" type="submit">
       Submit

@@ -11,11 +11,9 @@ const ReqRule = ({allowedRule}) => {
     const [user,setUser] = useState();
     useEffect(()=>{
       axios.get(`${APIURL}/user`,{
-        params:{
-          apiKey:ApiKey,
-        },
         headers:{
-          Authorization : `Bearer ${token}`
+          Authorization : `Bearer ${token}`,
+          "x-api-key":ApiKey,
         }
       }).then((data)=>setUser(data.data.data))
     },[token]);

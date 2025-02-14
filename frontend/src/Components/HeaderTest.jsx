@@ -8,6 +8,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { ApiKey, APIURL } from "../Api/Api";
 import { Link } from "react-router-dom";
+import  data  from "../Assets/TunisianLocation/data.json";
 const HeaderTest = () => {
     const [user,setUser] = useState();
     const [isSearch,setIsSearch] = useState(false);
@@ -19,11 +20,10 @@ const HeaderTest = () => {
     useEffect(()=>{
         if(token){
             axios.get(`${APIURL}/user`,{
-                params:{
-                    apiKey:ApiKey
-                },
                 headers:{
-                    Authorization:`Bearer ${token}`
+                    Authorization:`Bearer ${token}`,
+                    "x-api-key":ApiKey,
+
                 }
             }
         ).then((data)=>setUser(data.data.data));
@@ -41,9 +41,11 @@ const HeaderTest = () => {
     //     }).then((data)=>setDataSearch(data.data.data.title))
     // },[])
     useEffect(()=>{
-        axios.get("/TunisianLocation/data.json").then((response)=>setDataSearch(response.data)).catch((err)=>console.log(err));
+        setDataSearch(data)
     },[]);
-  return (
+    console.log(dataSearch.filter((e)=>e.Gov.includes("Medenine") && e.Deleg.includes("Medenine Nord") && e.Cite.includes("")));
+    console.log([...new Set(dataSearch.map((e)=>e.Gov))]);
+    return (
     <>
     {
         isSearch &&

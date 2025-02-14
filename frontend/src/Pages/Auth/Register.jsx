@@ -32,7 +32,6 @@ const RegisterTest = () => {
         try{ 
             setLodging(true);
             const res = await axios.post("http://127.0.0.1:8000/api/v1/register",{
-                apiKey:ApiKey,
                 first_name : value.first_name,
                 last_name : value.last_name,
                 email : value.email,
@@ -42,6 +41,7 @@ const RegisterTest = () => {
             {
                 headers : {
                     "Accept": "application/json",
+                    "x-api-key":ApiKey,
                 }
             }
         )
