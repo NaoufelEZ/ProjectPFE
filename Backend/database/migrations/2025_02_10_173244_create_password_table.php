@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("email");
             $table->string("code",6);
             $table->string("token",20);
+            $table->boolean("is_verified")->default(false);
             $table->timestamp("created_at")->useCurrent();
             $table->timestamp("expiry_at")->nullable();
         });

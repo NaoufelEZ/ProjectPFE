@@ -13,6 +13,8 @@ class Password extends Model
         "email",
         "code",
         "token",
-        "expiry_at"
+        "expiry_at",
+        "is_verified"
     ];
+    public $timestamps = false;
 }
