@@ -67,7 +67,9 @@ Route::middleware('authenticateApiKey')->group(function(){
         // password
         Route::post("/password/seed","seedPassword");
         Route::put("/password_verify/{token}","passwordCodeVerify");
+        Route::put("/password_change/{token}","passwordChange");
         Route::get("/password_verify_token/{token}","passwordTokenVerify");
+        Route::put("/password/reseed/{token}","reSeedPassword");
     });
     // Products
     Route::controller(ProductController::class)->group(function(){
