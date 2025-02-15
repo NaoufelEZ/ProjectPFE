@@ -20,12 +20,13 @@ import Order from "./Pages/public/Products/Order.jsx";
 import ForgetPassword from "./Pages/Auth/ForgetPassword.jsx";
 import PasswordVerify from "./Pages/public/Otp/PasswordVerify.jsx";
 import ChangePassword from "./Pages/public/Otp/ChangePassword.jsx";
-import Test from "./Pages/public/Otp/Test.jsx";
+import DashboardProducts from "./Pages/Dashboard/Products.jsx";
+import AddUsers from "./Pages/Dashboard/AddUsers.jsx";
+import AddProduct from "./Pages/Dashboard/AddProduct.jsx";
 
 function App() {
   return (
     <Routes>
-      <Route path="/test1" element={<Test />} />
       <Route path="/order" element={<Order />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
@@ -53,12 +54,12 @@ function App() {
         {/* Admin */}
           <Route element={<ReqRule allowedRule={["Admin"]}/>}>
             <Route path="users" element={<Users />} />
-            <Route path="user/add" element={<Users />} />
+            <Route path="user/add" element={<AddUsers />} />
           </Route>
           {/* Product Manger */}
           <Route element={<ReqRule allowedRule={["Admin","Product Manager"]}/>}>
-            <Route path="products" element={<Users />} />
-            <Route path="product/add" element={<Users />} />
+            <Route path="products" element={<DashboardProducts />} />
+            <Route path="product/add" element={<AddProduct />} />
           </Route>
         </Route>
       </Route>
