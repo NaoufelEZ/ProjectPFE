@@ -31,7 +31,7 @@ class otpController extends Controller
             return response()->json(["data"=>"Otp Not Found","status"=>404], 404);
         }
         else if($otpCode->otp_code != $code){
-            return response()->json(["data"=>"Otp Not Wong","status"=>422], 422);
+            return response()->json(["data"=>"Otp Wrong","status"=>422], 422);
         }
         $id = $otpCode->id;
         User::find($id)->update([

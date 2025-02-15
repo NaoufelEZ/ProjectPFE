@@ -34,7 +34,7 @@ const HeaderTest = () => {
 
         <div className={`mega bg-dark ${click.action ? "show" : ""}`}>
         <div className="text-light">Hello {
-                click.section === "man" ? <img src="https://media1.tenor.com/m/epNMHGvRyHcAAAAd/gigachad-chad.gif" alt="man"/> : <img src="https://media1.tenor.com/m/mk9S6WmAIZsAAAAd/ha-ha-ha-woman.gif" alt="women"/>
+                click.section === "man" ? <span>MEN</span> : <span>WOMEN</span>
             }</div>
         </div>
         
