@@ -19,4 +19,7 @@ class Product extends Model
     public function productStock(){
         return $this->hasMany(ProductStock::class);
     }
+    public function wishlist(){
+        return $this->hasMany(Wishlist::class);
+    }
 }

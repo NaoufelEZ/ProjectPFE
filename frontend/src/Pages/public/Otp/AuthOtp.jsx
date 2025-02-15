@@ -14,12 +14,12 @@ const AuthOtp = () => {
     e.preventDefault();
     try{
     await axios.put(`${APIURL}/register_send_verify/${hash}`,{
-      apiKey:ApiKey,
       code:otp
     },
     {
     headers:{
       "Accept": "application/json",
+      "x-api-key":ApiKey
     }
   })
   nav("/login",{replace:true});

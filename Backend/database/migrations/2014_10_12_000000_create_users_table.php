@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('password',64);
             $table->boolean('email_verify')->default(false);
             $table->string('phone',8);
-            $table->enum("role",array("Admin","Client","Product Manager","Delivery Personal"));
+            $table->enum("role",array("Admin","Client","Product Manager"));
             $table->string("avatar",70)->default("default-avatar.png");
-            $table->timetamp("banned")->useCurrent()->add();
+            $table->timestamp("banned_chat")->default(NULL);
             $table->timestamps();
         });
     }

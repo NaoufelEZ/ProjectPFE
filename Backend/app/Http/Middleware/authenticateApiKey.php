@@ -15,8 +15,8 @@ class authenticateApiKey
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->apiKey != env("APIkey","4fdc278b7935a7b9368ee6bde5f48f4cb237ff0f")){
-            return response()->json(["msg"=>"Api key Not Found Or Wrong","status"=>403],403);
+        if($request->header("x-api-key") != env("APIkey","4fdc278b7935a7b9368ee6bde5f48f4cb237ff0f")){
+            return response()->json(["data"=>"Api key Not Found Or Wrong","status"=>403],403);
         }
         return $next($request);
     }
