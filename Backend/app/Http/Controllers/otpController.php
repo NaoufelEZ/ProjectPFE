@@ -146,9 +146,6 @@ class otpController extends Controller
     public function passwordTokenVerify($token){
         $otp = Password::where("token",$token)->latest()->first();
         if($otp){
-            if(!$otp->is_verified){
-                return response()->json(["message"=>"You can change you password","status"=>422], 422);
-            }
             return response()->json(["message"=>"token is right","status"=>200], 200);
         }
         return response()->json(["message"=>"token is Wrong","status"=>404], 404);

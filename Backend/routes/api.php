@@ -50,6 +50,7 @@ Route::middleware('authenticateApiKey')->group(function(){
             // Add user
             Route::get("/users","index");
             Route::put("admin/user/{id}","update");
+            Route::post("admin/user/add","store");
             Route::delete("admin/delete/{id}","delete");
         });
     });

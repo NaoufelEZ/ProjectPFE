@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone',8);
             $table->enum("role",array("Admin","Client","Product Manager"));
             $table->string("avatar",70)->default("default-avatar.png");
-            $table->timestamp("banned_chat")->default(NULL);
+            $table->timestamp("banned_chat")->nullable();
             $table->timestamps();
         });
     }

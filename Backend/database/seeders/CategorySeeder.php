@@ -13,12 +13,12 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Categories::factory(10)->create();
-        // Categories::factory()->createMany([
-        //     ["category" => "Man"],
-        //     ["category" => "Women"],
-        //     ["category" => "Clothes"],
-        //     ["category" => "Shoes"]
-        // ]);
+        // Categories::factory(10)->create();
+        Categories::factory()->createMany([
+            ["category" => "Man"],
+            ["category" => "Women"],
+            ["category" => "Clothes"],
+            ["category" => "Shoes"]
+        ]);
     }
 }

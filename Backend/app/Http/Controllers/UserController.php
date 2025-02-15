@@ -92,4 +92,29 @@ class UserController extends Controller
         $user->delete();
         return response()->json(["data"=>"User Is Deleted","status"=>200], 200);
     }
+    public function store(Request $request){
+        try{
+        $validUser = $request->validate([
+            "first_name"=>"required|string|min:3",
+            "last_name"=>"required|string|min:3",
+            "email"=>"required|email|unique:users,email",
+            "password"=>"required|string|min:6",
+            "phone"=>"required|digits:8",
+            "role"=>"required|in:Admin,Product Manager",
+        ]);
+        if($validUser){
+            $user = User::create([
+                "first_name"=>$validUser["first_name"],
+                "last_name"=>$validUser["last_name"],
+                "email"=>$validUser["email"],
+                "password"=>Hash::make($validUser["password"]),
+                "phone"=>$validUser["phone"],
+                "role"=>$validUser["role"],
+            ]);
+            return response()->json(["message"=>"User Add","status"=>201], 201);
+        }
+    }catch(ValidationException $e){
+        return response()->json(["message"=>$e->errors(),"status"=>422], 422);
+    }
+    }
 }
