@@ -29,7 +29,7 @@ const PasswordVerify = () => {
                 Accept:"application/json",
                 "x-api-key":ApiKey
             }
-        }).then((data)=>console.log(data)).catch(()=>setError(true))
+        }).catch((err)=>err.status !== 410 && setError(true))
         
     },[token]);
     const handleVerify = async (e) => {

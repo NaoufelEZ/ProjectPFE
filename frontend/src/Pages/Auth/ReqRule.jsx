@@ -17,7 +17,6 @@ const ReqRule = ({allowedRule}) => {
         }
       }).then((data)=>setUser(data.data.data))
     },[token]);
-    console.log(user);
   return (
     token ?
     (!user ? <Loading /> 

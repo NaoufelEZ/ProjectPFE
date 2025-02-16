@@ -27,7 +27,8 @@ console.log(products)
   return (
     <div className="container">
     {products ? (
-      products.map((e, key) => (
+      products.length === 0 ? <p>there not products</p>
+      : products.map((e, key) => (
           <div className="Box" key={key}>
             <img
               width={270} height={230}

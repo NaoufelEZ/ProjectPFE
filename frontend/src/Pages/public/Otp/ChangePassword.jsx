@@ -13,6 +13,7 @@ const passwordChange = Yup.object().shape({
 const ChangePassword = () => {
   const {token} = useParams();
   const [block,setBlock] = useState(false);
+  const [error,setError] = useState(false);
   const nav = useNavigate();
   useEffect(()=>{
     axios.get(`${APIURL}/password_verify_token/${token}`,{
@@ -43,13 +44,17 @@ const ChangePassword = () => {
       });
       nav("/login",{replace:true});
     }catch(err){
-      console.log(err)
-      if(Response.data.data.status === 422){
-        setBlock(true)
+      console.log(err.status)
+      if(err.status === 422){
+        setBlock(true);
+      }
+      else if(err.status === 410){
+        setError(true);
       }
     }
     }
     });
+    console.log(error)
   return (
     <div className="w-100 d-flex justify-content-center">
     {
@@ -67,6 +72,9 @@ const ChangePassword = () => {
         </Form.Group>
       <div className="text-danger">{formik.touched.rePassword && formik.errors.rePassword ? formik.errors.rePassword : null}</div>
         <Button type="submit">Submit</Button>
+        <Form.Group className="mt-3">
+        {error && <p className="text-danger">password should be not as the old password</p>}
+        </Form.Group>
       </Form>
     }
     </div>
