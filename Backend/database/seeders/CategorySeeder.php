@@ -17,8 +17,6 @@ class CategorySeeder extends Seeder
         Categories::factory()->createMany([
             ["category" => "Man"],
             ["category" => "Women"],
-            ["category" => "Clothes"],
-            ["category" => "Shoes"]
         ]);
     }
 }
