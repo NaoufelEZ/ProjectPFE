@@ -11,7 +11,7 @@ import Products from "./Pages/public/Products/Products";
 import Product from "./Pages/public/Products/Product";
 import ReqLogin from "./Pages/Auth/ReqLogin.jsx";
 import AuthOtp from "./Pages/public/Otp/AuthOtp.jsx";
-import HeaderTest from "./Components/HeaderTest.jsx";
+import HeaderTest from "./Components/Header2.jsx";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import Users from "./Pages/Dashboard/Users.jsx";
 import ReqRule from "./Pages/Auth/ReqRule.jsx";

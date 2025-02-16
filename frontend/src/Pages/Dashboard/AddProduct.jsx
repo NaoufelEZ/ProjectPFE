@@ -7,7 +7,7 @@ import Cookies from "universal-cookie";
 const ProductForm = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
-  const [colors, setColors] = useState(["Red", "Green", "Blue"]);
+  const [colors, setColors] = useState(["Red", "Green", "Blue","Yellow","White","Black","Pink","Brown"]);
   const [colorSelects, setColorSelects] = useState([
     { name: "", image: null, sizes: [{ size: "", quantity: "" }] },
   ]);
@@ -68,21 +68,19 @@ const ProductForm = () => {
     e.preventDefault();
     const formData = new FormData();
 
-    // Append product details
     formData.append("title", product.title);
     formData.append("description", product.description);
     formData.append("price", product.price);
     formData.append("discount", product.discount);
 
-    // Append colors, sizes, quantities, and images
     colorSelects.forEach((colorItem, colorIndex) => {
-      formData.append(`colors[${colorIndex}]`, colorItem.name);
+      formData.append(`colors[]`, colorItem.name);
       if (colorItem.image) {
-        formData.append(`product_pictures[${colorIndex}]`, colorItem.image);
+        formData.append(`product_pictures[]`, colorItem.image);
       }
       colorItem.sizes.forEach((sizeItem, sizeIndex) => {
-        formData.append(`sizes[${colorIndex}][${sizeIndex}]`, sizeItem.size);
-        formData.append(`quantity[${colorIndex}][${sizeIndex}]`, sizeItem.quantity);
+        formData.append(`sizes[]`, sizeItem.size);
+        formData.append(`quantity[]`, sizeItem.quantity);
       });
     });
 
@@ -92,6 +90,7 @@ const ProductForm = () => {
       });
       setMessage({ type: "success", text: response.data.data });
     } catch (error) {
+      console.log(error)
       setMessage({ type: "danger", text: error.response?.data?.data || "An error occurred" });
     }
   };

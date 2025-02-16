@@ -26,11 +26,10 @@ const AvatarIcons = (props) => {
     {menu &&
     <ul className="position-absolute list-group p-3 bg-light end-0">
     {(props.data.role === "Admin" || props.data.role === "Product Manager" ) &&
-      <li><Link to="/dashboard">Dashboard</Link></li>
+      <li><Link className=" text-decoration-none" to="/dashboard">Dashboard</Link></li>
     }
-      <li><Link to="/setting">Profile</Link></li>
+      <li><Link className=" text-decoration-none" to="/setting">Profile</Link></li>
       <li onClick={handleLogout}>Logout</li>
-      <li>{}</li>
     </ul>}
     </div>
   )
