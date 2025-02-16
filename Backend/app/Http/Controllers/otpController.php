@@ -127,11 +127,15 @@ class otpController extends Controller
             ]);
             $otp = Password::where("token",$token)->latest()->first();
             $email = $otp->email;
+            $user = User::where("email",$email)->get()->first();
             if(!$otp){
                 return response()->json(["message"=>"Otp Not Found","status"=>404], 404);
             }
             else if(!$otp->is_verified){
                 return response()->json(["message"=>"You can change you password","status"=>422], 422);
+            }
+            elseif(Hash::check($validPassword["password"], $user->password)){
+                return response()->json(["message"=>"the New Password should be not like the old password","status"=>410], 410);
             }
             User::where("email",$email)->update([
                 "password"=> Hash::make($validPassword["password"])
@@ -145,10 +149,14 @@ class otpController extends Controller
 
     public function passwordTokenVerify($token){
         $otp = Password::where("token",$token)->latest()->first();
-        if($otp){
-            return response()->json(["message"=>"token is right","status"=>200], 200);
+        if(!$otp){
+            return response()->json(["message"=>"token is Wrong","status"=>404], 404);
         }
-        return response()->json(["message"=>"token is Wrong","status"=>404], 404);
+        elseif(!$otp->is_verified){
+            return response()->json(["message"=>"you are not allow not verified","status"=>410], 410);
+        }
+        return response()->json(["message"=>"token is right","status"=>200], 200);
+
 
     }
     public function reSeedPassword($token){
