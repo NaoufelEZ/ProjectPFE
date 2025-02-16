@@ -6,12 +6,16 @@ import { Button, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./user.css";
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
+
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [currentUser,setCurrentUserUser] = useState([]);
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const nav = useNavigate();
   useEffect(() => {
     axios.get(`${APIURL}/user`, {
       headers: {
@@ -38,8 +42,33 @@ const Users = () => {
     }
     )
   }, []);
-  const handleDelete = (id)=>{
-    console.log(id)
+  const handleDelete = async (id)=>{
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your user has been deleted.",
+          icon: "success"
+        });
+            axios.delete(`${APIURL}/admin/delete/${id}`,{
+              headers:{
+                Authorization:`Bearer ${token}`,
+                Accept:"application/json",
+                "x-api-key":ApiKey
+              }
+            }).then(()=>nav("/dashboard/users"));
+            
+      }
+    });
+
   }
   return (
     <div>
@@ -71,7 +100,7 @@ const Users = () => {
               <Button className="d-flex justify-content-center align-items-center p-2" type="button"><FontAwesomeIcon icon={faPenToSquare} className="text-success h6 m-0"/></Button>
               { user.id !== currentUser.id ?
               <Button onClick={()=>handleDelete(user.id)} className="d-flex justify-content-center align-items-center p-2" type="button"><FontAwesomeIcon icon={faTrash} className="text-danger h6 m-0"/></Button>
-              : ""
+              : null
               }
             </td>
           </tr>
