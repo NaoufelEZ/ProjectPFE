@@ -18,7 +18,7 @@ const AvatarIcons = (props) => {
       }
     })
   .then(()=>cookie.remove("auth"))
-  .finally(()=>nav("/"));
+  .finally(()=>nav("/"),window.location.reload());
   }
   return (
     <div className="position-relative">

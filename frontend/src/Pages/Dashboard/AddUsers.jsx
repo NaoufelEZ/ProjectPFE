@@ -48,6 +48,7 @@ const AddUsers = () => {
                         "Authorization":`Bearer ${token}`,
                     }
                 });
+                nav("/dashboard/users");
                 }catch(error){
                 setError(true);
                 }

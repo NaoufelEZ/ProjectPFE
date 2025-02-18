@@ -5,7 +5,12 @@ import LeftBar from "../../Components/Dashboard/LeftBar"
 const Dashboard = () => {
   return (
     <>
-     <Outlet />
+    {/* <TopBar /> */}
+    {/* <div className="d-flex"> */}
+    {/* <LeftBar /> */}
+    <Outlet />
+    {/* </div> */}
+    
     </>
   )
 }
