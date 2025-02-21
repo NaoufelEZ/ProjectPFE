@@ -80,7 +80,7 @@ const AddUsers = () => {
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Role</Form.Label>
                 <Form.Select name="role" onChange={formik.handleChange} value={formik.values.role} aria-label="Default select example">
-                    <option disabled selected >Select Role</option>
+                    <option disabled selected value="">Select Role</option>
                     <option value="Admin">Admin</option>
                     <option value="Product Manager">Product Manager</option>
                 </Form.Select>

@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 const Products = () => {
 const [products, setProducts] = useState([]);
-const [click, setClick] = useState(false);
+const [click, setClick] = useState({action:false,index:null});
 const cookie = new Cookies();
 const token = cookie.get("auth");
 useEffect(() => {
@@ -25,7 +25,7 @@ console.log(error)
 )
 }
 , []);
-console.log(products)
+console.log(click)
 
   return (
     <div className="container">
@@ -34,9 +34,9 @@ console.log(products)
       : products.map((e, key) => (
           <div className="Box position-relative" key={key}>
           <div>
-            <FontAwesomeIcon onClick={()=>setClick(prev =>!prev)} role="button" className="position-absolute h6" icon={faEllipsisVertical}/>
+            <FontAwesomeIcon   onClick={() => setClick(prev => ({action: !prev.action,index: prev.action ? null : key}))} role="button" className="position-absolute h6 z-1" icon={faEllipsisVertical}/>
             {
-              click && <div className="pop position-absolute bg-light">
+              (click.action && click.index === key) && <div className="pop position-absolute bg-light z-1">
                 <ul className="">
                   <li role="button" className="d-flex align-items-center"><FontAwesomeIcon className="me-1 text-danger" icon={faTrash} /> Delete</li>
                   <li role="button" className="d-flex align-items-center"><FontAwesomeIcon className="me-1 text-secondary" icon={faPenToSquare} />Edit</li>

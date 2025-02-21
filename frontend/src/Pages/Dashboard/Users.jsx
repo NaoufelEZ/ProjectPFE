@@ -64,7 +64,9 @@ const Users = () => {
                 Accept:"application/json",
                 "x-api-key":ApiKey
               }
-            }).then(()=>nav("/dashboard/users"));
+            });
+            window.location.reload();
+            nav("/dashboard/users")
             
       }
     });

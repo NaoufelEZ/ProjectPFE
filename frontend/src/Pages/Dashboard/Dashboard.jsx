@@ -5,11 +5,11 @@ import LeftBar from "../../Components/Dashboard/LeftBar"
 const Dashboard = () => {
   return (
     <>
-    {/* <TopBar /> */}
-    {/* <div className="d-flex"> */}
-    {/* <LeftBar /> */}
+    <TopBar />
+    <div className="d-flex">
+    <LeftBar />
     <Outlet />
-    {/* </div> */}
+    </div>
     
     </>
   )
