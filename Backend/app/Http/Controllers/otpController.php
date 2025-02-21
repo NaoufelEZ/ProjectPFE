@@ -37,7 +37,7 @@ class otpController extends Controller
         else if($otpCode->otp_code != $code){
             return response()->json(["data"=>"Otp Not Wong","status"=>422], 422);
         }
-        $id = $otpCode->id;
+        $id = $otpCode->user_id;
         User::find($id)->update([
             "email_verify"=>true,
         ]);

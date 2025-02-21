@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\optController;
 use App\Http\Controllers\otpController;
 use App\Http\Controllers\ProductController;
@@ -78,6 +79,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::get("products/product/{id}","product");
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::post("/product/add","store");
+            Route::post("/product/delete/{id}","delete");
 
         });
     });
@@ -98,6 +100,19 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("wishlist","index");
             Route::post("wishlist/add/{id}","store");
             Route::delete("wishlist/delete/{id}","delete");
+        });
+    });
+    // Comments
+    Route::controller(CommentController::class)->group(function(){
+        Route::get("/product/{id}/comments","index");
+        Route::middleware("auth:sanctum")->group(function(){
+            Route::post("/product/{id}/comment/add","store");
+            Route::delete("/product/{id}/comment/delete/{id}","delete");
+            Route::put("/product/{id}/comment/update/{id}","update");  
+        });
+        Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
+            Route::get("/comments","all");
+            Route::put("/product/{id}/comment/banned/{id}","banned");  
         });
     });
 
