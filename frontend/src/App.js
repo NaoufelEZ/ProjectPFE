@@ -30,7 +30,7 @@ function App() {
   return (
     <Routes>
       <Route path="/order" element={<Order />} />
-      <Route path="/Test" element={<Recommendations />} />
+      <Route path="/Test" element={<Header2 />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
       <Route path="/password/change/:token" element={<ChangePassword />} />
