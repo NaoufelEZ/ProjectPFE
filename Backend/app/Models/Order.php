@@ -15,6 +15,10 @@ class Order extends Model
         "user_id",
         "product_id",
         "quantity",
+        "size",
+        "color",
+        "quantity",
+        "status"
     ];
     public $timestamps = false;
 }

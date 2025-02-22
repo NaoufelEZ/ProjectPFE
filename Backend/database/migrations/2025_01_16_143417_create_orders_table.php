@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer("quantity");
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("product_id");
             $table->foreign("user_id")->references("id")->on("users");
             $table->foreign("product_id")->references("id")->on("products");
+            $table->string("size");
+            $table->string("color");
+            $table->integer("quantity");
             $table->string("status")->default("Pending");
             $table->timestamp("order_date")->useCurrent();
         });
