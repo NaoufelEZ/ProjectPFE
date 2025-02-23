@@ -52,6 +52,9 @@ const Product = () => {
         const items = JSON.parse(localStorage.getItem("card")) || [];
         const newItem = {
             "id":id,
+            "title":data.title,
+            "price":data.price,
+            "image":selectedImage,
             "color":color,
             "size":selectedSize,
             "count":count

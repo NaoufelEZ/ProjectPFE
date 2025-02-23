@@ -25,12 +25,16 @@ import AddUsers from "./Pages/Dashboard/AddUsers.jsx";
 import AddProduct from "./Pages/Dashboard/AddProduct.jsx";
 import Header2 from "./Components/Header2.jsx";
 import Recommendations from "./Components/Recommendations .jsx";
+import Checkout from "./Pages/public/Products/Checkout.jsx";
+import Address from "./Pages/public/Products/Address.jsx";
 
 function App() {
   return (
     <Routes>
+      <Route path="/a" element={<Address />} />
+      <Route path="/checkout" element={<Checkout />} />
       <Route path="/order" element={<Order />} />
-      <Route path="/Test" element={<Recommendations />} />
+      <Route path="/Test" element={<Header2 />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
       <Route path="/password/change/:token" element={<ChangePassword />} />

@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import dataTun from "../../../Assets/TunisianLocation/data.json";
+import { Button, Form } from "react-bootstrap";
+import { ApiKey, APIURL } from "../../../Api/Api";
+import axios from "axios";
+import Cookies from "universal-cookie";
 
 const Order = () => {
     const [gov, setGov] = useState([]); 
@@ -10,9 +14,12 @@ const Order = () => {
     const [selectedDeleg, setSelectedDeleg] = useState("");
     const [selectedCite, setSelectedCite] = useState("");
     const [zip, setZip] = useState("");
+    const [addresse, setAddresse] = useState("");
+    const cookie = new Cookies();
+    const token = cookie.get("auth");
 
     useEffect(() => {
-        setGov([...new Set(dataTun.map((e) => e.Gov))]); // Extract unique Gov names
+        setGov([...new Set(dataTun.map((e) => e.Gov))]); 
         setData(dataTun);
     }, []);
 
@@ -51,9 +58,30 @@ const Order = () => {
             setCite([]); 
         }
     }, [selectedCite]);
+    const handleAddAddresse = async (e)=>{
+        e.preventDefault();
+        try{
+        await axios.post(`${APIURL}/address/add`,{
+            "address":addresse,
+            "state":selectedGov,
+            "zip":zip[0].zip,
+            "street":selectedCite
+        },
+    {
+        headers:{
+            Accept:"application/json",
+            "x-api-key":ApiKey,
+            Authorization:`Bearer ${token}`,
+        }
+    })
+    }catch(err){
+    console.error(err)
+    }
+    }
 
     return (
         <div>
+            <Form onSubmit={handleAddAddresse}>
             <select onChange={(e) => setSelectedGov(e.target.value)}>
                 <option value="" disabled selected>
                     Select Governorate
@@ -87,6 +115,9 @@ const Order = () => {
                 ))}
             </select>
             <input type="text" value={(selectedCite && zip) && zip[0].zip}/>
+            <input type="text" onChange={(e)=>setAddresse(e.target.value)} value={addresse}/>
+            <Button type="submit">Add Addresse</Button>
+            </Form>
         </div>
     );
 };

@@ -8,11 +8,12 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { ApiKey, APIURL } from "../Api/Api";
 import { Link } from "react-router-dom";
+import Basket from "./Basket";
 const Header = () => {
     const [user,setUser] = useState();
     const [isSearch,setIsSearch] = useState(false);
+    const [basket, setBasket] = useState(false);
     const [search,setSearch] = useState("");
-    const [basket,setBasket] = useState(false);
     const [click,setClick] = useState({"action":false});
     const cookie = new Cookies();
     const token = cookie.get("auth");
@@ -80,6 +81,8 @@ const Header = () => {
                     </div>}
             </div>
             </div>}
+
+        {basket && <Basket token={token} open={basket} setBasket={setBasket} />}
 
         
     </header>
