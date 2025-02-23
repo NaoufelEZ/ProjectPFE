@@ -14,10 +14,10 @@ class Order extends Model
     protected $fillable = [
         "user_id",
         "product_id",
-        "quantity",
-        "size",
         "color",
+        "size",
         "quantity",
+        "addresse_id",
         "status"
     ];
     public $timestamps = false;

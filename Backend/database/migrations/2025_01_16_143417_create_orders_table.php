@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("product_id");
+            $table->unsignedBigInteger("addresse_id");
             $table->foreign("user_id")->references("id")->on("users");
             $table->foreign("product_id")->references("id")->on("products");
-            $table->string("size");
             $table->string("color");
+            $table->string("size");
             $table->integer("quantity");
+            $table->foreign("addresse_id")->references("id")->on("addresses");
             $table->string("status")->default("Pending");
             $table->timestamp("order_date")->useCurrent();
         });

@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\optController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\otpController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\useController;
@@ -114,6 +115,17 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("/comments","all");
             Route::put("/product/{id}/comment/banned/{id}","banned");  
         });
+    });
+    // Order
+    Route::controller(OrderController::class)->group(function(){
+        Route::middleware("auth:sanctum")->group(function(){
+            Route::post("/order/add","store");
+        });
+        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+            Route::get("orders","index");
+            Route::put("order/update","update");
+        });
+
     });
 
 });
