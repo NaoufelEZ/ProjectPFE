@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect, useRef } from "react";
 import logo from "../Assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBagShopping, faChevronDown, faClose, faHeart, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,8 @@ const Header = () => {
     const [click,setClick] = useState({"action":false});
     const cookie = new Cookies();
     const token = cookie.get("auth");
-    useEffect(()=>{
+    const basketDiv = useRef();
+        useEffect(()=>{
         if(token){
             axios.get(`${APIURL}/user`,{
                 headers:{
@@ -67,9 +68,9 @@ const Header = () => {
                 click.section === "man" ? <span>man</span> : <span>women</span>
             }</div>
         </div>
-        {basket && <div style={{height:"100vh"}} className="w-25 bg-light position-absolute end-0 top-0 z-3 p-3">
+        {basket && <div ref={basketDiv} style={{height:"100vh"}} className="w-25 bg-light position-absolute end-0 top-0 z-3 p-3">
             <div className="w-100 d-flex justify-content-end p-3">
-            <span role="button" onClick={()=>setBasket(prev => false)}><FontAwesomeIcon className="h5" icon={faClose} /></span>
+            <span role="button" onClick={()=>setBasket(false)}><FontAwesomeIcon className="h5" icon={faClose} /></span>
             </div>
             <div className="w-100 d-flex d-flex justify-content-between">
                 <h3>Basket</h3>
