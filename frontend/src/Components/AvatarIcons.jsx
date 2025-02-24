@@ -5,7 +5,6 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const AvatarIcons = (props) => {
-  console.log(props);
   const [menu,setMenu] = useState(false);
     const cookie = new Cookies();
     const token = cookie.get("auth");

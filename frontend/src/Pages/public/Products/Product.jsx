@@ -21,11 +21,14 @@ const Product = () => {
     const [size,setSize] = useState();
     const [selectedSize,setSelectedSize] = useState();
     const [count,setCount] = useState(1);
+    const [discount,setDiscount] = useState(0);
+    const [sizeVerify,setSizeVerify] = useState(false);
     const [select,setSelect] = useState(()=>{
         const data = localStorage.getItem("card");
         return data ? JSON.parse(data) :  [];
     });
     const nav = useNavigate();
+    
     useEffect(()=>{
         axios.get(`${APIURL}/products/product/${id}`,{
             headers:{
@@ -48,12 +51,20 @@ const Product = () => {
             }
         }).catch(()=>setError(true)).finally(()=>setLoading(false));
     },[id,nav,color]);
+    useEffect(()=>{
+        if(data){
+
+            const productDiscount = data.discount !== 0 ? (data.price /100) * data.discount  :  0;
+            setDiscount(productDiscount);
+        }
+        }
+    ,[data]);
     const handleClick = ()=>{
         const items = JSON.parse(localStorage.getItem("card")) || [];
         const newItem = {
             "id":id,
             "title":data.title,
-            "price":data.price,
+            "price":discount === 0 ? data.price : data.price - discount,
             "image":selectedImage,
             "color":color,
             "size":selectedSize,
@@ -64,7 +75,10 @@ const Product = () => {
             item.color === newItem.color &&
             item.size === newItem.size
         );
-        if(!existingItem){
+        if(!selectedSize){
+            setSizeVerify(true);
+        }
+        else if(!existingItem){
             setSelect(prev => [...prev,newItem]);
             localStorage.setItem("card",JSON.stringify(select));
         }
@@ -88,27 +102,29 @@ const Product = () => {
     }
     }
     const dataFetch = data ? 
-    <div className="d-flex w-100 bg-dark text-light">
-        <div>
+    <div className="d-flex w-100 bg-light text-dark p-3">
+        <div className="me-3">
             <img width={500} src={`${IMAGEURL}/products/${selectedImage}`} alt="product"/>
         </div>
         <div className="w-100 mb-4">
             <p>{data.title}</p>
-            <p>{data.price}DT</p>
+            {discount === 0 ? <p>{(data.price).toFixed(2)} TND</p> : <div><span className="h5 text-black me-3">{(data.price - discount).toFixed(2)}</span><span className=" text-decoration-line-through text-secondary">{data.price}</span></div> }
             <p>Color</p>
             {color ? <p>{color}</p> : <p>{data.product_stock[0].color}</p>}
             <div className="d-flex w-100">
             {uniqueColor.map((e)=>(
-                <span onClick={()=>setColor(e)} role="button" className="rounded-circle me-1" style={{height:"20px",width:"20px","backgroundColor":e}}></span>
+                <span onClick={()=>setColor(e)} role="button" className={`${color === e && "border border-2 p-2"} rounded-circle me-1`} style={{height:"20px",width:"20px","backgroundColor":e}}></span>
             ))}
             </div>
             <p>Size</p>
             <div className="d-flex">
-            {size.map((e)=>(
-                <div onClick={()=>{setSelectedSize(e)}}  role="button" style={{height:"30px",width:"30px"}} className="bg-light rounded-circle text-dark me-2 pointer-event d-flex justify-content-center align-items-center">{e}</div>
+            {size.map((e,key)=>(
+                <div key={key} onClick={()=>{setSelectedSize(e);setSizeVerify(false)}}  role="button" style={{height:"30px",width:"30px"}} className={`${selectedSize === e && "bg-dark text-white"} bg-light rounded-circle text-dark me-2 d-flex justify-content-center align-items-center border border-2`}>{e}</div>
             ))}
             </div>
-            <div className="p-2 border-white">
+            {sizeVerify && <p className="text-danger">Select a size</p>}
+                <span>Quantity</span>
+            <div style={{width:"100px"}} className="p-2 border-white d-flex justify-content-between align-items-center bg-white rounded-4 text-dark">
                 <span className="user-select-none" role="button" onClick={()=>count !== 1 && setCount(prev => prev -1)}>-</span>
                 <span>{count}</span>
                 <span className="user-select-none" role="button" onClick={()=>setCount(prev => prev +1)}>+</span>
@@ -117,6 +133,7 @@ const Product = () => {
         </div>
         </div>
      : "";
+     
   return (
     <div>
     <Header />

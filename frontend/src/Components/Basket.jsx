@@ -16,13 +16,21 @@ const Basket = (props) => {
         }
     },[])
     useEffect(() => {
-        const totalPrice = storage.reduce((sum, e) => sum + e.price, 0);
+        const totalPrice = storage.reduce((sum, e) => sum + e.price * e.count, 0);
         setTotal(totalPrice);
       }, [storage]);
+    const deliveryFee = total <= 150 ? 7 : 0;
       const handleDelete = (product)=>{
-        console.log(product)
-
+        const newStorage = storage.filter((e,key)=> key !== product);
+        setStorage(newStorage);
+        window.localStorage.setItem("card",JSON.stringify(newStorage));
       }
+      useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+          document.body.style.overflow = "unset";
+        };
+        }, []);
   return (
     <div style={{height:"100vh"}} className="w-25 bg-light position-absolute end-0 top-0 z-3 p-3">
             <div className="w-100 d-flex justify-content-end p-3">
@@ -43,10 +51,14 @@ const Basket = (props) => {
                     </div>
                     <div className="w-50">
                         <div className="d-flex justify-content-between">
-                            <p className="h6 fw-bold">{e.price} TND</p>
+                            <p className="h6 fw-bold">{parseFloat(e.price * e.count).toFixed(2)} TND</p>
                             <FontAwesomeIcon role="button" onClick={()=>handleDelete(key)} className="h6" icon={faTrash} />
                         </div>
                         <p>{e.title}</p>
+                        <div style={{fontSize:"14px"}} className='d-flex justify-content-between w-25 text-secondary'>
+                        <span>{e.size}</span>
+                        <span>{e.count}x</span>
+                        </div>
                     </div>
                     </div> 
                 ))}
@@ -54,18 +66,18 @@ const Basket = (props) => {
                 <div className="py-2">
                     <div className="d-flex justify-content-between">
                     <span>Subtotal:</span>
-                    <span className="fw-bold">{total} TDN</span>
+                    <span className="fw-bold">{total.toFixed(2)} TDN</span>
                     </div>
                     <div className="d-flex justify-content-between">
                     <span>Delivery costs</span>
-                    <span className="fw-bold">7 TDN</span>
+                    <span className={`${deliveryFee === 0 && "text-success h5"} fw-bold`}>{deliveryFee === 0 ? "Free" : deliveryFee + " TND"}</span>
                     </div>
                     <div className="d-flex justify-content-between">
                     <span>Total</span>
-                    <span className="fw-bold">{total + 7} TDN</span>
+                    <span className="fw-bold">{(total + deliveryFee).toFixed(2)} TDN</span>
                     </div>
                    <div className="w-100 mt-3 d-flex justify-content-center">
-                    <span onClick={()=>{props.token ? navigate("/order") : navigate("/login")}} role="button" className="bg-success p-2 w-100 text-center text-white rounded-pill">Process order</span>
+                    <span onClick={()=>{props.token ? navigate("/checkout") : navigate("/login")}} role="button" className="bg-success p-2 w-100 text-center text-white rounded-pill">Process order</span>
                    </div>
                 </div>
                 </>
