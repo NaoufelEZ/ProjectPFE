@@ -60,7 +60,7 @@ const Header = () => {
             <div style={{width:"180px"}} className="d-flex align-items-center justify-content-between">
             <FontAwesomeIcon className="h6 m-0" role="button" onClick={()=>setIsSearch(prev => !prev)} icon={faMagnifyingGlass} />
             <FontAwesomeIcon onClick={()=>setBasket(prev=>!prev)} className="h6 m-0" role="button" icon={faBagShopping}/>
-            {user ? <AvatarIcons data={user} /> : <><Link className="me-3 text-decoration-none" to="login">Login</Link><Link className="text-decoration-none" to="register">Sign Up</Link></>}
+            {user ? <AvatarIcons data={user} /> : <><Link className="me-3 text-decoration-none" to="/login">Login</Link><Link className="text-decoration-none" to="/register">Sign Up</Link></>}
             </div>
         </nav>
 

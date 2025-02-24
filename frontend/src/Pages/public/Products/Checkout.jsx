@@ -3,16 +3,18 @@ import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import { Button, Form } from "react-bootstrap";
 import Cookies from "universal-cookie";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import flouci from "../../../Assets/images/flouci.png";
 import delivery from "../../../Assets/images/delivery-van.png";
+import AddressBox from "./AddressBox";
 
 const Checkout = () => {
     const [carts, setCarts] = useState([]);
     const [total, setTotal] = useState(0);
     const [address,setAddress] = useState([]);
     const [payment,setPayment] = useState([{"method":"Flouci","icon":flouci},{"method":"Cash payment on delivery","icon":delivery}]);
-    const [paymentChoose,setPaymentChoose] = useState(0);
+    const [paymentChoose,setPaymentChoose] = useState(1);
+    const [popup,setPopup] = useState(false);
     const cookie = new Cookies();
     const token = cookie.get("auth");
     const navigate = useNavigate();
@@ -46,6 +48,7 @@ const Checkout = () => {
 
     return (
         <div className="d-flex w-100 p-3 gap-4">
+        {/* {popup ? <div style={{height:"100vh"}} className="position-absolute w-100 d-flex justify-content-center align-items-center"><AddressBox /> </div>: null} */}
         <table className="table w-100 align-middle">
             <tbody>
                 {carts && carts.length > 0 ? (
@@ -55,7 +58,7 @@ const Checkout = () => {
                                 <img width={100} height={100} src={`${IMAGEURL}/products/${cart.image}`} alt="cart" />
                             </td>
                             <td className="w-50">x {cart.count} pieces</td>
-                            <td className="w-25">{cart.price * cart.count} TND</td>
+                            <td className="w-25">{(cart.price * cart.count).toFixed(2)} TND</td>
                         </tr>
                     ))
                 
@@ -66,7 +69,7 @@ const Checkout = () => {
                 )}
                 <tr className="border-1">
                     <td colSpan={2}>Cart subtotal</td>
-                    <td>{total} TND</td>
+                    <td>{(total).toFixed(2)} TND</td>
                 </tr>
                 <tr className="border-1">
                     <td colSpan={2}>Delivery</td>
@@ -74,7 +77,7 @@ const Checkout = () => {
                 </tr>
                 <tr className="border-1">
                     <td colSpan={2}>Order total</td>
-                    <td className="fw-bold">{total + deliveryFee} TND</td>
+                    <td className="fw-bold">{(total + deliveryFee).toFixed(2)} TND</td>
                 </tr>
             </tbody>
         </table>
@@ -85,8 +88,8 @@ const Checkout = () => {
                     <tr className="border-1">
                         <h4>Delivery address</h4>
                         <div>
-                            <Button type="button">Add New Address</Button>
-                            <div style={{height:"200px"}} className="p-1 bg-light mt-2 rounded-2 overflow-x-auto">{address && address.length > 0 ? address.map((e,key)=>(<div className="p-1 bg-white mb-1" key={key}><label className="me-3">Choose as delivery address</label><Form>
+                            <Link to="/address"><Button type="button">Add New Address</Button></Link>
+                            <div style={{ height:address && address.length > 0 ? "200px" : "auto"}} className="p-1 bg-light mt-2 rounded-2 overflow-x-auto">{address && address.length > 0 ? address.map((e,key)=>(<div className="p-1 bg-white mb-1" key={key}><label className="me-3">Choose as delivery address</label><Form>
                             <Form.Check
                                 type="switch"
                                 value={e.id}
@@ -94,7 +97,7 @@ const Checkout = () => {
                                 checked={selectedAddress === key}
                                 onChange={() => handleSelect(key)}
                             />
-            </Form><p>{e.address}</p><p>{e.state}</p><p>{e.street}</p><p>{e.zip}</p></div>)) : <p>You don't have any registered addresses, you must add a new address!</p>}</div>
+                        </Form><p>{e.address}</p><p>{e.state}</p><p>{e.street}</p><p>{e.zip}</p></div>)) : <p>You don't have any registered addresses, you must add a new address!</p>}</div>
                         </div>
                     </tr>
                     <tr className="border-1">
@@ -102,7 +105,7 @@ const Checkout = () => {
                         <h4>Payment method</h4>
                         <div className="mt-3">
                             {payment.map((element,key)=>(
-                                <Button key={key} onClick={()=>setPaymentChoose(key)} type="button" className={`list-group-item list-group-item-action mb-2 ${paymentChoose === key && "active"}`}><img className="me-2" width={30} src={element.icon} alt="flouci"/>{element.method}</Button>
+                                <Button key={key} onClick={()=>setPaymentChoose(key)} disabled={element.method === "Flouci"} type="button" className={`list-group-item list-group-item-action mb-2  ${paymentChoose === key && "active"}`}><img className="me-2" width={30} src={element.icon} alt="method"/>{element.method}{element.method === "Flouci" && " (Coming Soon)"}</Button>
                             ))}
                         </div>
                 </div>

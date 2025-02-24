@@ -1,13 +1,16 @@
 import { faClose, faHeart, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
+import "./basket.css";
+import useCloseOut from '../hook/useClose';
 
 const Basket = (props) => {
     const [storage,setStorage] = useState([]);
     const [total,setTotal] = useState(0);
     const navigate = useNavigate();
+    const basketRef = useRef(null);
 
     useEffect(()=>{
         const storedData = window.localStorage.getItem("card");
@@ -31,8 +34,10 @@ const Basket = (props) => {
           document.body.style.overflow = "unset";
         };
         }, []);
+
+        useCloseOut(basketRef,props.setBasket)
   return (
-    <div style={{height:"100vh"}} className="w-25 bg-light position-absolute end-0 top-0 z-3 p-3">
+    <div ref={basketRef} style={{height:"100vh"}} className="w-25 bg-light position-absolute end-0 top-0 z-3 p-3 d-flex flex-column">
             <div className="w-100 d-flex justify-content-end p-3">
             <span role="button" onClick={()=>props.setBasket(prev => false)}><FontAwesomeIcon className="h5" icon={faClose} /></span>
             </div>
@@ -43,8 +48,8 @@ const Basket = (props) => {
                     <span>Wishlist</span>
                     </div>}
             </div>
-            <div>
-                {storage && storage.length > 0 ? <><div style={{height:"320px"}} className="overflow-y-scroll">{ storage.map((e,key)=>(
+            <div className="flex-grow-1 d-flex flex-column justify-content-between">
+                {storage && storage.length > 0 ? <><div className="overflow-y-scroll">{ storage.map((e,key)=>(
                    <div key={key} className="d-flex mb-2">
                     <div className="me-2">
                         <img className="rounded-3" width={120} height={100} src={`${IMAGEURL}/products/${e.image}`} alt="product" />

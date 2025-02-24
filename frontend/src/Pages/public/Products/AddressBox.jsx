@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dataTun from "../../../Assets/TunisianLocation/data.json";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Row, Toast } from "react-bootstrap";
 import { ApiKey, APIURL } from "../../../Api/Api";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
+import useCloseOut from "../../../hook/useClose";
 
-const Address = () => {
+const AddressBox = () => {
     const [gov, setGov] = useState([]); 
     const [data, setData] = useState([]); 
     const [cite, setCite] = useState([]); 
@@ -16,9 +17,11 @@ const Address = () => {
     const [selectedCite, setSelectedCite] = useState("");
     const [zip, setZip] = useState("");
     const [address, setAddress] = useState("");
+    const [show,setShow] = useState(true);
     const cookie = new Cookies();
     const token = cookie.get("auth");
     const navigate = useNavigate();
+    const toastRef = useRef(null);
 
     useEffect(() => {
         setGov([...new Set(dataTun.map((e) => e.Gov))]); 
@@ -81,10 +84,14 @@ const Address = () => {
     console.error(err)
     }
     }
-
-    return (
-        <div style={{height:"100vh"}} className="w-100 d-flex justify-content-lg-center align-items-center">
-            <Form onSubmit={handleAddAddress}>
+    useCloseOut(toastRef,setShow)
+  return (
+        <Toast ref={toastRef} show={show} onClose={()=>setShow(false)}>
+        <Toast.Header>
+            <strong className="me-auto">Add Address</strong>
+        </Toast.Header>
+        <Toast.Body>
+        <Form onSubmit={handleAddAddress}>
             <Form.Group className="mb-3">
                 <Form.Control placeholder="Address" type="text" value={address} onChange={(e)=>setAddress(e.target.value)} />
             </Form.Group>
@@ -125,8 +132,10 @@ const Address = () => {
             </Form.Group>
                 <Button className="w-100" type="submit">Add Address</Button>
             </Form>
-        </div>
-    );
-};
+        </Toast.Body>
 
-export default Address;
+        </Toast>
+  )
+}
+
+export default AddressBox

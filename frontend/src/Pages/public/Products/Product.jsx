@@ -113,7 +113,7 @@ const Product = () => {
             {color ? <p>{color}</p> : <p>{data.product_stock[0].color}</p>}
             <div className="d-flex w-100">
             {uniqueColor.map((e)=>(
-                <span onClick={()=>setColor(e)} role="button" className={`${color === e && "border border-2 p-2"} rounded-circle me-1`} style={{height:"20px",width:"20px","backgroundColor":e}}></span>
+                <span onClick={()=>setColor(e)} role="button" className={`${color === e && "border border-2 p-2"} rounded-circle me-1 border border-1 border-dark`} style={{height:"30px",width:"30px","backgroundColor":e}}></span>
             ))}
             </div>
             <p>Size</p>
@@ -123,10 +123,12 @@ const Product = () => {
             ))}
             </div>
             {sizeVerify && <p className="text-danger">Select a size</p>}
-                <span>Quantity</span>
-            <div style={{width:"100px"}} className="p-2 border-white d-flex justify-content-between align-items-center bg-white rounded-4 text-dark">
-                <span className="user-select-none" role="button" onClick={()=>count !== 1 && setCount(prev => prev -1)}>-</span>
+                <span className="mb-3">Quantity</span>
+            <div style={{width:"100px"}} className="p-2 border-white d-flex justify-content-between align-items-center bg-white rounded-4 text-dark mb-3">
+                <span  className="user-select-none" role="button" onClick={()=>count !== 1 && setCount(prev => prev -1)}>-</span>
+                <span style={{height:"15px"}}  className="border border-1"></span>
                 <span>{count}</span>
+                <span style={{height:"15px"}} className="border border-1"></span>
                 <span className="user-select-none" role="button" onClick={()=>setCount(prev => prev +1)}>+</span>
             </div>
             <Button onClick={handleClick} type="button">Add card</Button>

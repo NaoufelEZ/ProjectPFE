@@ -16,7 +16,6 @@ import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import Users from "./Pages/Dashboard/Users.jsx";
 import ReqRule from "./Pages/Auth/ReqRule.jsx";
 import Err404 from "./Pages/public/Errors/Err404.jsx";
-import Order from "./Pages/public/Products/Order.jsx";
 import ForgetPassword from "./Pages/Auth/ForgetPassword.jsx";
 import PasswordVerify from "./Pages/public/Otp/PasswordVerify.jsx";
 import ChangePassword from "./Pages/public/Otp/ChangePassword.jsx";
@@ -24,16 +23,16 @@ import DashboardProducts from "./Pages/Dashboard/Products.jsx";
 import AddUsers from "./Pages/Dashboard/AddUsers.jsx";
 import AddProduct from "./Pages/Dashboard/AddProduct.jsx";
 import Header2 from "./Components/Header2.jsx";
-import Recommendations from "./Components/Recommendations .jsx";
 import Checkout from "./Pages/public/Products/Checkout.jsx";
 import Address from "./Pages/public/Products/Address.jsx";
+import AddressBox from "./Pages/public/Products/AddressBox.jsx";
 
 function App() {
   return (
     <Routes>
-      <Route path="/a" element={<Address />} />
+      <Route path="/addressbox" element={<AddressBox />} />
       <Route path="/checkout" element={<Checkout />} />
-      <Route path="/order" element={<Order />} />
+      <Route path="/address" element={<Address />} />
       <Route path="/Test" element={<Header2 />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
