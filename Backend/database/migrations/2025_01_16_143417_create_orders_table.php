@@ -21,8 +21,10 @@ return new class extends Migration
             $table->string("color");
             $table->string("size");
             $table->integer("quantity");
+            $table->string("price");
             $table->foreign("addresse_id")->references("id")->on("addresses");
             $table->string("status")->default("Pending");
+            $table->string("method_payment");
             $table->timestamp("order_date")->useCurrent();
         });
     }
