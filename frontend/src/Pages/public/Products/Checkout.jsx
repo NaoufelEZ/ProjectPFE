@@ -15,6 +15,7 @@ const Checkout = () => {
     const [payment,setPayment] = useState([{"method":"Flouci","icon":flouci},{"method":"Cash payment on delivery","icon":delivery}]);
     const [paymentChoose,setPaymentChoose] = useState(1);
     const [popup,setPopup] = useState(false);
+    const [user,setUser] = useState([]);
     const cookie = new Cookies();
     const token = cookie.get("auth");
     const navigate = useNavigate();
@@ -25,6 +26,15 @@ const Checkout = () => {
             setCarts(JSON.parse(storedData));
         }
     }, []);
+    useEffect(()=>{
+        axios.get(`${APIURL}/user`,{
+          headers:{
+            Accept:"application/json",
+            Authorization:`Bearer ${token}`,
+            "x-api-key":ApiKey,
+          }
+        }).then((response)=>setUser(response.data.data));
+      },[]);
 
     useEffect(() => {
         const totalPrice = carts.reduce((sum, e) => sum + e.price * e.count, 0);
@@ -45,6 +55,7 @@ const Checkout = () => {
         const handleSelect = (index) => {
             setSelectedAddress(index);
         };
+       
 
     return (
         <div className="d-flex w-100 p-3 gap-4">

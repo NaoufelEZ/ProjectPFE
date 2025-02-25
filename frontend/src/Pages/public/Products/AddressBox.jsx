@@ -84,7 +84,8 @@ const AddressBox = () => {
     console.error(err)
     }
     }
-    useCloseOut(toastRef,setShow)
+    useCloseOut(toastRef,setShow);
+    
   return (
         <Toast ref={toastRef} show={show} onClose={()=>setShow(false)}>
         <Toast.Header>

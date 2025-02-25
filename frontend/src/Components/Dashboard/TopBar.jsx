@@ -19,7 +19,6 @@ const TopBar = () => {
       }
     }).then((response)=>setUser(response.data.data));
   },[]);
-  console.log(click)
   return (
     <header style={{height:"60px"}} className="w-100 bg-light px-3">
       <nav className="d-flex align_items_center justify-content-end">
