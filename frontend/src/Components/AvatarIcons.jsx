@@ -3,7 +3,7 @@ import { ApiKey, APIURL, IMAGEURL } from "../Api/Api"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import useCloseOut from "../hook/useClose";
+import useCloseOut from "../Hook/useClose";
 
 const AvatarIcons = (props) => {
 

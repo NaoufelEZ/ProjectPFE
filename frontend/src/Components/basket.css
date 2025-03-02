@@ -1,0 +1,27 @@
+/* Custom Scrollbar Styling */
+.overflow-y-scroll {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #888 #f1f1f1; /* Firefox */
+  
+    /* Webkit-based browsers (Chrome, Edge, Safari) */
+  }
+  .overflow-y-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .overflow-y-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+  }
+  
+  .overflow-y-scroll::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+  
+  .overflow-y-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  

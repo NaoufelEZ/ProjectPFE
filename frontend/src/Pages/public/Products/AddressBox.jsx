@@ -5,7 +5,7 @@ import { ApiKey, APIURL } from "../../../Api/Api";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
-import useCloseOut from "../../../hook/useClose";
+import useCloseOut from "../../../Hook/useClose";
 
 const AddressBox = () => {
     const [gov, setGov] = useState([]); 
