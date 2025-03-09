@@ -17,8 +17,10 @@ class Order extends Model
         "color",
         "size",
         "quantity",
+        "price",
         "addresse_id",
-        "status"
+        "status",
+        "method_payment"
     ];
     public $timestamps = false;
 }

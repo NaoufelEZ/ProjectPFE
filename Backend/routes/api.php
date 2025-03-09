@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\optController;
 use App\Http\Controllers\OrderController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\useController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
+use App\Models\Addresse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -92,6 +94,7 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("/address/{id}","show");
             Route::put("/address/update/{id}","update");
             Route::delete("/address/delete/{id}","delete");
+            Route::put("/address/default/update/{id}","default");
         });
     });
 
@@ -126,6 +129,15 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::put("order/update","update");
         });
 
+    });
+    // category
+    Route::controller(CategoryController::class)->group(function(){
+        // private
+        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+        });
+        // public
+        Route::get("subcategory","showSubcategory");
+        Route::get("category/{id_cat}/subcategory/{id_sub}","showDetails");
     });
 
 });

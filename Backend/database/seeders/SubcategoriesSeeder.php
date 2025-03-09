@@ -15,7 +15,7 @@ class SubcategoriesSeeder extends Seeder
     {
         Subcategories::factory()->createMany([
             ["subcategories"=>"Clothes"],
-            ["subcategories"=>"Shoes"]
+            ["subcategories"=>"Shoes"],
         ]);
     }
 }

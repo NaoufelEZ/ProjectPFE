@@ -80,4 +80,21 @@ class AddressController extends Controller
         }
         return response()->json(["data"=>$address,"status"=>200],200);
     }
+    public function default(request $request,$id){
+        $user = $request->user()->id;
+        $address = Addresse::where("user_id",$user)->where("id",$id)->first();
+        $adressesUser = Addresse::where("user_id",$user);
+        if(!$address){
+            return response()->json(["data"=>"No address found","status"=>404],404);
+        }
+        if($adressesUser->count() > 1){
+            $adressesUser->update([
+                "is_default"=>false,
+             ]);
+        }
+        $address->update([
+           "is_default"=>true,
+        ]);
+        return response()->json(["data"=>"Address updated successfully","status"=>200],200);
+    }
 }

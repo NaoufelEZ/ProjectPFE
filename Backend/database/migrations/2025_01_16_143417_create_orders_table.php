@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreign("addresse_id")->references("id")->on("addresses");
             $table->string("status")->default("Pending");
             $table->string("method_payment");
+            $table->boolean("delivery_pay")->default(true);
             $table->timestamp("order_date")->useCurrent();
         });
     }
