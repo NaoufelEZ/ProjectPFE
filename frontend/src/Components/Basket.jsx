@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import "./basket.css";
 import useCloseOut from '../Hook/useClose';
 
+
 const Basket = (props) => {
     const [storage, setStorage] = useState([]);
     const [total, setTotal] = useState(0);

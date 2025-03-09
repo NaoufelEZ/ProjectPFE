@@ -31,8 +31,7 @@ function App() {
   return (
     <Routes>
       <Route path="/addressbox" element={<AddressBox />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route path="/address" element={<Address />} />
+      
       <Route path="/Test" element={<Header2 />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
@@ -47,8 +46,11 @@ function App() {
         <Route path="/register" element={<Register/>} />
       </Route>
       <Route path="/verify/:hash" element={<OtpVerify/>} />
+      {/* auth */}
       <Route element={<ReqAuth />}>
       <Route path="/auth/verify" element={<AuthOtp/>} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/address" element={<Address />} />
       <Route path="/setting" element={<Setting />}>
         <Route path="profile" element={<Profile />}/>
         <Route path="password" element={<Password />}/>

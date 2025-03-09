@@ -16,6 +16,7 @@ const Checkout = () => {
     const [paymentChoose,setPaymentChoose] = useState(1);
     const [popup,setPopup] = useState(false);
     const [user,setUser] = useState([]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
     const cookie = new Cookies();
     const token = cookie.get("auth");
     const navigate = useNavigate();
@@ -48,18 +49,56 @@ const Checkout = () => {
                 "x-api-key":ApiKey,
                 Authorization:`Bearer ${token}`,
             }
-        }).then((response)=>setAddress(response.data.data)).catch((err)=>{err.status === 500 && navigate("/")});
+        }).then((response)=>setAddress(response.data.data))
+        .catch((err)=>{err.status === 500 && navigate("/")});
     },[]);
 
-        const [selectedAddress, setSelectedAddress] = useState(null);
         const handleSelect = (index) => {
+            axios.put(`${APIURL}/address/default/update/${index}`,{},{
+                headers:{
+                    Accept:"application",
+                    "x-api-key":ApiKey,
+                    Authorization:`Bearer ${token}`,
+                }
+            })
             setSelectedAddress(index);
         };
-       
-
+       const formData = new FormData();
+       carts.forEach((item)=>{
+        formData.append("user_id[]",user.id);
+        formData.append("product_id[]",item.id);
+        formData.append("color[]",item.color);
+        formData.append("size[]",item.size);
+        formData.append("price[]",item.price);
+        formData.append("addresse_id[]",selectedAddress);
+        formData.append("quantity[]",item.count);
+        formData.append("paymentChoose[]",payment[paymentChoose].method);
+       });
+    //    for (let [key, value] of formData.entries()) {
+    //     console.log(`${key}: ${value}`);
+    // }
+       const handleOrder = async (e)=>{
+        e.preventDefault();
+        if(selectedAddress !== null){
+        try{
+        await axios.post(`${APIURL}/order/add`,formData,
+            {
+                headers:{
+                    Accept:"application",
+                    "x-api-key":ApiKey,
+                    Authorization:`Bearer ${token}`,
+                    }
+            });
+            localStorage.removeItem("card");
+            navigate("/");
+        }catch(err){
+            console.log(err)
+        }
+        }
+       }
     return (
-        <div className="d-flex w-100 p-3 gap-4">
-        {/* {popup ? <div style={{height:"100vh"}} className="position-absolute w-100 d-flex justify-content-center align-items-center"><AddressBox /> </div>: null} */}
+        <Form onSubmit={handleOrder} className="d-flex w-100 p-3 gap-4">
+        {popup ? <div style={{height:"100vh"}} className="position-absolute w-100 d-flex justify-content-center align-items-center "><AddressBox setOpen={setPopup} /></div> : null}
         <table className="table w-100 align-middle">
             <tbody>
                 {carts && carts.length > 0 ? (
@@ -99,14 +138,14 @@ const Checkout = () => {
                     <tr className="border-1">
                         <h4>Delivery address</h4>
                         <div>
-                            <Link to="/address"><Button type="button">Add New Address</Button></Link>
+                            <Button onClick={()=>setPopup(prev => true)} type="button">Add New Address</Button>
                             <div style={{ height:address && address.length > 0 ? "200px" : "auto"}} className="p-1 bg-light mt-2 rounded-2 overflow-x-auto">{address && address.length > 0 ? address.map((e,key)=>(<div className="p-1 bg-white mb-1" key={key}><label className="me-3">Choose as delivery address</label><Form>
                             <Form.Check
                                 type="switch"
                                 value={e.id}
                                 name="address"
-                                checked={selectedAddress === key}
-                                onChange={() => handleSelect(key)}
+                                checked={selectedAddress === e.id}
+                                onChange={() => handleSelect(e.id)}
                             />
                         </Form><p>{e.address}</p><p>{e.state}</p><p>{e.street}</p><p>{e.zip}</p></div>)) : <p>You don't have any registered addresses, you must add a new address!</p>}</div>
                         </div>
@@ -123,9 +162,9 @@ const Checkout = () => {
             </tr>
         </tbody>
     </table>
-        <Button className="w-50" type="button">{paymentChoose === 1 ? "Place order" : `Payer (${total + deliveryFee} TND)`}</Button>
+        <Button className="w-50" type="submit">{paymentChoose === 1 ? "Place order" : `Payer (${total + deliveryFee} TND)`}</Button>
         </div>
-        </div>
+        </Form>
     );
 };
 

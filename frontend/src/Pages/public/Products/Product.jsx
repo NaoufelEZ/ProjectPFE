@@ -27,8 +27,8 @@ const Product = () => {
         const data = localStorage.getItem("card");
         return data ? JSON.parse(data) :  [];
     });
+    const MySwal = withReactContent(Swal)
     const nav = useNavigate();
-    
     useEffect(()=>{
         axios.get(`${APIURL}/products/product/${id}`,{
             headers:{
@@ -81,10 +81,24 @@ const Product = () => {
         else if(!existingItem){
             setSelect(prev => [...prev,newItem]);
             localStorage.setItem("card",JSON.stringify(select));
+            const Toast = MySwal.mixin({
+                toast: true,
+                position: "bottom-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = MySwal.stopTimer;
+                  toast.onmouseleave = MySwal.resumeTimer;
+                }
+              });
+              Toast.fire({
+                icon: "success",
+                title: "The product added in the basket!"
+              });
         }
         else{
-        const MySwal = withReactContent(Swal)
-    const Toast = MySwal.mixin({
+        const Toast = MySwal.mixin({
         toast: true,
         position: "bottom-end",
         showConfirmButton: false,
@@ -111,9 +125,11 @@ const Product = () => {
             {discount === 0 ? <p>{(data.price).toFixed(2)} TND</p> : <div><span className="h5 text-black me-3">{(data.price - discount).toFixed(2)}</span><span className=" text-decoration-line-through text-secondary">{data.price}</span></div> }
             <p>Color</p>
             {color ? <p>{color}</p> : <p>{data.product_stock[0].color}</p>}
-            <div className="d-flex w-100">
+            <div className="d-flex w-100 gap-1">
             {uniqueColor.map((e)=>(
-                <span onClick={()=>setColor(e)} role="button" className={`${color === e && "border border-2 p-2"} rounded-circle me-1 border border-1 border-dark`} style={{height:"30px",width:"30px","backgroundColor":e}}></span>
+                <div onClick={()=>setColor(e)} className="border border-1 border-dark rounded-circle p-1 s">
+                <span   role="button" className={`${color === e && "sizing"} rounded-circle d-block`} style={{height:"30px",width:"30px","backgroundColor":e}}></span>
+                </div>
             ))}
             </div>
             <p>Size</p>

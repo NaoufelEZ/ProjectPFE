@@ -7,10 +7,13 @@ svg{
     transform: rotate(180deg);
 }
 .mega {
+    height: 300px;
     transition: .5s ease-in-out;
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-300px);
     visibility: hidden;
+    position: relative;
+    z-index: 2;
 }
 
 .mega.show {
@@ -26,3 +29,17 @@ nav img{
 .basket{
     transform: translateX(100%);
 }
+.grid-container {
+    width: 50%;
+    height: 100px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+  }
+  
+  .menu-item {
+    cursor: pointer;
+    padding: 5px;
+    font-weight: bold;
+  }

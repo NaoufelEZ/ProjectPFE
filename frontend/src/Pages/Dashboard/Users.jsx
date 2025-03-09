@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { Button, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./user.css";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
@@ -13,6 +13,8 @@ import Swal from 'sweetalert2'
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [currentUser,setCurrentUserUser] = useState([]);
+  const [filterUsers,setFilterUsers] = useState([]);
+  const [search,setSearch] = useState("");
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const nav = useNavigate();
@@ -36,7 +38,8 @@ const Users = () => {
         "x-api-key": ApiKey
       }
     }).then((response) => {
-      setUsers(response.data.data)
+      setUsers(response.data.data);
+      setFilterUsers(response.data.data)
     }).catch((error) => {
       console.log(error)
     }
@@ -70,12 +73,27 @@ const Users = () => {
             
       }
     });
-
   }
+  useEffect(()=>{
+    setFilterUsers(users.filter((e)=>e.email.includes(search)));
+  },[search])
   return (
-    <div>
-     <h1>Users</h1>
-     <Table className="w-65" striped bordered hover>
+    <div className="p-3">
+    <div className="d-flex justify-content-between align-items-center mb-3">
+     <span>Users</span>
+     <div className="d-flex align-items-center gap-1 ms-auto">
+      <span className="m-0 w-25">{filterUsers.length} Members</span>
+      <div className="w-50 rounded-3 bg-secondary">
+        <FontAwesomeIcon className="h6 m-2 text-center align-middle" icon={faSearch} />
+      <input onChange={(e)=>setSearch(e.target.value)} value={search} placeholder="search" className=" w-75 bg-secondary border-0 outline-none p-1" type="text"/>
+      </div>
+      <div role="button" className="p-2 w-25 bg-primary rounded-3 d-flex justify-content-around align-items-center text-white">
+        <FontAwesomeIcon icon={faPlus}/>
+        <span>Add user</span>
+      </div>
+     </div>
+    </div>
+     <Table className="w-100" striped bordered hover>
       <thead>
         <tr>
           <th>#</th>
@@ -89,7 +107,7 @@ const Users = () => {
         </tr>
       </thead>
       <tbody>
-        {users.map((user, index) => (
+        {filterUsers.length > 0 ? filterUsers.map((user, index) => (
           <tr key={index}>
             <td>{index + 1}</td>
             <td><img width={50} height={50} className="rounded-circle" src={`${IMAGEURL}/avatars/${user.avatar}`} alt="avatar"/></td>
@@ -106,7 +124,10 @@ const Users = () => {
               }
             </td>
           </tr>
-        ))}
+        ))
+        :
+        <tr><td className="text-center" colSpan={8}>User Not Found</td></tr>
+        }
       </tbody>
       </Table>
 

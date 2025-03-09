@@ -7,7 +7,7 @@ import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 import useCloseOut from "../../../Hook/useClose";
 
-const AddressBox = () => {
+const AddressBox = ({setOpen}) => {
     const [gov, setGov] = useState([]); 
     const [data, setData] = useState([]); 
     const [cite, setCite] = useState([]); 
@@ -65,29 +65,30 @@ const AddressBox = () => {
     }, [selectedCite]);
     const handleAddAddress = async (e)=>{
         e.preventDefault();
-        try{
-        await axios.post(`${APIURL}/address/add`,{
-            "address":address,
-            "state":selectedGov,
-            "zip":zip[0].zip,
-            "street":selectedCite
-        },
-    {
-        headers:{
-            Accept:"application/json",
-            "x-api-key":ApiKey,
-            Authorization:`Bearer ${token}`,
-        }
-    })
-    navigate("/checkout");
-    }catch(err){
-    console.error(err)
-    }
+        console.log('first');
+    //     try{
+    //     await axios.post(`${APIURL}/address/add`,{
+    //         "address":address,
+    //         "state":selectedGov,
+    //         "zip":zip[0].zip,
+    //         "street":selectedCite
+    //     },
+    // {
+    //     headers:{
+    //         Accept:"application/json",
+    //         "x-api-key":ApiKey,
+    //         Authorization:`Bearer ${token}`,
+    //     }
+    // })
+    // // navigate("/checkout");
+    // }catch(err){
+    // console.error(err)
+    // }
     }
     useCloseOut(toastRef,setShow);
     
   return (
-        <Toast ref={toastRef} show={show} onClose={()=>setShow(false)}>
+        <Toast ref={toastRef} show={show} onClose={()=>setOpen(false)}>
         <Toast.Header>
             <strong className="me-auto">Add Address</strong>
         </Toast.Header>

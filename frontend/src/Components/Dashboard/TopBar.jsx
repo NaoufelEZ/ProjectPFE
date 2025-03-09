@@ -21,7 +21,7 @@ const TopBar = () => {
   },[]);
   return (
     <header style={{height:"60px"}} className="w-100 bg-light px-3">
-      <nav className="d-flex align_items_center justify-content-end">
+      <nav className="d-flex align-items-center justify-content-end h-100">
       <div role="button" onClick={()=>setClick(prev => !prev)}>
         <img  className="me-2" src={`${IMAGEURL}/avatars/${user.avatar}`} alt="avatar" />
         <FontAwesomeIcon icon={faChevronDown} />
