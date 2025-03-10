@@ -1,42 +1,107 @@
+/* Fix Swiper Layout */
 .swiper {
-    width: 80%;  
-    max-width: 1200px;
-    height: 100%;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 1309px;
+  height: 100vh;  /* Ensures Full Page Height */
+  margin: 0 auto;
 }
 
 .swiper-slide {
-    width: auto;
-    max-width: 100%;
+  width: 100%;
+  height: 100vh;  /* Make sure slides take full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-  .autoplay-progress {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    z-index: 10;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: var(--swiper-theme-color);
-  }
-  
-  .autoplay-progress svg {
-    --progress: 0;
-    position: absolute;
-    left: 0;
-    top: 0px;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    stroke-width: 4px;
-    stroke: var(--swiper-theme-color);
-    fill: none;
-    stroke-dashoffset: calc(125.6px * (1 - var(--progress)));
-    stroke-dasharray: 125.6;
-    border-radius: 15px;
-  }
-  
+/* Autoplay Progress */
+.autoplay-progress {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--swiper-theme-color);
+}
+
+.autoplay-progress svg {
+  --progress: 0;
+  position: absolute;
+  left: 0;
+  top: 0px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  stroke-width: 4px;
+  stroke: var(--swiper-theme-color);
+  fill: none;
+  stroke-dashoffset: calc(125.6px * (1 - var(--progress)));
+  stroke-dasharray: 125.6;
+  border-radius: 15px;
+}
+
+/* Full Page Scroll Container */
+.fullpage-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;  /* Hide scrollbar for a clean look */
+  -ms-overflow-style: none;
+}
+
+.fullpage-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
+/* Full Page Sections */
+.fullpage-section {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  position: relative;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+/* Fade-in Effect for Sections */
+.fullpage-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section Titles */
+.section-title {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 2.2rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Background Colors for Each Section */
+.new-collection {
+  background: #111;
+  color: white;
+}
+
+.other-section {
+  background: #222;
+  color: white;
+}
+
+/* Smooth Scrolling Effect */
+html {
+  scroll-behavior: smooth;
+}
