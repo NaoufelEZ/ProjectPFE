@@ -7,7 +7,7 @@ import AvatarIcons from "./AvatarIcons";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { ApiKey, APIURL } from "../Api/Api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Basket from "./Basket";
 import { Col, Row } from "react-bootstrap";
 const Header = () => {
@@ -22,6 +22,7 @@ const Header = () => {
     const cookie = new Cookies();
     const token = cookie.get("auth");
     const basketDiv = useRef();
+    const navigate = useNavigate();
         useEffect(()=>{
         if(token){
             axios.get(`${APIURL}/user`,{
@@ -30,7 +31,8 @@ const Header = () => {
                     "x-api-key":ApiKey,
                 }
             }
-        ).then((data)=>setUser(data.data.data));
+        ).then((response)=>setUser(response.data.data))
+        .catch(()=>{cookie.remove("auth",{path:"/"});navigate("/")});
         }
     },[token]);
     useEffect(()=>{

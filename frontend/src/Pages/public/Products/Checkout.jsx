@@ -64,16 +64,16 @@ const Checkout = () => {
             setSelectedAddress(index);
         };
        const formData = new FormData();
+       formData.append("user_id",user.id);
+       formData.append("address_id",selectedAddress);
+       formData.append("paymentChoose",payment[paymentChoose].method);
        carts.forEach((item)=>{
-        formData.append("user_id[]",user.id);
         formData.append("product_id[]",item.id);
         formData.append("color[]",item.color);
         formData.append("size[]",item.size);
         formData.append("price[]",item.price);
-        formData.append("addresse_id[]",selectedAddress);
         formData.append("quantity[]",item.count);
-        formData.append("paymentChoose[]",payment[paymentChoose].method);
-       });
+    });
     //    for (let [key, value] of formData.entries()) {
     //     console.log(`${key}: ${value}`);
     // }
