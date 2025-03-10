@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Addresse;
+use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException as ValidationException;
 
@@ -12,18 +12,18 @@ class AddressController extends Controller
     public function store(request $request){
         try{
             $user = $request->user()->id;
-            $userValide = $request->validate([
+            $userValid = $request->validate([
                 "address" => "required|string|max:100",
                 "state" => "required|string|max:30",
                 "zip" => "required|digits:4",
                 "street" => "required|string|max:100",
             ]);
-            Addresse::create([
+            Address::create([
                 "user_id" => $user,
-                "address" => $userValide["address"],
-                "state" => $userValide["state"],
-                "zip" => $userValide["zip"],
-                "street" => $userValide["street"],
+                "address" => $userValid["address"],
+                "state" => $userValid["state"],
+                "zip" => $userValid["zip"],
+                "street" => $userValid["street"],
             ]);
         return response()->json(["data" => "Address added successfully","status"=>200], 200);
     }catch(ValidationException $e){
@@ -32,7 +32,7 @@ class AddressController extends Controller
     }
     public function index(request $request){
         $user = $request->user()->id;
-        $address = Addresse::where("user_id",$user)->get();
+        $address = Address::where("user_id",$user)->get();
         if($address->isEmpty()){
             return response()->json(["data"=>"No address found","status"=>404],404);
         }
@@ -41,22 +41,22 @@ class AddressController extends Controller
     }
     public function update(request $request,$id){
         $user = $request->user()->id;
-        $address = Addresse::where("user_id",$user)->where("id",$id)->first();
+        $address = Address::where("user_id",$user)->where("id",$id)->first();
         if(!$address){
             return response()->json(["data"=>"No address found","status"=>404],404);
         }
         try{
-        $userValide = $request->validate([
+        $addressValid = $request->validate([
             "address" => "required|string|max:100",
             "state" => "required|string|max:30",
             "zip" => "required|digits:4",
             "street" => "required|string|max:100",
         ]);
         $address->update([
-            "address" => $userValide["address"],
-            "state" => $userValide["state"],
-            "zip" => $userValide["zip"],
-            "street" => $userValide["street"],
+            "address" => $addressValid["address"],
+            "state" => $addressValid["state"],
+            "zip" => $addressValid["zip"],
+            "street" => $addressValid["street"],
         ]);
         return response()->json(["data"=>"Address updated successfully","status"=>200],200);
     }catch(ValidationException $e){
@@ -65,7 +65,7 @@ class AddressController extends Controller
     }
     public function delete(request $request,$id){
         $user = $request->user()->id;
-        $address = Addresse::where("user_id",$user)->where("id",$id)->first();
+        $address = Address::where("user_id",$user)->where("id",$id)->first();
         if(!$address){
             return response()->json(["data"=>"No address found","status"=>404],404);
         }
@@ -74,7 +74,7 @@ class AddressController extends Controller
     }
     public function show(request $request,$id){
         $user = $request->user()->id;
-        $address = Addresse::where("user_id",$user)->where("id",$id)->first();
+        $address = Address::where("user_id",$user)->where("id",$id)->first();
         if(!$address){
             return response()->json(["data"=>"No address found","status"=>404],404);
         }
@@ -82,13 +82,13 @@ class AddressController extends Controller
     }
     public function default(request $request,$id){
         $user = $request->user()->id;
-        $address = Addresse::where("user_id",$user)->where("id",$id)->first();
-        $adressesUser = Addresse::where("user_id",$user);
+        $address = Address::where("user_id",$user)->where("id",$id)->first();
+        $addressesUser = Address::where("user_id",$user);
         if(!$address){
             return response()->json(["data"=>"No address found","status"=>404],404);
         }
-        if($adressesUser->count() > 1){
-            $adressesUser->update([
+        if($addressesUser->count() > 1){
+            $addressesUser->update([
                 "is_default"=>false,
              ]);
         }

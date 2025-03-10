@@ -13,6 +13,8 @@ class CategoryDetails extends Model
         "categoryDetails",
         "category_id",
         "subcategory_id",
+        "category_details_image",
+
     ];
     public function category(){
         return $this->belongsTo(Categories::class,'category_id');

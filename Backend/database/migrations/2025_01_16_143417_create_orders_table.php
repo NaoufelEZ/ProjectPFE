@@ -14,15 +14,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id");
-            $table->unsignedBigInteger("product_id");
-            $table->unsignedBigInteger("addresse_id");
+            $table->unsignedBigInteger("address_id");
             $table->foreign("user_id")->references("id")->on("users");
-            $table->foreign("product_id")->references("id")->on("products");
-            $table->string("color");
-            $table->string("size");
-            $table->integer("quantity");
-            $table->string("price");
-            $table->foreign("addresse_id")->references("id")->on("addresses");
+            $table->foreign("address_id")->references("id")->on("addresses");
             $table->string("status")->default("Pending");
             $table->string("method_payment");
             $table->boolean("delivery_pay")->default(true);

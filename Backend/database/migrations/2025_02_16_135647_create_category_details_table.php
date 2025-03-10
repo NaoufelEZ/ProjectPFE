@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign("category_id")->references("id")->on("categories")->onDelete("cascade");
             $table->unsignedBigInteger("subcategory_id");
             $table->foreign("subcategory_id")->references("id")->on("subcategories")->onDelete("cascade");
+            $table->string("category_details_image",100)->nullable();
             $table->timestamps();
         });
     }
@@ -28,5 +29,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('category_details');
+
     }
 };

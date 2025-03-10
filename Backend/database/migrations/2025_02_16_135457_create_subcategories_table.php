@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('subcategories', function (Blueprint $table) {
             $table->id();
-            $table->string("subcategories");
+            $table->string("subcategories",120);
+            $table->string("subcategories_image",100)->nullable();
             $table->timestamps();
         });
     }

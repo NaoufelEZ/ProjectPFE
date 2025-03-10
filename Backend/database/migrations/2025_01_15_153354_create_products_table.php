@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string("title",70);
             $table->string("description");
-            $table->integer("price");
+            $table->double("price");
             $table->integer("discount");
+            $table->unsignedBigInteger("brand_id");
+            $table->foreign("brand_id")->references("id")->on("brand")->onDelete("cascade");
             $table->timestamps();
         });
     }

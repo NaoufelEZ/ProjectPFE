@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\authController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\optController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\useController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Models\Addresse;
+use App\Models\Brand;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -121,9 +123,11 @@ Route::middleware('authenticateApiKey')->group(function(){
     });
     // Order
     Route::controller(OrderController::class)->group(function(){
+        // users 
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/order/add","store");
         });
+        // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::get("orders","index");
             Route::put("order/update","update");
@@ -138,6 +142,18 @@ Route::middleware('authenticateApiKey')->group(function(){
         // public
         Route::get("subcategory","showSubcategory");
         Route::get("category/{id_cat}/subcategory/{id_sub}","showDetails");
+    });
+    // brand
+    Route::controller(BrandController::class)->group(function(){
+        // admin
+        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+            Route::post("/brand/add","store");
+            Route::put("/brand/update{id}","update");
+            Route::delete("/brand/delete/{id}","delete");
+            Route::get("/brand/{id}","brand");
+        });
+        // public
+        
     });
 
 });

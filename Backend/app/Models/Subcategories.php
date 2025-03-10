@@ -11,6 +11,7 @@ class Subcategories extends Model
     protected $table = "subcategories";
     protected $fillable = [
         "subcategories",
+        "subcategories_image",
     ];
     public function categoryDetails(){
         return $this->hasMany(CategoryDetails::class,"subcategory_id");

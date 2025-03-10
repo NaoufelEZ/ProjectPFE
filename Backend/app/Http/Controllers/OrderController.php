@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -13,7 +14,7 @@ class OrderController extends Controller
         try{
             $orderValidation = $request->validate([
                 "product_id"=>"required",
-                "addresse_id"=>"required|array",
+                "address_id"=>"required",
                 "color"=>"required",
                 "size"=>"required",
                 "quantity"=>"required",
@@ -21,23 +22,25 @@ class OrderController extends Controller
                 "paymentChoose"=>"required",
             ]);
             $user = $request->user();
+            // return $orderValidation;
+            $order = Order::create([
+                "user_id"=>$user->id,
+                "address_id"=>$orderValidation["address_id"],
+                "method_payment"=>$orderValidation["paymentChoose"],
+            ]);
             $products = $orderValidation["product_id"];
             $colors = $orderValidation["color"];
             $sizes = $orderValidation["size"];
-            $quantitys = $orderValidation["quantity"];
-            $method_payment = $orderValidation["paymentChoose"];
-            $addresse_id = $orderValidation["addresse_id"];
+            $quantity = $orderValidation["quantity"];
             $price = $orderValidation["price"];
             foreach($products as $key => $product){
-                Order::create([
-                    "user_id"=>$user->id,
+                OrderItems::create([
+                    "order_id"=>$order->id,
                     "product_id"=>$product,
                     "color"=>$colors[$key],
                     "size"=>$sizes[$key],
                     "price"=> $price[$key],
-                    "quantity"=>$quantitys[$key],
-                    "addresse_id"=> $addresse_id[$key],
-                    "method_payment"=> $method_payment[$key],
+                    "quantity"=>$quantity[$key],
                 ]);
             }
             return response()->json(["message"=>"order are add","status"=>201],201);

@@ -13,13 +13,7 @@ class Order extends Model
     protected $table = "orders";
     protected $fillable = [
         "user_id",
-        "product_id",
-        "color",
-        "size",
-        "quantity",
-        "price",
-        "addresse_id",
-        "status",
+        "address_id",
         "method_payment"
     ];
     public $timestamps = false;

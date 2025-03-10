@@ -23,12 +23,14 @@ class ProductController extends Controller
                 "description"=>"required|string|min:6",
                 "price"=>"required|numeric",
                 "discount"=>"required|numeric",
+                "brand_id"=>"required|numeric",
             ]);
             $product = Product::create([
                 "title"=>$validProduct["title"],
                 "description"=>$validProduct["description"],
                 "price"=>$validProduct["price"],
                 "discount"=>$validProduct["discount"],
+                "brand_id"=>$validProduct["brand_id"],
             ]);
             $colors = $request->colors;
             $sizes = $request->sizes;

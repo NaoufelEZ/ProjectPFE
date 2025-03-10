@@ -15,6 +15,7 @@ class Product extends Model
         "description",
         "price",
         "discount",
+        "brand_id",
     ];
     public function productStock(){
         return $this->hasMany(ProductStock::class);
