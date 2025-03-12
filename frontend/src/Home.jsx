@@ -1,103 +1,61 @@
-import { useEffect, useRef } from "react";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import { Swiper, SwiperSlide } from "swiper/react";
-import man from "./Assets/images/D_slide_man_accs_-1.jpg";
-import calzado from "./Assets/images/D_slide_man_calzado_-1.jpg";
-import ramadan from "./Assets/images/D_slide_man_ramadan_-1.jpg";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+import jeans from "./Assets/images/slide_man_ramadan_jeans_-1jpg.jpg";
 import "./home.css";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Carousel } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { ApiKey, APIURL,IMAGEURL } from "./Api/Api";
+
 
 const Home = () => {
-  const progressLine = useRef(null);
-
-  const onAutoplayTimeLeft = (swiper, timeLeft) => {
-    if (progressLine.current) {
-      const progress = 1 - timeLeft / swiper.params.autoplay.delay;
-      progressLine.current.style.setProperty("--progress", progress);
-    }
-  };
-
-  // Smooth fade-in effect for sections
-  useEffect(() => {
-    const sections = document.querySelectorAll(".fullpage-section");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-
-    return () => {
-      sections.forEach((section) => {
-        observer.unobserve(section);
-      });
-    };
-  }, []);
-
+  const [subcategory,setSubcategory] = useState([]);
+  const [categoryDetails,setCategoryDetails] = useState([]);
+  // const navigate = useNavigate();
+  const {cat} = useParams();
+  useEffect(()=>{
+    axios.get(`${APIURL}/category/${cat}/subcategory`,{
+      headers:{
+        Accept:"application/json",
+        "x-api-key":ApiKey,
+      }
+    }).then((response)=>setSubcategory(response.data.data)
+  ).catch((err)=>console.log(err))
+  },[cat]);
+  useEffect(()=>{
+    axios.get(`${APIURL}/category/${cat}/subcategory/details`,{
+      headers:{
+        Accept:"application/json",
+        "x-api-key":ApiKey,
+      }
+    }).then((response)=>setCategoryDetails(response.data.data)
+  ).catch((err)=>console.log(err))
+  },[cat]);
   return (
     <>
       <Header />
-      <main className="fullpage-container">
-        {/* Swiper Section (First Full Page) */}
-        <section className="fullpage-section">
-          <Swiper
-            spaceBetween={30}
-            centeredSlides={true}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            pagination={{
-              clickable: true,
-            }}
-            navigation={false}
-            modules={[Autoplay, Pagination, Navigation]}
-            onAutoplayTimeLeft={onAutoplayTimeLeft}
-            className="mySwiper"
-          >
-            <SwiperSlide>
-              <img width="100%" src={man} alt="Man Collection" />
-              <h1 className="section-title">Welcome to our store</h1>
-            </SwiperSlide>
-            <SwiperSlide>
-              <img width="100%" src={calzado} alt="Shoes Collection" />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img width="100%" src={ramadan} alt="Ramadan Collection" />
-            </SwiperSlide>
-          </Swiper>
+      <section  className="w-100 ">
+      <Carousel  className="w-100 position-sticky top-0 z-0" data-bs-theme="dark">
+      {subcategory && subcategory.map((e,index)=>(
+        <Carousel.Item style={{height:"calc(100vh - 70px)"}} key={index}>
+          <img height="100%" className="d-block w-100" src={`${IMAGEURL}/categories/${e.subcategories_image}`} alt=""/>
+          <Carousel.Caption>
+            <h1 className="text-white fw-bold text-uppercase ">{e.subcategories}</h1>
+          </Carousel.Caption>
+        </Carousel.Item>
+      ))}
+    </Carousel>
+      
+        <section className="sub">
+        {categoryDetails && categoryDetails.map((e,index)=>(
+          <div key={index} className="box">
+            <img src={`${IMAGEURL}/categories/${e.category_details_image}`} alt={e.categoryDetails}/>
+            <span>{e.categoryDetails}</span>
+          </div>
+        ))}
         </section>
-
-        {/* Categories Section (Second Full Page) */}
-        <section className="fullpage-section categories">
-          <h2 className="section-title">Categories</h2>
-          <p>Discover our unique categories</p>
-        </section>
-
-        {/* New Collection Section (Third Full Page) */}
-        <section className="fullpage-section new-collection">
-          <h2 className="section-title">New Collection</h2>
-          <p>Check out our latest arrivals</p>
-        </section>
-
-        {/* Other Section (Fourth Full Page) */}
-        <section className="fullpage-section other-section">
-          <h2 className="section-title">Trending Now</h2>
-          <p>Explore the hottest trends</p>
-        </section>
-      </main>
+      </section>
       <Footer />
     </>
   );

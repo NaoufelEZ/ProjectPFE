@@ -1,4 +1,4 @@
-import { Routes,Route } from "react-router-dom";
+import { Routes,Route, Navigate } from "react-router-dom";
 import Login from "./Pages/Auth/Login.jsx";
 import Register from "./Pages/Auth/Register";
 import Home from "./Home.jsx";
@@ -39,7 +39,8 @@ function App() {
       <Route path="/test" element={<HeaderTest />} />
       <Route path="/products" element={<Products />} />
       <Route path="/product/:id" element={<Product/>} />
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<Navigate to="/man" replace />} />
+      <Route path="/:cat" element={<Home/>} />
       <Route path="/*" element={<Err404 />} />
       <Route element={<ReqLogin />}>
         <Route path="/login" element={<Login/>} />
