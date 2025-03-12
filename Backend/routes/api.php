@@ -130,7 +130,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::get("orders","index");
-            Route::put("order/update","update");
+            Route::put("order/update/{id}","update");
         });
 
     });
@@ -138,10 +138,30 @@ Route::middleware('authenticateApiKey')->group(function(){
     Route::controller(CategoryController::class)->group(function(){
         // private
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+            // category
+            Route::post("admin/category/add","storeCategory");
+            Route::put("admin/category/update/{id}","updateCategory");
+            Route::delete("admin/category/delete/{id}","deleteCategory");
+            Route::get("admin/category/{id}","getCategory");
+
+            // subcategory
+            Route::post("admin/subcategory/add","storeSubcategory");
+            Route::put("admin/subcategory/update/{id}","updateSubcategory");
+            Route::delete("admin/subcategory/delete/{id}","deleteSubcategory");
+            Route::get("admin/subcategory/{id}","getSubcategory");
+            // category details
+            Route::post("admin/categorydetails/add","storeCategorydetails");
+            Route::put("admin/categorydetails/update/{id}","updateCategorydetails");
+            Route::delete("admin/categorydetails/delete/{id}","deleteCategorydetails");
+            Route::get("admin/categorydetails/{id}","getCategorydetails");
         });
         // public
-        Route::get("subcategory","showSubcategory");
-        Route::get("category/{id_cat}/subcategory/{id_sub}","showDetails");
+        Route::get("category","showCategories");
+        Route::get("category/{cat}","getCategory");
+        Route::get("category/{cat}/subcategory","showSubcategory");
+        Route::get("category/details","showCategoryDetails");
+        Route::get("category/{cat}/subcategory/details","showDetailsByCategory");
+        Route::get("category/{cat}/subcategory/{id_sub}","showDetails");
     });
     // brand
     Route::controller(BrandController::class)->group(function(){
