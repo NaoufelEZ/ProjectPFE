@@ -7,7 +7,7 @@ const Setting = () => {
   return (
     <>
     <Header />
-    <div className="d-flex justify-content-between w-50">
+    <div className="d-flex w-100 mt-5 gap-5">
     <LeftBar />
     <Outlet />
     </div>

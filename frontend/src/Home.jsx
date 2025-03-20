@@ -1,12 +1,12 @@
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import jeans from "./Assets/images/slide_man_ramadan_jeans_-1jpg.jpg";
 import "./home.css";
 import { Carousel } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ApiKey, APIURL,IMAGEURL } from "./Api/Api";
+import { Helmet } from "react-helmet-async";
 
 
 const Home = () => {
@@ -34,10 +34,13 @@ const Home = () => {
   },[cat]);
   return (
     <>
-      <Header />
+    <Helmet>
+      <title>{cat}'s Clothing|Nalouti Store</title>
+    </Helmet>
+      <Header navTo={cat} />
       <section  className="w-100 ">
       <Carousel  className="w-100 position-sticky top-0 z-0" data-bs-theme="dark">
-      {subcategory && subcategory.map((e,index)=>(
+      {subcategory && subcategory.filter((item) => item.subcategories !== "New").map((e,index)=>(
         <Carousel.Item style={{height:"calc(100vh - 70px)"}} key={index}>
           <img height="100%" className="d-block w-100" src={`${IMAGEURL}/categories/${e.subcategories_image}`} alt=""/>
           <Carousel.Caption>
@@ -52,6 +55,15 @@ const Home = () => {
           <div key={index} className="box">
             <img src={`${IMAGEURL}/categories/${e.category_details_image}`} alt={e.categoryDetails}/>
             <span>{e.categoryDetails}</span>
+          </div>
+        ))}
+        </section>
+        <section style={{height:"100vh"}} className=" position-relative z-1 w-100">
+        {subcategory && subcategory
+        .filter((e) => e.subcategories === "New")
+        .map((findNew, index) => (
+          <div key={index}>
+          <img width="100%" src={`${IMAGEURL}/categories/${findNew.subcategories_image}`} alt="New" />
           </div>
         ))}
         </section>

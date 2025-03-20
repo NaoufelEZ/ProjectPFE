@@ -1,17 +1,17 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import "./leftBarStyle.css"
 const LeftBar = () => {
   return (
-    <div className='leftBar'>
+    <div className='p-0 me-5 '>
         <ul>
-            <li>
-                <Link to="/setting/profile">Profile</Link>
+            <li className="d-block pt-2 pb-2">
+              <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"}  to="/setting/purchases">My purchases</NavLink>
             </li>
-            <li>
-            <Link to="/setting/avatar">Avatar</Link>
+            <li className="d-block pt-2 pb-2">
+              <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"} to="/setting/personal-details">Personal details</NavLink>
             </li>
-            <li>
-            <Link to="/setting/password">Password</Link>
+            <li className="d-block pt-2 pb-2">
+            <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"} to="/setting/saved-addresses">Saved addresses</NavLink>
             </li>
         </ul>
     </div>

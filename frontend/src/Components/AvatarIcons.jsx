@@ -31,7 +31,7 @@ const AvatarIcons = (props) => {
     {(props.data.role === "Admin" || props.data.role === "Product Manager" ) &&
       <li><Link className=" text-decoration-none" to="/dashboard">Dashboard</Link></li>
     }
-      <li><Link className=" text-decoration-none" to="/setting">Profile</Link></li>
+      <li><Link className="text-decoration-none" to="/setting">Profile</Link></li>
       <li onClick={handleLogout}>Logout</li>
     </ul>}
     </div>
