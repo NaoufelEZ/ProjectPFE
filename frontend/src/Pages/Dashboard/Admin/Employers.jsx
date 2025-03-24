@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react"
-import { ApiKey, APIURL, IMAGEURL } from "../../Api/Api"
+import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api"
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { Button, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./user.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
+import { Helmet } from "react-helmet-async";
 
 
-const Users = () => {
+const Employers = () => {
   const [users, setUsers] = useState([]);
   const [currentUser,setCurrentUserUser] = useState([]);
   const [filterUsers,setFilterUsers] = useState([]);
@@ -38,8 +39,8 @@ const Users = () => {
         "x-api-key": ApiKey
       }
     }).then((response) => {
-      setUsers(response.data.data);
-      setFilterUsers(response.data.data)
+      setUsers(response.data.data.filter((e)=>e.role !== "Client"));
+      setFilterUsers(response.data.data.filter((e)=>e.role !== "Client"))
     }).catch((error) => {
       console.log(error)
     }
@@ -75,10 +76,14 @@ const Users = () => {
     });
   }
   useEffect(()=>{
-    setFilterUsers(users.filter((e)=>e.email.includes(search)));
+    setFilterUsers(users.filter((e)=>(e.first_name + " "+ e.last_name).toLocaleLowerCase().trim().includes(search.toLocaleLowerCase().trim())));
   },[search])
   return (
-    <div className="p-3">
+    <>
+    <Helmet>
+      <title>Employers|Nalouti Store</title>
+    </Helmet>
+    <div className="p-4">
     <div className="d-flex justify-content-between align-items-center mb-3">
      <span>Users</span>
      <div className="d-flex align-items-center gap-1 ms-auto">
@@ -87,10 +92,10 @@ const Users = () => {
         <FontAwesomeIcon className="h6 m-2 text-center align-middle" icon={faSearch} />
       <input onChange={(e)=>setSearch(e.target.value)} value={search} placeholder="search" className=" w-75 bg-secondary border-0 outline-none p-1" type="text"/>
       </div>
-      <div role="button" className="p-2 w-25 bg-primary rounded-3 d-flex justify-content-around align-items-center text-white">
+      <Link to="/dashboard/admin/users/add-user" role="button" className="p-2 w-25 bg-primary rounded-3 d-flex justify-content-around align-items-center text-white">
         <FontAwesomeIcon icon={faPlus}/>
         <span>Add user</span>
-      </div>
+      </Link>
      </div>
     </div>
      <Table className="w-100" striped bordered hover>
@@ -130,9 +135,9 @@ const Users = () => {
         }
       </tbody>
       </Table>
-
     </div>
+    </>
   )
 }
 
-export default Users
+export default Employers;

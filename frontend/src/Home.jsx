@@ -58,12 +58,12 @@ const Home = () => {
           </div>
         ))}
         </section>
-        <section style={{height:"100vh"}} className=" position-relative z-1 w-100">
+        <section style={{height:"100vh"}} className="position-relative z-1 w-100">
         {subcategory && subcategory
         .filter((e) => e.subcategories === "New")
         .map((findNew, index) => (
           <div key={index}>
-          <img width="100%" src={`${IMAGEURL}/categories/${findNew.subcategories_image}`} alt="New" />
+          <img height={700} width="100%" src={`${IMAGEURL}/categories/${findNew.subcategories_image}`} alt="New" />
           </div>
         ))}
         </section>

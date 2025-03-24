@@ -34,7 +34,7 @@ const SavedAddresses = () => {
           <span>there are not address saved</span>
           </div>
           <div className="mt-4 d-flex justify-content-center">
-          <Link to="/address" role='button' className="p-3 bg-black text-white rounded-3 text-center">
+          <Link to="/setting/address" role='button' className="p-3 bg-black text-white rounded-3 text-center">
             <span>Add Address</span>
           </Link>
           </div>

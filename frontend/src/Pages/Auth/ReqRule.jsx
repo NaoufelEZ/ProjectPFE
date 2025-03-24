@@ -15,13 +15,13 @@ const ReqRule = ({allowedRule}) => {
           Authorization : `Bearer ${token}`,
           "x-api-key":ApiKey,
         }
-      }).then((data)=>setUser(data.data.data))
+      }).then((data)=>setUser(data.data.data)).catch((err)=>console.log(err))
     },[token]);
   return (
     token ?
     (!user ? <Loading /> 
     : (allowedRule.includes(user.role) ? <Outlet /> : <Navigate to={"/"} replace/> )  ) 
-    : <Navigate to={"/"} replace/> 
+    : <Navigate to={"/login"} replace/> 
   )
 }
 

@@ -4,7 +4,10 @@ import { Button, Form } from "react-bootstrap";
 import { ApiKey, APIURL } from "../../../Api/Api";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet-async";
 
 const Address = () => {
     const [gov, setGov] = useState([]); 
@@ -83,8 +86,20 @@ const Address = () => {
     }
 
     return (
-        <div style={{height:"100vh"}} className="w-100 d-flex justify-content-lg-center align-items-center">
-            <Form onSubmit={handleAddAddress}>
+        <>
+        <Helmet>
+        <title>Add Address| Nalouti Store</title>
+        </Helmet>
+        <section  className="w-50">
+            <div className="mb-3">
+            <Link className="text-muted" to="/setting/personal-details">
+            <FontAwesomeIcon className="h6 me-2 mb-0" icon={faArrowLeft}/>
+            <span className="h6">
+            Back to Personal Details
+            </span>
+            </Link>
+        </div>
+            <Form className="w-100" onSubmit={handleAddAddress}>
             <Form.Group className="mb-3">
                 <Form.Control placeholder="Address" type="text" value={address} onChange={(e)=>setAddress(e.target.value)} />
             </Form.Group>
@@ -123,9 +138,10 @@ const Address = () => {
                 </Form.Select>
                 <Form.Control placeholder="Zip Code" disabled={selectedCite.length === 0} type="text" value={(selectedCite && zip) && zip[0].zip}/>
             </Form.Group>
-                <Button className="w-100" type="submit">Add Address</Button>
+                <Button variant='dark' type="submit">Add Address</Button>
             </Form>
-        </div>
+        </section>
+        </>
     );
 };
 

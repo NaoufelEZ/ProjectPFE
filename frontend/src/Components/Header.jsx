@@ -2,24 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import logo from "../Assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBagShopping,
   faChevronDown,
   faMagnifyingGlass,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import "./HeaderTest.css";
-import AvatarIcons from "./AvatarIcons";
+import { FiUser } from "react-icons/fi";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { ApiKey, APIURL } from "../Api/Api";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import Basket from "./Basket";
 import { Col, Row } from "react-bootstrap";
+import BasketUi from "../Assets/UI/BasketUi";
+import SearchBar from "../Assets/UI/SearchBar";
 
 const Header = ({ navTo }) => {
   const { cat } = useParams();
   const [user, setUser] = useState(null);
-  const [isSearch, setIsSearch] = useState(false);
   const [basket, setBasket] = useState(false);
   const [search, setSearch] = useState("");
   const [click, setClick] = useState({ action: false });
@@ -97,17 +96,6 @@ const Header = ({ navTo }) => {
 
   return (
     <>
-      {isSearch && (
-        <div className="d-flex justify-content-center w-100 py-5">
-          <input
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-            type="text"
-          />
-          <button>Search</button>
-        </div>
-      )}
-
       {(click.action || basket) && (
         <div
           style={{ height: "100vh" }}
@@ -163,30 +151,22 @@ const Header = ({ navTo }) => {
           </div>
 
           {/* Right Menu */}
-          <div className="d-flex align-items-center justify-content-between gap-3">
-            <FontAwesomeIcon
-              className="m-0 h6"
-              role="button"
-              onClick={() => setIsSearch((prev) => !prev)}
-              icon={faMagnifyingGlass}
-            />
-            <FontAwesomeIcon
-              onClick={() => setBasket((prev) => !prev)}
-              className="m-0 h6"
-              role="button"
-              icon={faBagShopping}
-            />
+          <div className="d-flex align-items-center justify-content-between gap-4">
+            <SearchBar />
             {user ? (
               <Link className="text-decoration-none text-black" to="/setting/purchases">
-                <FontAwesomeIcon className="m-0 h6 pe-2" role="button" icon={faUser} />
+                <FiUser className="m-0 h3 pe-2" role="button" />
                 <span>{user.first_name}</span>
               </Link>
             ) : (
               <Link className="text-decoration-none text-black" to="/login">
-                <FontAwesomeIcon className="m-0 h6 pe-2" role="button" icon={faUser} />
+                <FiUser className="m-0 h3 pe-2" role="button" />
                 <span>Login</span>
               </Link>
             )}
+              <div onClick={() => setBasket((prev) => !prev)}>
+              <BasketUi />
+              </div>
           </div>
         </nav>
 

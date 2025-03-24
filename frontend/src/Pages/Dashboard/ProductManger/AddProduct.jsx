@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Row, Col, InputGroup, Alert } from "react-bootstrap";
 import axios from "axios";
-import { ApiKey, APIURL } from "../../Api/Api";
+import { ApiKey, APIURL } from "../../../Api/Api";
 import Cookies from "universal-cookie";
 
 const ProductForm = () => {

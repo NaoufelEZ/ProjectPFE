@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
-import { ApiKey,APIURL, IMAGEURL } from "../../Api/Api";
+import { ApiKey,APIURL, IMAGEURL } from "../../../Api/Api";
 import axios from "axios";
 import "./Products.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,7 +28,7 @@ console.log(error)
 console.log(click)
 
   return (
-    <div className="container">
+    <div className="product-container">
     {products ? (
       products.length === 0 ? <p>there not products</p>
       : products.map((e, key) => (

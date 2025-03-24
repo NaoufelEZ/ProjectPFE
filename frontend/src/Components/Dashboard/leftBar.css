@@ -1,0 +1,29 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: #1f2937;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+}
+
+.custom-accordion .accordion-item {
+  background: #1f2937 !important;
+  border: none;
+}
+
+.custom-accordion .accordion-button {
+  background: #374151 !important;
+  color: white !important;
+  box-shadow: none;
+}
+
+.custom-accordion .accordion-button:not(.collapsed) {
+  background: #4b5563 !important;
+  color: white !important;
+}
+
+.custom-accordion .accordion-body {
+  background: #1f2937 !important;
+  color: white !important;
+}

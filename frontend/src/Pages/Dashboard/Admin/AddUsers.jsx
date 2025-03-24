@@ -3,9 +3,10 @@ import { Button, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import * as Yup from "yup";
-import { ApiKey, APIURL } from "../../Api/Api";
+import { ApiKey, APIURL } from "../../../Api/Api";
 import axios from "axios";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const AddUserSchema = Yup.object().shape({
   first_name:Yup.string().matches(/^[a-zA-Z]+$/,"First Name should be a alpha").min(3,"First Name Should Be At Less 3 Letter").required("First Name required"),
@@ -55,18 +56,22 @@ const AddUsers = () => {
         }});
           
   return (
-    <div>
-        <Form onSubmit={formik.handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>First Name</Form.Label>
-                <Form.Control name="first_name" onChange={formik.handleChange} value={formik.values.first_name} type="text" placeholder="Enter First Name" />
-            </Form.Group>
+    <>
+    <Helmet>
+        <title>Add User|Nalouti Store</title>
+    </Helmet>
+    <div className="w-100 p-4">
+        <Form className="w-50" onSubmit={formik.handleSubmit}>
+            <Form.Group className="mb-3 d-flex gap-2" controlId="formBasicEmail">
+            <div className="w-50">
+                <Form.Control  name="first_name" onChange={formik.handleChange} value={formik.values.first_name} type="text" placeholder="Enter First Name" />
                 <div className="text-danger">{formik.touched.first_name && formik.errors.first_name ? formik.errors.first_name : null }</div>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Last Name</Form.Label>
+            </div>
+            <div className="w-50">
                 <Form.Control name="last_name" onChange={formik.handleChange} value={formik.values.last_name} type="text" placeholder="Enter Last Name" />
+                <div className="text-danger">{formik.touched.last_name && formik.errors.last_name ? formik.errors.last_name : null }</div>
+            </div>
             </Form.Group>
-        <div className="text-danger">{formik.touched.last_name && formik.errors.last_name ? formik.errors.last_name : null }</div>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control name="email" onChange={formik.handleChange} value={formik.values.email} type="email" placeholder="Enter Email" />
@@ -95,6 +100,7 @@ const AddUsers = () => {
             <div className="text-danger">{error && "Email is already exist"}</div>
         </Form>
     </div>
+    </>
   )
 }
 
