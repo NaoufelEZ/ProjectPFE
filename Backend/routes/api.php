@@ -80,8 +80,11 @@ Route::middleware('authenticateApiKey')->group(function(){
     });
     // Products
     Route::controller(ProductController::class)->group(function(){
-        Route::get("/products","index");
+        // public
+        Route::get("/products/{cat}/{subcat}/{detail}","index");
+        Route::get("/products/{cat}/new","new");
         Route::get("products/product/{id}","product");
+        // private
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::post("/product/add","store");
             Route::post("/product/delete/{id}","delete");

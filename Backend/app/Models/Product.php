@@ -10,12 +10,11 @@ class Product extends Model
     use HasFactory;
     protected $table = "products";
     protected $fillable = [
-        "id",
         "title",
         "description",
         "price",
         "discount",
-        "brand_id",
+        "details_id",
     ];
     public function productStock(){
         return $this->hasMany(ProductStock::class);
