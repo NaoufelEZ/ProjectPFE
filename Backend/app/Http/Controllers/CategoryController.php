@@ -81,17 +81,17 @@ class CategoryController extends Controller
         return response()->json(["data"=>$categoryDetails,"status"=>200],200);
 
     }
-    public function showDetails($cat,$id_sub){
+    public function showDetails($cat,$sub){
         $category = Categories::where("category",$cat)->first();
-        $subcategory = Subcategories::find($id_sub);
+        $subcategoryId = Subcategories::where("subcategories",$sub)->where("category_id",$category->id)->first();
         if(!$category){
             return response()->json(["message"=>"category not found","status"=>404],404);
         }
-        else if(!$subcategory){
+        else if(!$subcategoryId){
             return response()->json(["message"=>"subcategory not found","status"=>404],404);
         }
         $categoryDetails = CategoryDetails::where('category_id', $category->id)
-        ->where('subcategory_id', $subcategory->id)
+        ->where('subcategory_id', $subcategoryId->id)
         ->get();
         return $categoryDetails;
     }
