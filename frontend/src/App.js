@@ -1,7 +1,6 @@
 import { Routes,Route, Navigate } from "react-router-dom";
 import Login from "./Pages/Auth/Login.jsx";
 import Register from "./Pages/Auth/Register";
-import Home from "./Home.jsx";
 import OtpVerify from "./Pages/public/Otp/OtpVerify";
 import ReqAuth from "./Pages/Auth/ReqBack.jsx";
 import Setting from "./Pages/public/Setting/Setting";
@@ -33,10 +32,14 @@ import Employers from "./Pages/Dashboard/Admin/Employers.jsx";
 import Message from "./Pages/Dashboard/Admin/Message.jsx";
 import OverviewManger from "./Pages/Dashboard/ProductManger/Overview.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
+import Home from "./Pages/Home.jsx";
+import Filter from "./Components/Filter.jsx";
+import Orders from "./Pages/Dashboard/Admin/Orders.jsx";
 
 function App() {
   return (
     <Routes>
+    <Route path="/filter" element={<Filter />} />
      <Route path="/" element={<Navigate to="/Man" replace />} />
      <Route path="/:cat" element={<Home/>} />
       <Route path="/addressbox" element={<AddressBox />} />
@@ -77,10 +80,9 @@ function App() {
             <Route path="overview" element={<Message />} />
               <Route path="users">
                 <Route path="employers" element={<Employers />} />
-                <Route path="client" element={<Users />} />
-              <Route path="add-user" element={<AddUsers />} />
+                <Route path="add-user" element={<AddUsers />} />
               </Route>
-              <Route path="message" element={<Message />} />
+              <Route path="orders" element={<Orders />} />
             </Route>
           {/* Product Manger */}
           <Route path="manger" element={<ReqRule allowedRule={["Product Manager"]}/>}>

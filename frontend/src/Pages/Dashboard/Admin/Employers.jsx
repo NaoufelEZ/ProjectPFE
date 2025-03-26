@@ -1,37 +1,18 @@
-import { useEffect, useState } from "react"
-import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api"
-import axios from "axios";
-import Cookies from "universal-cookie";
-import { Button, Table } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
-import "./user.css";
-import { Link, useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2'
-import { Helmet } from "react-helmet-async";
+import React, { useEffect, useState } from 'react';
+import { Table, Badge, Button, Pagination } from 'react-bootstrap';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { ApiKey,APIURL } from '../../../Api/Api';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
-
-const Employers = () => {
+const Users = ({ role }) => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([]);
-  const [currentUser,setCurrentUserUser] = useState([]);
   const [filterUsers,setFilterUsers] = useState([]);
-  const [search,setSearch] = useState("");
-  const cookie = new Cookies();
-  const token = cookie.get("auth");
-  const nav = useNavigate();
-  useEffect(() => {
-    axios.get(`${APIURL}/user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "x-api-key": ApiKey
-      }
-    }).then((response) => {
-      setCurrentUserUser(response.data.data)
-    }).catch((error) => {
-      console.log(error)
-    }
-    )
-  }, []);
+
+const cookie = new Cookies();
+const token = cookie.get("auth");
+
   useEffect(() => {
     axios.get(`${APIURL}/users`, {
       headers: {
@@ -39,105 +20,126 @@ const Employers = () => {
         "x-api-key": ApiKey
       }
     }).then((response) => {
-      setUsers(response.data.data.filter((e)=>e.role !== "Client"));
-      setFilterUsers(response.data.data.filter((e)=>e.role !== "Client"))
+      setUsers(response.data.data);
+      setFilterUsers(response.data.data)
     }).catch((error) => {
       console.log(error)
     }
     )
   }, []);
-  const handleDelete = async (id)=>{
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your user has been deleted.",
-          icon: "success"
-        });
-            axios.delete(`${APIURL}/admin/delete/${id}`,{
-              headers:{
-                Authorization:`Bearer ${token}`,
-                Accept:"application/json",
-                "x-api-key":ApiKey
-              }
-            });
-            window.location.reload();
-            nav("/dashboard/users")
-            
-      }
-    });
-  }
-  useEffect(()=>{
-    setFilterUsers(users.filter((e)=>(e.first_name + " "+ e.last_name).toLocaleLowerCase().trim().includes(search.toLocaleLowerCase().trim())));
-  },[search])
-  return (
-    <>
-    <Helmet>
-      <title>Employers|Nalouti Store</title>
-    </Helmet>
-    <div className="p-4">
-    <div className="d-flex justify-content-between align-items-center mb-3">
-     <span>Users</span>
-     <div className="d-flex align-items-center gap-1 ms-auto">
-      <span className="m-0 w-25">{filterUsers.length} Members</span>
-      <div className="w-50 rounded-3 bg-secondary">
-        <FontAwesomeIcon className="h6 m-2 text-center align-middle" icon={faSearch} />
-      <input onChange={(e)=>setSearch(e.target.value)} value={search} placeholder="search" className=" w-75 bg-secondary border-0 outline-none p-1" type="text"/>
-      </div>
-      <Link to="/dashboard/admin/users/add-user" role="button" className="p-2 w-25 bg-primary rounded-3 d-flex justify-content-around align-items-center text-white">
-        <FontAwesomeIcon icon={faPlus}/>
-        <span>Add user</span>
-      </Link>
-     </div>
-    </div>
-     <Table className="w-100" striped bordered hover>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Avatar</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Phone</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filterUsers.length > 0 ? filterUsers.map((user, index) => (
-          <tr key={index}>
-            <td>{index + 1}</td>
-            <td><img width={50} height={50} className="rounded-circle" src={`${IMAGEURL}/avatars/${user.avatar}`} alt="avatar"/></td>
-            <td>{user.first_name}</td>
-            <td>{user.last_name}</td>
-            <td>{user.email}{user.id === currentUser.id && " (you)"}</td>
-            <td>{user.role}</td>
-            <td>{user.phone}</td>
-            <td className="d-flex justify-content-between">
-              <Button className="d-flex justify-content-center align-items-center p-2" type="button"><FontAwesomeIcon icon={faPenToSquare} className="text-success h6 m-0"/></Button>
-              { user.id !== currentUser.id ?
-              <Button onClick={()=>handleDelete(user.id)} className="d-flex justify-content-center align-items-center p-2" type="button"><FontAwesomeIcon icon={faTrash} className="text-danger h6 m-0"/></Button>
-              : null
-              }
-            </td>
-          </tr>
-        ))
-        :
-        <tr><td className="text-center" colSpan={8}>User Not Found</td></tr>
-        }
-      </tbody>
-      </Table>
-    </div>
-    </>
-  )
-}
 
-export default Employers;
+  const itemsPerPage = 6;
+
+  const inventoryData = [
+    { id: 1, sku: 'CLT-TS-BLK-S', name: 'Black T-Shirt Small', category: 'T-Shirts', stock: 45, price: 19.99, status: 'In Stock' },
+    { id: 2, sku: 'CLT-TS-BLK-M', name: 'Black T-Shirt Medium', category: 'T-Shirts', stock: 32, price: 19.99, status: 'In Stock' },
+    { id: 3, sku: 'CLT-TS-BLK-L', name: 'Black T-Shirt Large', category: 'T-Shirts', stock: 18, price: 19.99, status: 'In Stock' },
+    { id: 4, sku: 'CLT-TS-WHT-S', name: 'White T-Shirt Small', category: 'T-Shirts', stock: 27, price: 19.99, status: 'In Stock' },
+  ]
+  console.log(filterUsers)
+  const getStatus = (status) => {
+    switch (status) {
+      case 1:
+        return <Badge bg="success">Active</Badge>;
+      case 0:
+        return <Badge bg="danger">Not Active</Badge>;
+    }
+  };
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filterUsers.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filterUsers.length / itemsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  return (
+    <div className="w-100 p-2">
+    <div className="d-flex justify-content-between align-items-center">
+      <span className="fw-bold h5">User Management</span>
+      <Button>Add New User</Button>
+    </div>
+    <hr/>
+      <div className="table-responsive">
+        <Table hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filterUsers.map((item,index) => (
+              <tr key={index}>
+                <td>{index+1}</td>
+                <td>{item.first_name +" "+ item.last_name}</td>
+                <td>{item.email}</td>
+                <td>{item.role}</td>
+                <td>{getStatus(item.email_verify)}</td>
+                <td>
+                  <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2" title="Edit User">
+                    <FaEdit size={13} className="mb-0" />
+                  </Button>
+                  {filterUsers.id !== users.id ?
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    title="Delete User"
+                  >
+                    <FaTrash />
+                  </Button>
+                  :
+                  null
+                  }
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      <div className="d-flex justify-content-between align-items-center mt-3">
+        <div>
+          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filterUsers.length)} of {filterUsers.length} items
+        </div>
+        <Pagination>
+          <Pagination.First
+            onClick={() => paginate(1)}
+            disabled={currentPage === 1}
+          />
+          <Pagination.Prev
+            onClick={() => paginate(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+          />
+
+          {[...Array(totalPages).keys()].map(number => (
+            <Pagination.Item
+              key={number + 1}
+              active={number + 1 === currentPage}
+              onClick={() => paginate(number + 1)}
+            >
+              {number + 1}
+            </Pagination.Item>
+          ))}
+
+          <Pagination.Next
+            onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+          />
+          <Pagination.Last
+            onClick={() => paginate(totalPages)}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
+      </div>
+    </div>
+  );
+};
+
+
+export default Users;

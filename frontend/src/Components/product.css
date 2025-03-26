@@ -1,0 +1,19 @@
+.img-container {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease-in-out;
+}
+a{
+    text-decoration: none !important;
+}
+
+.img-container img:hover {
+    transform: scale(1.1);
+}

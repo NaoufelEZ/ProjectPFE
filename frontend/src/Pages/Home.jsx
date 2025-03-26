@@ -1,11 +1,11 @@
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
 import "./home.css";
 import { Carousel } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ApiKey, APIURL,IMAGEURL } from "./Api/Api";
+import { ApiKey, APIURL,IMAGEURL } from "../Api/Api";
 import { Helmet } from "react-helmet-async";
 
 
@@ -66,6 +66,10 @@ const Home = () => {
           <img height={700} width="100%" src={`${IMAGEURL}/categories/${findNew.subcategories_image}`} alt="New" />
           </div>
         ))}
+        <div className=" position-absolute bottom-0 mb-5 d-flex align-items-center w-100 flex-column">
+          <span role="button" className="text-white h6 mb-3 text-uppercase">New</span>
+          <Link to="new" className="bg-white p-2 rounded-pill text-black">Discover</Link>
+        </div>
         </section>
       </section>
       <Footer />

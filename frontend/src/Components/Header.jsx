@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import logo from "../Assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
-  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import "./HeaderTest.css";
 import { FiUser } from "react-icons/fi";
@@ -16,15 +15,14 @@ import { Col, Row } from "react-bootstrap";
 import BasketUi from "../Assets/UI/BasketUi";
 import SearchBar from "../Assets/UI/SearchBar";
 
-const Header = ({ navTo }) => {
+const Header = () => {
   const { cat } = useParams();
   const [user, setUser] = useState(null);
   const [basket, setBasket] = useState(false);
-  const [search, setSearch] = useState("");
   const [click, setClick] = useState({ action: false });
   const [choseMenu, setChoseMenu] = useState({
     cat: cat,
-    sub: 1,
+    sub: "Clothes",
     change: false,
   });
   const [subcategory, setSubcategory] = useState([]);
@@ -93,7 +91,6 @@ const Header = ({ navTo }) => {
         .then((response) => setCategoryDetails(response.data));
     }
   }, [choseMenu, cat, lastNav]);
-
   return (
     <>
       {(click.action || basket) && (
@@ -121,11 +118,11 @@ const Header = ({ navTo }) => {
                       section: e.category,
                       action: prev.section === e.category ? !prev.action : true,
                     }));
-                    setChoseMenu({ cat: e.category, sub: subcategory[0]?.id || 1, change: false });
+                    setChoseMenu({ cat: e.category, sub: subcategory[0]?.subcategories || "Clothes", change: false });
                   }}
                   className="d-flex align-items-center me-4"
                 >
-                  <NavLink to={`/${e.category}`} className={({isActive}) => isActive ? "me-2 text-black fw-bold" : "me-2 text-muted"}>
+                  <NavLink to={`/${e.category}`} className={({isActive}) => isActive ? "me-2 text-black fw-bold text-uppercase" : "me-2 text-muted text-uppercase"}>
                     {e.category}
                   </NavLink>
                   <FontAwesomeIcon
@@ -174,12 +171,13 @@ const Header = ({ navTo }) => {
         <div className={`mega bg-light ${click.action ? "show" : ""}`}>
           <Row className="p-2 text-black">
             <Col className="col-3 d-flex flex-column">
-              <span role="button">New</span>
+              <span className="mb-3" role="button">New</span>
               {subcategory
                 .filter((item) => item.subcategories !== "New")
                 .map((element, key) => (
                   <span
-                    onClick={() => setChoseMenu({ cat: cat, sub: element.id, change: true })}
+                    className="mb-3"
+                    onClick={() => setChoseMenu({ cat: cat, sub: element.subcategories, change: true })}
                     role="button"
                     key={key}
                   >
@@ -191,9 +189,9 @@ const Header = ({ navTo }) => {
               {choseMenu.change ? (
                 <div className="grid-container">
                   {categoryDetails.map((element, index) => (
-                    <span role="button" key={index}>
+                    <Link className="text-decoration-none" to={`${choseMenu.sub}/${element.categoryDetails.replaceAll(" ","-")}`} role="button" key={index}>
                       {element.categoryDetails}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               ) : (

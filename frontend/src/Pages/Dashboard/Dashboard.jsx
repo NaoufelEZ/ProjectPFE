@@ -9,13 +9,13 @@ const Dashboard = () => {
   const user = useUser();
   return (
     <>
-    <TopBar />
-    <div className="d-flex g-5">
+    <div className="d-flex">
   {user ? (
     user.role === "Admin" ? (
       <>
         <LeftBar />
-        <Outlet />
+        <TopBar />
+
       </>
     ) : (
       <>

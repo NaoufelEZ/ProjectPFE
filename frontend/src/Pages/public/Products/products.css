@@ -1,24 +1,16 @@
-.container,.skeleton{
+.products-container,.skeleton{
     display: grid;
     grid-template-columns: repeat(4,1fr);
     gap: 10px;
 }
+
 .img-container {
     width: 100%;
-    height: 200px;
-    overflow: hidden;
+    height: 300px;
 }
 
 .img-container img {
     width: 100%;
-    height: 100%;
+    height: 80%;
     object-fit: cover;
-    transition: transform 0.5s ease-in-out;
-}
-a{
-    text-decoration: none !important;
-}
-
-.img-container img:hover {
-    transform: scale(1.1);
 }
