@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Row, Col, InputGroup, Alert } from "react-bootstrap";
 import axios from "axios";
 import { ApiKey, APIURL } from "../../../Api/Api";
 import Cookies from "universal-cookie";
+import { Helmet } from "react-helmet-async";
 
 const ProductForm = () => {
-  const cookie = new Cookies();
-  const token = cookie.get("auth");
+
+  const [category,setCategory] = useState([])
+  const [subcategory,setSubCategory] = useState([])
+  const [detail,setDetail] = useState([])
   const [colors, setColors] = useState(["Red", "Green", "Blue","Yellow","White","Black","Pink","Brown"]);
   const [colorSelects, setColorSelects] = useState([
     { name: "", image: null, sizes: [{ size: "", quantity: "" }] },
@@ -14,10 +17,50 @@ const ProductForm = () => {
   const [product, setProduct] = useState({
     title: "",
     description: "",
+    category: "",
+    subcategory: "",
     price: "",
     discount: "",
   });
   const [message, setMessage] = useState(null);
+
+  const cookie = new Cookies();
+  const token = cookie.get("auth");
+
+  useEffect(()=>{
+    axios.get(`${APIURL}/category`,{
+      headers:{
+        Accept:"application/json",
+        "x-api-key":ApiKey,
+      }
+    }).then((response)=>setCategory(response.data.data))
+  },[])
+console.log(product.category)
+console.log(subcategory)
+  useEffect(()=>{
+    if(product.category){ 
+      axios.get(`${APIURL}/admin/category/${product.category}/subcategory`,{
+      headers:{
+        Accept:"application/json",
+        Authorization:`Bearer ${token}`,
+        "x-api-key":ApiKey,
+      }
+    }).then((response)=>setSubCategory(response.data.data)
+  ).catch((err)=>console.log(err));
+  }
+  },[product.category])
+
+  useEffect(()=>{
+    if(product.category && product.subcategory){ 
+      axios.get(`${APIURL}/admin/category/${product.category}/subcategory/${product.subcategory}`,{
+      headers:{
+        Accept:"application/json",
+        Authorization:`Bearer ${token}`,
+        "x-api-key":ApiKey,
+      }
+    }).then((response)=>setDetail(response.data.data));
+  }
+  },[product.category,product.subcategory])
 
   const addColorSelect = () => {
     setColorSelects([...colorSelects, { name: "", image: null, sizes: [{ size: "", quantity: "" }] }]);
@@ -96,11 +139,17 @@ const ProductForm = () => {
   };
 
   return (
-    <Form className="w-50 p-4 border rounded shadow-sm bg-light" onSubmit={handleSubmit}>
-      <h3 className="text-center mb-4">Add New Product</h3>
+    <>
+    <Helmet>
+      <title>Add Product|Nalouti Dashboard</title>
+    </Helmet>
+    <div>
+    <span className="fw-bold h5">Add New Product</span>
+    <hr/>
 
       {message && <Alert variant={message.type}>{message.text}</Alert>}
 
+    <Form className="w-100 p-4" onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
         <Form.Label>Product Name</Form.Label>
         <Form.Control
@@ -123,6 +172,45 @@ const ProductForm = () => {
           onChange={handleProductChange}
         />
       </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label>Category</Form.Label>
+        <Form.Select value={product.category} name="category" onChange={handleProductChange}>
+          <option value="" disabled >Select Category</option>
+          {category && category.map((item)=>(
+          <option key={item.id} value={item.id}>{item.category}</option>
+          
+          ))}
+        </Form.Select>
+      </Form.Group>
+
+      {
+        product.category && subcategory.length > 0 &&
+        <Form.Group className="mb-3">
+        <Form.Label>Subcategory</Form.Label>
+        <Form.Select value={product.subcategory} name="subcategory" onChange={handleProductChange}>
+          <option value="" disabled selected >Select subcategory</option>
+          {subcategory.filter((e)=>e.subcategories !== "New").map((item)=>(
+          <option key={item.id} value={item.id}>{item.subcategories}</option>
+          
+          ))}
+        </Form.Select>
+      </Form.Group>
+      }
+
+      {
+        detail && detail.length > 0 &&
+        <Form.Group className="mb-3">
+        <Form.Label>category detail</Form.Label>
+        <Form.Select value={product.subcategory} name="subcategory" onChange={handleProductChange}>
+          <option value="" disabled selected >Select subcategory</option>
+          {detail.map((item)=>(
+          <option key={item.id} value={item.id}>{item.categoryDetails}</option>
+          
+          ))}
+        </Form.Select>
+      </Form.Group>
+      }
 
       <Form.Group className="mb-3">
         <Form.Label>Product Price</Form.Label>
@@ -212,6 +300,8 @@ const ProductForm = () => {
         Submit
       </Button>
     </Form>
+    </div>
+    </>
   );
 };
 

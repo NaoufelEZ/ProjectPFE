@@ -4,11 +4,15 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { ApiKey,APIURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import useUser from '../../../Hooks/useUser';
+import { Helmet } from 'react-helmet-async';
 
-const Users = ({ role }) => {
+const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([]);
   const [filterUsers,setFilterUsers] = useState([]);
+
+  const user = useUser();
 
 const cookie = new Cookies();
 const token = cookie.get("auth");
@@ -29,14 +33,6 @@ const token = cookie.get("auth");
   }, []);
 
   const itemsPerPage = 6;
-
-  const inventoryData = [
-    { id: 1, sku: 'CLT-TS-BLK-S', name: 'Black T-Shirt Small', category: 'T-Shirts', stock: 45, price: 19.99, status: 'In Stock' },
-    { id: 2, sku: 'CLT-TS-BLK-M', name: 'Black T-Shirt Medium', category: 'T-Shirts', stock: 32, price: 19.99, status: 'In Stock' },
-    { id: 3, sku: 'CLT-TS-BLK-L', name: 'Black T-Shirt Large', category: 'T-Shirts', stock: 18, price: 19.99, status: 'In Stock' },
-    { id: 4, sku: 'CLT-TS-WHT-S', name: 'White T-Shirt Small', category: 'T-Shirts', stock: 27, price: 19.99, status: 'In Stock' },
-  ]
-  console.log(filterUsers)
   const getStatus = (status) => {
     switch (status) {
       case 1:
@@ -55,6 +51,10 @@ const token = cookie.get("auth");
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
+    <>
+    <Helmet>
+      <title>Users|Nalouti Dashboard</title>
+    </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
       <span className="fw-bold h5">User Management</span>
@@ -82,10 +82,11 @@ const token = cookie.get("auth");
                 <td>{item.role}</td>
                 <td>{getStatus(item.email_verify)}</td>
                 <td>
-                  <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2" title="Edit User">
+                <div className={`d-flex ${user && item.id === user.id && "w-50 justify-content-center"}`}>
+                  <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2 " title="Edit User">
                     <FaEdit size={13} className="mb-0" />
                   </Button>
-                  {filterUsers.id !== users.id ?
+                  { user && item.id !== user.id ?
                   <Button
                     variant="outline-danger"
                     size="sm"
@@ -96,6 +97,7 @@ const token = cookie.get("auth");
                   :
                   null
                   }
+                  </div>
                 </td>
               </tr>
             ))}
@@ -138,6 +140,7 @@ const token = cookie.get("auth");
         </Pagination>
       </div>
     </div>
+    </>
   );
 };
 

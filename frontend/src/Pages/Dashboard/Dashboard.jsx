@@ -10,23 +10,9 @@ const Dashboard = () => {
   return (
     <>
     <div className="d-flex">
-  {user ? (
-    user.role === "Admin" ? (
-      <>
         <LeftBar />
         <TopBar />
-
-      </>
-    ) : (
-      <>
-        <LeftBarProduct />
-        <Outlet />
-      </>
-    )
-  ) : (
-    <Loading />
-  )}
-</div>
+    </div>
     
     </>
   )

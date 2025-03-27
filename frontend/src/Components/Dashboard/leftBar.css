@@ -6,7 +6,9 @@
   position: sticky;
   top: 0;
 }
-
+.sidebar.active{
+  width: 25px;
+}
 .nav-item:hover{
   background-color: #425262;
   border-radius: 5px;

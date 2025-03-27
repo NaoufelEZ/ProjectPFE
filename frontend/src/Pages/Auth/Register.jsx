@@ -85,19 +85,20 @@ const Register = () => {
                 <Card.Body>
                   <h3 className="text-center mb-4">Sign Up</h3>
                   <Form onSubmit={formik.handleSubmit}>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3 d-flex gap-2">
+                      <div className="d-flex flex-column">
                       <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        name="first_name"
-                        onChange={formik.handleChange}
-                        value={formik.values.first_name}
-                        type="text"
-                        placeholder="Enter First Name"
-                      />
-                      <div className="text-danger">{formik.touched.first_name && formik.errors.first_name}</div>
-                    </Form.Group>
+                        <Form.Control
+                          name="first_name"
+                          onChange={formik.handleChange}
+                          value={formik.values.first_name}
+                          type="text"
+                          placeholder="Enter First Name"
+                        />
+                        <div className="text-danger">{formik.touched.first_name && formik.errors.first_name}</div>
+                      </div>
 
-                    <Form.Group className="mb-3">
+                      <div className="d-flex flex-column">
                       <Form.Label>Last Name</Form.Label>
                       <Form.Control
                         name="last_name"
@@ -107,8 +108,8 @@ const Register = () => {
                         placeholder="Enter Last Name"
                       />
                       <div className="text-danger">{formik.touched.last_name && formik.errors.last_name}</div>
+                      </div>
                     </Form.Group>
-
                     <Form.Group className="mb-3">
                       <Form.Label>Email address</Form.Label>
                       <Form.Control

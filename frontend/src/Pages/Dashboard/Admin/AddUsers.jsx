@@ -46,7 +46,7 @@ const AddUsers = () => {
                     headers : {
                         Accept: "application/json",
                         "x-api-key":ApiKey,
-                        "Authorization":`Bearer ${token}`,
+                        Authorization:`Bearer ${token}`,
                     }
                 });
                 nav("/dashboard/users");

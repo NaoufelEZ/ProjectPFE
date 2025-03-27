@@ -10,60 +10,45 @@ import { Helmet } from "react-helmet-async";
 
 
 
-const Products = () => {
+const Category = () => {
   const user = useUser();
   const cookie = new Cookies();
   const token = cookie.get("auth");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [products,setProducts] = useState([]);
+  const [category,setCategory] = useState([]);
   const [search,setSearch] = useState("");
-  const [productsFilter,setProductsFilter] = useState([]);
+  const [categoryFilter,setCategoryFilter] = useState([]);
   useEffect(()=>{
-    axios.get(`${APIURL}/products`,{
+    axios.get(`${APIURL}/category`,{
       headers:{
         Authorization: `Bearer ${token}`,
         "x-api-key":ApiKey,
       }
-    }).then((response)=>{setProducts(response.data.data);setProductsFilter(response.data.data)})
+    }).then((response)=>{setCategory(response.data.data);setCategoryFilter(response.data.data)})
   },[])
   useEffect(()=>{
-    setProductsFilter(products.filter((element)=>element.title.toLowerCase().includes(search.toLowerCase().trim())));
+    setCategoryFilter(category.filter((element)=>element.title.toLowerCase().includes(search.toLowerCase().trim())));
   },[search])
   const itemsPerPage = 6;
-  // Mock inventory data
-
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'In Stock':
-        return <Badge bg="success">In Stock</Badge>;
-      case 'Low Stock':
-        return <Badge bg="warning" text="dark">Low Stock</Badge>;
-      case 'Out of Stock':
-        return <Badge bg="danger">Out of Stock</Badge>;
-      default:
-        return <Badge bg="secondary">{status}</Badge>;
-    }
-  };
-
-  // Pagination logic
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = productsFilter.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(productsFilter.length / itemsPerPage);
+  const currentItems = categoryFilter.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(categoryFilter.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
     <Helmet>
-      <title>Inventory|Nalouti Dashboard</title>
+      <title>Category|Nalouti Dashboard</title>
     </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
-      <span className="fw-bold h5">Inventory Management</span>
+      <span className="fw-bold h5">Category Management</span>
       <div className="d-flex align-items-center">
-        <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Inventory"/>
+        <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Category"/>
         {
           user && user.role === "Product Manager" &&
           <Button className="w-75">Add New Item</Button>
@@ -76,24 +61,15 @@ const Products = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Product Name</th>
-              <th>Category</th>
-              <th>Stock</th>
-              <th>Price</th>
-              <th>Status</th>
-              {user && user.role === 'Product Manager' && <th>Actions</th>}
+              <th>Category Name</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {productsFilter && productsFilter.length > 0 ? productsFilter.map((item,index) => (
+            {categoryFilter && categoryFilter.length > 0 ? categoryFilter.map((item,index) => (
               <tr key={index}>
                 <td>{index+1}</td>
-                <td>{item.title}</td>
                 <td>{item.category}</td>
-                <td>{item.stock}</td>
-                <td>${item.price.toFixed(2)}</td>
-                <td>{getStatusBadge(item.status)}</td>
-                {user && user.role === 'Product Manager' && (
                   <td>
                     <Button variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
@@ -102,7 +78,6 @@ const Products = () => {
                       <FaTrash />
                     </Button>
                   </td>
-                )}
               </tr>
             ))
             :
@@ -116,7 +91,7 @@ const Products = () => {
 
       <div className="d-flex justify-content-between align-items-center mt-3">
         <div>
-          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, productsFilter.length)} of {productsFilter.length} items
+          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, categoryFilter.length)} of {categoryFilter.length} items
         </div>
         <Pagination>
           <Pagination.First
@@ -153,4 +128,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Category;

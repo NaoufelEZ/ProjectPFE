@@ -35,6 +35,8 @@ import Address from "./Pages/public/Setting/Address.jsx";
 import Home from "./Pages/Home.jsx";
 import Filter from "./Components/Filter.jsx";
 import Orders from "./Pages/Dashboard/Admin/Orders.jsx";
+import Category from "./Pages/Dashboard/ProductManger/Category.jsx";
+import AddCategory from "./Pages/Dashboard/ProductManger/AddCategory.jsx";
 
 function App() {
   return (
@@ -75,20 +77,20 @@ function App() {
       {/* Protected Routes*/}
       <Route element={<ReqRule allowedRule={["Admin","Product Manager"]}/>}>
         <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="overview" element={<Message />} />
+          <Route path="inventory" element={<DashboardProducts />} />
+
         {/* Admin */}
-          <Route path="admin" element={<ReqRule allowedRule={["Admin"]}/>}>
-            <Route path="overview" element={<Message />} />
-              <Route path="users">
-                <Route path="employers" element={<Employers />} />
-                <Route path="add-user" element={<AddUsers />} />
-              </Route>
+          <Route element={<ReqRule allowedRule={["Admin"]}/>}>
+              <Route path="users" element={<Employers />}/>
+              <Route path="add-user" element={<AddUsers />} />
               <Route path="orders" element={<Orders />} />
             </Route>
           {/* Product Manger */}
-          <Route path="manger" element={<ReqRule allowedRule={["Product Manager"]}/>}>
-              <Route path="overview" element={<OverviewManger />} />
-              <Route path="products" element={<DashboardProducts />} />
+          <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
               <Route path="product/add" element={<AddProduct />} />
+              <Route path="category" element={<Category />} />
+              <Route path="category/add" element={<AddCategory />} />
           </Route>
         </Route>
       </Route>
