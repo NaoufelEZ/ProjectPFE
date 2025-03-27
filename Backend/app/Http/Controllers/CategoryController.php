@@ -118,4 +118,22 @@ class CategoryController extends Controller
             return response()->json(["message"=>$e->errors(),"status"=>422],422);
         }
     }
+    public function adminSubcategory($id){
+        $data = Subcategories::where("category_id",$id)->get();
+        if($data->isEmpty()){
+            return response()->json(["message"=>"the subcategory is empty","status"=>404],404);
+        }
+        return response()->json(["data"=>$data,"status"=>200],200);
+    }    
+
+    public function adminDetail($id,$id_sub){
+        $categoryDetails = CategoryDetails::where('category_id',$id)
+        ->where('subcategory_id', $id_sub)
+        ->get();
+        if($categoryDetails->isEmpty()){
+            return response()->json(["message"=>"the category Details is empty","status"=>404],404);
+        }
+        return response()->json(["data"=>$categoryDetails,"status"=>200],200);
+
+    }
 }

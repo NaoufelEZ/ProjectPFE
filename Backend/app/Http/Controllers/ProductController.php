@@ -70,4 +70,12 @@ class ProductController extends Controller
         }
         return response()->json(["data"=>$product,"status"=>200], 200);
     }
+    public function roleIndex(){
+        $products = Product::get();
+        if($products->isEmpty()){
+            return response()->json(["message"=>"Not Products","status"=>404],404);
+        }
+        return response()->json(["message"=>"succeed","data"=>$products,"status"=>200],200);
+
+    }
 }
