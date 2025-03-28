@@ -150,11 +150,13 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("admin/category/{id}","getCategory");
             // subcategory
             Route::post("admin/subcategory/add","storeSubcategory");
+            Route::get("admin/subcategory","adminSubcategoryShow");
             Route::put("admin/subcategory/update/{id}","updateSubcategory");
             Route::get("admin/category/{id}/subcategory/{id_sub}","adminDetail");
             Route::delete("admin/subcategory/delete/{id}","deleteSubcategory");
             Route::get("admin/subcategory/{id}","getSubcategory");
             // category details
+            Route::get("admin/category-details","adminCategoryDetailsShow");
             Route::post("admin/categorydetails/add","storeCategorydetails");
             Route::put("admin/categorydetails/update/{id}","updateCategorydetails");
             Route::delete("admin/categorydetails/delete/{id}","deleteCategorydetails");
