@@ -1,21 +1,34 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ApiKey, IMAGEURL } from "../../../Api/Api";
-import "./productStyle.css";
 import Header from "../../../Components/Header";
 import "./products.css";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Helmet } from "react-helmet-async";
+import { FaRegHeart } from "react-icons/fa";
+import useUser from "../../../Hooks/useUser";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSliders } from "@fortawesome/free-solid-svg-icons";
+import Filter from "../../../Components/Filter";
+
 
 const Products = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  console.log(isOpen)
 
+  const { cat } = useParams();
+  const { sub } = useParams();
+  const { detail } = useParams();
+
+  const user = useUser();
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/v1/products", {
+      .get(`http://127.0.0.1:8000/api/v1/products/${cat}/${sub}/${detail}`, {
         headers: {
           Accept: "application/json",
           "x-api-key": ApiKey,
@@ -28,8 +41,12 @@ const Products = () => {
 
   return (
     <>
+    <Helmet>
+      <title>{cat}'s {sub}|Nalouti Store</title>
+    </Helmet>
+    <Filter setIsOpen={setIsOpen} isOpen={isOpen} />
       <Header />
-      <main className="container">
+      <main className="mt-3 px-3">
         {error ? (
           <p>Products are empty</p>
         ) : loading ? (
@@ -39,9 +56,17 @@ const Products = () => {
             ))}
           </div>
         ) : data && data.length > 0 ? (
-          data.map((e, key) => (
-            <Link to={`/product/${e.id}`} key={key}>
-              <div className="box">
+          <section className="w-100">
+            <div className="w-100 d-flex justify-content-end">
+              <div onClick={()=>setIsOpen(true)} role="button" className="rounded-pill border p-2">
+              <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
+                <span>Filter</span>
+              </div>
+            </div>
+            <section className="products-container">
+          {data.map((e, key) => (
+            <Link className="text-decoration-none" to={`/product/${e.id}`} key={key}>
+              <div className="product-box position-relative">
                 <div className="img-container overflow-hidden">
                   <img
                     width={200}
@@ -49,13 +74,20 @@ const Products = () => {
                     alt="product"
                   />
                 </div>
-                <div className="d-flex flex-column">
-                  <span>{e.title}</span>
-                  <span className="fw-bold text-dark">{e.price} TND</span>
+                <div className="d-flex w-100 justify-content-between text-dark position-absolute bottom-0 px-3">
+                  <div className="d-flex flex-column">
+                    <span>{e.title}</span>
+                    <span>{e.price} TND</span>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    {user && <FaRegHeart className="h5 mb-0" /> }
+                  </div>
                 </div>
               </div>
             </Link>
-          ))
+          ))}
+            </section>
+            </section>
         ) : (
           <p>No products available</p>
         )}

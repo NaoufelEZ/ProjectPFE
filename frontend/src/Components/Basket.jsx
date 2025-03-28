@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
 import "./basket.css";
-import useCloseOut from '../Hook/useClose';
+import useCloseOut from '../Hooks/useClose';
 
 
 const Basket = (props) => {
