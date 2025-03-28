@@ -59,7 +59,7 @@ const navigate = useNavigate();
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
       <span className="fw-bold h5">User Management</span>
-      <Button onClick={()=>navigate("/dashboard/add-user")}>Add New User</Button>
+      <Button onClick={()=>navigate("/dashboard/users/add")}>Add New User</Button>
     </div>
     <hr/>
       <div className="table-responsive">
@@ -75,7 +75,7 @@ const navigate = useNavigate();
             </tr>
           </thead>
           <tbody>
-            {filterUsers.map((item,index) => (
+            {currentItems.map((item,index) => (
               <tr key={index}>
                 <td>{index+1}</td>
                 <td>{item.first_name +" "+ item.last_name}</td>

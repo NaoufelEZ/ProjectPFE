@@ -30,13 +30,14 @@ import AccountChangePassword from "./Pages/public/Setting/AccountChangePassword.
 import AccountChangeEmail from "./Pages/public/Setting/AccountChangeEmail.jsx";
 import Employers from "./Pages/Dashboard/Admin/Employers.jsx";
 import Message from "./Pages/Dashboard/Admin/Message.jsx";
-import OverviewManger from "./Pages/Dashboard/ProductManger/Overview.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
 import Home from "./Pages/Home.jsx";
 import Filter from "./Components/Filter.jsx";
 import Orders from "./Pages/Dashboard/Admin/Orders.jsx";
 import Category from "./Pages/Dashboard/ProductManger/Category.jsx";
 import AddCategory from "./Pages/Dashboard/ProductManger/AddCategory.jsx";
+import Subcategory from "./Pages/Dashboard/ProductManger/Subcatgeory.jsx";
+import CategoryDetails from "./Pages/Dashboard/ProductManger/CategoryDetails.jsx";
 
 function App() {
   return (
@@ -83,13 +84,15 @@ function App() {
         {/* Admin */}
           <Route element={<ReqRule allowedRule={["Admin"]}/>}>
               <Route path="users" element={<Employers />}/>
-              <Route path="add-user" element={<AddUsers />} />
+              <Route path="users/add" element={<AddUsers />} />
               <Route path="orders" element={<Orders />} />
             </Route>
           {/* Product Manger */}
           <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
               <Route path="product/add" element={<AddProduct />} />
               <Route path="category" element={<Category />} />
+              <Route path="subcategory" element={<Subcategory />} />
+              <Route path="category-details" element={<CategoryDetails />} />
               <Route path="category/add" element={<AddCategory />} />
           </Route>
         </Route>

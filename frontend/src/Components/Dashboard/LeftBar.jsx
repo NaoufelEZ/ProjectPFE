@@ -1,15 +1,16 @@
 import  { useState } from "react";
 import { Nav } from "react-bootstrap";
 import { AiFillDashboard } from "react-icons/ai";
+import { BiSolidCategory } from "react-icons/bi";
 import "./leftBar.css";
 import {
-  FaBoxOpen, FaUsers,FaShoppingCart
+  FaBoxOpen, FaUsers,FaShoppingCart,FaTags 
 } from 'react-icons/fa';
 import { RiAdminFill,RiMenuUnfold4Fill } from "react-icons/ri";
 import { IoSettingsSharp } from "react-icons/io5";
 import useUser from '../../Hooks/useUser';
 import { CiLogout } from "react-icons/ci";
-import { MdManageAccounts } from "react-icons/md";
+import { MdManageAccounts,MdCategory  } from "react-icons/md";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -95,15 +96,23 @@ const LefBar = () => {
           <Nav.Link href="/dashboard/product/add" className="text-white">Product Management</Nav.Link>
         </Nav.Item>
         <Nav.Item className="d-flex align-items-center ms-2 px-2">
-          <FaBoxOpen className="h4 text-white mb-0" />
+          <BiSolidCategory className="h4 text-white mb-0" />
           <Nav.Link href="/dashboard/category" className="text-white">Category</Nav.Link>
+        </Nav.Item>
+        <Nav.Item className="d-flex align-items-center ms-2 px-2">
+          <MdCategory  className="h4 text-white mb-0" />
+          <Nav.Link href="/dashboard/subcategory" className="text-white">Subcategory</Nav.Link>
+        </Nav.Item>
+        <Nav.Item className="d-flex align-items-center ms-2 px-2">
+          <FaTags  className="h4 text-white mb-0" />
+          <Nav.Link href="/dashboard/category-details" className="text-white">Category Details</Nav.Link>
         </Nav.Item>
         </>
         }
         <hr/>
         <Nav.Item className="d-flex align-items-center ms-2 px-2">
           <IoSettingsSharp className="h4 me-3 text-white mb-0" />
-          <Nav.Link href="/dashboard/admin/message" className="text-white">Setting</Nav.Link>
+          <Nav.Link href="/dashboard/message" className="text-white">Setting</Nav.Link>
         </Nav.Item>
         <Nav.Item className="d-flex align-items-center ms-2 px-2">
           <CiLogout className="h4 text-white mb-0 me-4" />

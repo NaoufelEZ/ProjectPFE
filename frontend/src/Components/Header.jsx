@@ -169,7 +169,7 @@ const Header = () => {
 
         {/* Mega Menu */}
         <div className={`mega bg-light ${click.action ? "show" : ""}`}>
-          <Row className="p-2 text-black">
+          <Row className="p-2 w-100 text-black">
             <Col className="col-3 d-flex flex-column">
               <span className="mb-3" role="button">New</span>
               {subcategory

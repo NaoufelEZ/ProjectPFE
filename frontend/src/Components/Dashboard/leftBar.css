@@ -5,6 +5,7 @@
   padding: 10px;
   position: sticky;
   top: 0;
+  overflow-y: scroll;
 }
 .sidebar.active{
   width: 25px;

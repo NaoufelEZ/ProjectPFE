@@ -85,7 +85,7 @@ const Products = () => {
             </tr>
           </thead>
           <tbody>
-            {productsFilter && productsFilter.length > 0 ? productsFilter.map((item,index) => (
+            {currentItems && currentItems.length > 0 ? currentItems.map((item,index) => (
               <tr key={index}>
                 <td>{index+1}</td>
                 <td>{item.title}</td>

@@ -1,53 +1,52 @@
 import { useState,useEffect } from 'react';
 import { Table, Button, Form, Pagination } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { ApiKey,APIURL } from '../../../Api/Api';
+import { ApiKey,APIURL, IMAGEURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
 
-
-
-
-const Category = () => {
+const CategoryDetails = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [category,setCategory] = useState([]);
+  const [categoryDetails,setCategoryDetails] = useState([]);
   const [search,setSearch] = useState("");
-  const [categoryFilter,setCategoryFilter] = useState([]);
+  const [categoryDetailsFilter,setCategoryDetailsFilter] = useState([]);
   useEffect(()=>{
-    axios.get(`${APIURL}/category`,{
+    axios.get(`${APIURL}/admin/category-details`,{
       headers:{
         Authorization: `Bearer ${token}`,
         "x-api-key":ApiKey,
       }
-    }).then((response)=>{setCategory(response.data.data);setCategoryFilter(response.data.data)})
+    }).then((response)=>{setCategoryDetails(response.data.data);setCategoryDetailsFilter(response.data.data)}
+  ).catch((err)=>console.log(err))
   },[])
+  console.log(categoryDetails)
   useEffect(()=>{
-    setCategoryFilter(category.filter((element)=>element.title.toLowerCase().includes(search.toLowerCase().trim())));
+    setCategoryDetailsFilter(categoryDetails.filter((element)=>element.categoryDetails.toLowerCase().includes(search.toLowerCase().trim())));
   },[search])
   const itemsPerPage = 6;
   
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = categoryFilter.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(categoryFilter.length / itemsPerPage);
+  const currentItems = categoryDetailsFilter.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(categoryDetailsFilter.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
     <Helmet>
-      <title>Category|Nalouti Dashboard</title>
+      <title>Category Details|Nalouti Dashboard</title>
     </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
-      <span className="fw-bold h5">Category Management</span>
+      <span className="fw-bold h5">Category Details  Management</span>
       <div className="d-flex align-items-center">
-        <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Category"/>
-          <Button className="w-75">Add New Item</Button>
+        <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search subcategory"/>
+        <Button className="w-75">Add New Item</Button>
       </div>
     </div>
     <hr/>
@@ -56,7 +55,10 @@ const Category = () => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Image</th>
               <th>Category Name</th>
+              <th>Subcategory Name</th>
+              <th>Category Details  Name</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -64,7 +66,10 @@ const Category = () => {
             {currentItems && currentItems.length > 0 ? currentItems.map((item,index) => (
               <tr key={index}>
                 <td>{index+1}</td>
-                <td>{item.category}</td>
+                <td><img width="50" height="50" src={`${IMAGEURL}/categories/${item.category_details_image}`}/></td>
+                <td>{item.category.category}</td>
+                <td>{item.subcategory.subcategories}</td>
+                <td>{item.categoryDetails}</td>
                   <td>
                     <Button variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
@@ -86,7 +91,7 @@ const Category = () => {
 
       <div className="d-flex justify-content-between align-items-center mt-3">
         <div>
-          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, categoryFilter.length)} of {categoryFilter.length} items
+          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, categoryDetailsFilter.length)} of {categoryDetailsFilter.length} items
         </div>
         <Pagination>
           <Pagination.First
@@ -123,4 +128,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryDetails;
