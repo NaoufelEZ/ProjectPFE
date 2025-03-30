@@ -43,7 +43,6 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
             Route::put("user/profile","profile");
             Route::put("user/password","password");
-            Route::post("user/avatar","avatar");
         });
         // Admin
         Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
