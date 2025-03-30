@@ -6,7 +6,6 @@ import { Helmet } from "react-helmet-async";
 import { useFormik } from 'formik';
 import * as Yup  from 'yup';
 import { useNavigate } from 'react-router-dom';
-import useUser from '../../../Hooks/useUser';
 
 const categorySchema = Yup.object().shape({
     category:Yup.string().matches(/^[a-zA-Z]+$/, "Category should be alphabetic").min(3,"Category should at less be 3 characters").required("Category required")
@@ -27,7 +26,7 @@ const AddCategory = () => {
     validationSchema:categorySchema,
     onSubmit: async (value)=>{
         try{
-        axios.post(`${APIURL}/admin/category/add`,
+        await axios.post(`${APIURL}/admin/category/add`,
             {
                 category:value.category,
             },
@@ -66,7 +65,7 @@ const AddCategory = () => {
                     <Form.Control.Feedback type='valid'>Look Good</Form.Control.Feedback>
                     </Form.Group>
 
-                    <Button type='submit'>Save</Button>
+                    <Button type='submit'>Add</Button>
                 </Form>
         
             </div>

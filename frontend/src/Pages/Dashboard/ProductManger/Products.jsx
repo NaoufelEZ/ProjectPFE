@@ -6,6 +6,8 @@ import { ApiKey,APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
+import { IoMdEye } from "react-icons/io";
+import StatusBox from './StatusBox';
 
 
 
@@ -16,9 +18,13 @@ const Products = () => {
   const token = cookie.get("auth");
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isStatusOpen,setIsStatusOpen] = useState(false)
   const [products,setProducts] = useState([]);
   const [search,setSearch] = useState("");
   const [productsFilter,setProductsFilter] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+
   useEffect(()=>{
     axios.get(`${APIURL}/products`,{
       headers:{
@@ -26,10 +32,16 @@ const Products = () => {
         "x-api-key":ApiKey,
       }
     }).then((response)=>{setProducts(response.data.data);setProductsFilter(response.data.data)})
-  },[])
+  },[token])
   useEffect(()=>{
     setProductsFilter(products.filter((element)=>element.title.toLowerCase().includes(search.toLowerCase().trim())));
   },[search])
+
+  const handleStatusClick = (product) => {
+    setSelectedProduct(product);
+    setIsStatusOpen(true);
+  };
+
   const itemsPerPage = 6;
   // Mock inventory data
 
@@ -59,6 +71,7 @@ const Products = () => {
     <Helmet>
       <title>Inventory|Nalouti Dashboard</title>
     </Helmet>
+    <StatusBox isStatusOpen={isStatusOpen} setIsStatusOpen={setIsStatusOpen} data={selectedProduct} />
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
       <span className="fw-bold h5">Inventory Management</span>
@@ -77,8 +90,8 @@ const Products = () => {
             <tr>
               <th>#</th>
               <th>Product Name</th>
+              <th>description</th>
               <th>Category</th>
-              <th>Stock</th>
               <th>Price</th>
               <th>Status</th>
               {user && user.role === 'Product Manager' && <th>Actions</th>}
@@ -89,10 +102,12 @@ const Products = () => {
               <tr key={index}>
                 <td>{index+1}</td>
                 <td>{item.title}</td>
-                <td>{item.category}</td>
-                <td>{item.stock}</td>
-                <td>${item.price.toFixed(2)}</td>
-                <td>{getStatusBadge(item.status)}</td>
+                <td>
+                {item.description.split(" ").slice(0, 5).join(" ")}{item.description.split(" ").length > 5 ? "..." : ""}
+                </td>
+                <td></td>
+                <td>{item.price.toFixed(2)} TND</td>
+                <td><IoMdEye onClick={()=>handleStatusClick(item.product_stock)} color='green' role="button" size={25} /></td>
                 {user && user.role === 'Product Manager' && (
                   <td>
                     <Button variant="outline-primary" size="sm" className="me-2">

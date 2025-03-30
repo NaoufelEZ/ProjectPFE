@@ -5,6 +5,7 @@ import { ApiKey,APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -17,6 +18,8 @@ const Category = () => {
   const [category,setCategory] = useState([]);
   const [search,setSearch] = useState("");
   const [categoryFilter,setCategoryFilter] = useState([]);
+
+  const navigate = useNavigate();
   useEffect(()=>{
     axios.get(`${APIURL}/category`,{
       headers:{
@@ -26,7 +29,7 @@ const Category = () => {
     }).then((response)=>{setCategory(response.data.data);setCategoryFilter(response.data.data)})
   },[])
   useEffect(()=>{
-    setCategoryFilter(category.filter((element)=>element.title.toLowerCase().includes(search.toLowerCase().trim())));
+    setCategoryFilter(category.filter((element)=>element.category.toLowerCase().includes(search.toLowerCase().trim())));
   },[search])
   const itemsPerPage = 6;
   
@@ -47,7 +50,7 @@ const Category = () => {
       <span className="fw-bold h5">Category Management</span>
       <div className="d-flex align-items-center">
         <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Category"/>
-          <Button className="w-75">Add New Item</Button>
+          <Button className="w-75" onClick={()=>navigate("add")}>Add New Item</Button>
       </div>
     </div>
     <hr/>

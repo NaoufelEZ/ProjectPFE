@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Table, Badge, Button, Pagination, Form, Dropdown } from 'react-bootstrap';
 import { FaEye, FaTruck, FaCheck, FaTimes } from 'react-icons/fa';
+import { ApiKey, APIURL } from '../../../Api/Api';
+import Cookies from 'universal-cookie';
 
 const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [orders,setOrders] = useState([]);
+  const [ordersFilter,setOrdersFilter] = useState([]);
+  const [orderSelected,setOrderSelected] = useState("");
   const itemsPerPage = 6;
 
+  const cookie = new Cookies();
+  const token = cookie.get("auth");
+
+  useEffect(()=>{
+    axios.get(`${APIURL}/orders`,{
+      headers:{
+        Accept:"Application/json",
+        Authorization:`Bearer ${token}`,
+        "x-api-key":ApiKey,
+      }
+    }).then((response)=>{setOrders(response.data.data);setOrdersFilter(response.data.data)})
+  },[]);
+
+  useEffect(()=>{
+    setOrdersFilter(orders.filter((element)=>element.status === orderSelected));
+  },[orderSelected])
   // Mock orders data
-  const ordersData = [
-    { id: 'ORD-2025-0001', customer: 'John Smith', date: '2025-03-20', items: 3, total: 89.97, status: 'Delivered' },
-    { id: 'ORD-2025-0002', customer: 'Emma Johnson', date: '2025-03-21', items: 1, total: 49.99, status: 'Processing' },
-    { id: 'ORD-2025-0003', customer: 'Michael Brown', date: '2025-03-21', items: 2, total: 39.98, status: 'Shipped' },
-    { id: 'ORD-2025-0004', customer: 'Olivia Davis', date: '2025-03-22', items: 5, total: 154.95, status: 'Pending' },
-    { id: 'ORD-2025-0005', customer: 'William Miller', date: '2025-03-22', items: 2, total: 99.98, status: 'Delivered' },
-    { id: 'ORD-2025-0006', customer: 'Sophia Wilson', date: '2025-03-23', items: 1, total: 79.99, status: 'Pending' },
-    { id: 'ORD-2025-0007', customer: 'James Moore', date: '2025-03-23', items: 3, total: 59.97, status: 'Processing' },
-    { id: 'ORD-2025-0008', customer: 'Isabella Taylor', date: '2025-03-24', items: 2, total: 39.98, status: 'Shipped' },
-    { id: 'ORD-2025-0009', customer: 'Benjamin Anderson', date: '2025-03-24', items: 4, total: 199.96, status: 'Pending' },
-    { id: 'ORD-2025-0010', customer: 'Mia Thomas', date: '2025-03-24', items: 1, total: 49.99, status: 'Cancelled' },
-    { id: 'ORD-2025-0011', customer: 'Charlotte Jackson', date: '2025-03-24', items: 3, total: 149.97, status: 'Processing' },
-    { id: 'ORD-2025-0012', customer: 'Daniel White', date: '2025-03-25', items: 2, total: 99.98, status: 'Pending' },
-    { id: 'ORD-2025-0013', customer: 'Amelia Harris', date: '2025-03-25', items: 1, total: 19.99, status: 'Pending' },
-    { id: 'ORD-2025-0014', customer: 'Henry Martin', date: '2025-03-25', items: 5, total: 249.95, status: 'Processing' },
-    { id: 'ORD-2025-0015', customer: 'Elizabeth Thompson', date: '2025-03-25', items: 3, total: 149.97, status: 'Pending' },
-  ];
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -79,27 +84,24 @@ const Orders = () => {
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = ordersData.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(ordersData.length / itemsPerPage);
+  const currentItems = ordersFilter.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(ordersFilter.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
 
   return (
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
       <span className="fw-bold h5">Order Management</span>
-      <Form.Select className="w-25">
-        <option>All Orders</option>
-        <option>Pending</option>
-        <option>Cancelled</option>
-        <option>Processing</option>
-        <option>Shipped</option>
-        <option>Delivered</option>
+      <Form.Select onChange={(e)=>setOrderSelected(e.target.value)} className="w-25">
+        <option value="" selected disabled>All Orders</option>
+        <option value="Pending">Pending</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Processing">Processing</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Return">Return</option>
       </Form.Select>
     </div>
     <hr/>
@@ -107,36 +109,39 @@ const Orders = () => {
         <Table hover>
           <thead>
             <tr>
-              <th>Order ID</th>
+              <th>#</th>
               <th>Customer</th>
               <th>Date</th>
               <th>Items</th>
-              <th>Total</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.map(order => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.customer}</td>
-                <td>{formatDate(order.date)}</td>
-                <td>{order.items}</td>
-                <td>${order.total.toFixed(2)}</td>
+            {currentItems.length > 0 ? currentItems.map((order,index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{order.user.first_name + " " + order.user.last_name}</td>
+                <td>{order.order_date.split(" ")[0]}</td>
+                <td><FaEye /></td>
                 <td>{getStatusBadge(order.status)}</td>
                 <td>
                   {getActionButtons(order.status)}
                 </td>
               </tr>
-            ))}
+            ))
+            :
+            <tr>
+              <td className="text-center" colSpan={6}>Order Not Found</td>
+            </tr>
+            }
           </tbody>
         </Table>
       </div>
 
       <div className="d-flex justify-content-between align-items-center mt-3">
         <div>
-          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, ordersData.length)} of {ordersData.length} orders
+          Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, ordersFilter.length)} of {ordersFilter.length} orders
         </div>
         <Pagination>
           <Pagination.First

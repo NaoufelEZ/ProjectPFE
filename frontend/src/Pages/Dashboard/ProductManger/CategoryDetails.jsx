@@ -5,6 +5,7 @@ import { ApiKey,APIURL, IMAGEURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from 'react-router-dom';
 
 const CategoryDetails = () => {
   const cookie = new Cookies();
@@ -14,6 +15,7 @@ const CategoryDetails = () => {
   const [categoryDetails,setCategoryDetails] = useState([]);
   const [search,setSearch] = useState("");
   const [categoryDetailsFilter,setCategoryDetailsFilter] = useState([]);
+  const navigate = useNavigate();
   useEffect(()=>{
     axios.get(`${APIURL}/admin/category-details`,{
       headers:{
@@ -46,7 +48,7 @@ const CategoryDetails = () => {
       <span className="fw-bold h5">Category Details  Management</span>
       <div className="d-flex align-items-center">
         <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search subcategory"/>
-        <Button className="w-75">Add New Item</Button>
+        <Button className="w-75" onClick={()=>navigate("add")}>Add New Item</Button>
       </div>
     </div>
     <hr/>

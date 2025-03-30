@@ -8,7 +8,7 @@ import useUser from '../../../Hooks/useUser';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
-const Users = () => {
+const DeliveryCompany = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([]);
   const [filterUsers,setFilterUsers] = useState([]);
@@ -19,7 +19,7 @@ const cookie = new Cookies();
 const token = cookie.get("auth");
 const navigate = useNavigate();
   useEffect(() => {
-    axios.get(`${APIURL}/users`, {
+    axios.get(`${APIURL}/delivery-company`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "x-api-key": ApiKey
@@ -54,12 +54,12 @@ const navigate = useNavigate();
   return (
     <>
     <Helmet>
-      <title>Users|Nalouti Dashboard</title>
+      <title>Delivery Company|Nalouti Dashboard</title>
     </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
-      <span className="fw-bold h5">User Management</span>
-      <Button onClick={()=>navigate("/dashboard/users/add")}>Add New User</Button>
+      <span className="fw-bold h5">Delivery Company Management</span>
+      <Button onClick={()=>navigate("/dashboard/delivery-company/add")}>Add New Company</Button>
     </div>
     <hr/>
       <div className="table-responsive">
@@ -67,27 +67,29 @@ const navigate = useNavigate();
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
+              <th>Company Name</th>
               <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Fee</th>
+              <th>Duration</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((item,index) => (
+            {currentItems && currentItems.length > 0 ? currentItems.map((item,index) => (
               <tr key={index}>
                 <td>{index+1}</td>
-                <td>{item.first_name +" "+ item.last_name}</td>
+                <td>{item.first_name}</td>
+                <td>{item.email}</td>
+                <td>{item.email}</td>
                 <td>{item.email}</td>
                 <td>{item.role}</td>
                 <td>{getStatus(item.email_verify)}</td>
                 <td>
-                <div className={`d-flex ${user && item.id === user.id && "w-50 justify-content-center"}`}>
                   <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2 " title="Edit User">
                     <FaEdit size={13} className="mb-0" />
                   </Button>
-                  { user && item.id !== user.id ?
                   <Button
                     variant="outline-danger"
                     size="sm"
@@ -95,13 +97,16 @@ const navigate = useNavigate();
                   >
                     <FaTrash />
                   </Button>
-                  :
-                  null
-                  }
-                  </div>
                 </td>
               </tr>
-            ))}
+             
+            ))
+            :
+              <tr>
+                <td className="text-center" colSpan={8}>Delivery Company Not Found</td>
+              </tr>
+            }
+            
           </tbody>
         </Table>
       </div>
@@ -146,4 +151,4 @@ const navigate = useNavigate();
 };
 
 
-export default Users;
+export default DeliveryCompany;

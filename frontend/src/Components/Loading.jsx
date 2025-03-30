@@ -1,4 +1,3 @@
-import React from 'react'
 import { bouncy } from 'ldrs'
 
 const Loading = () => {

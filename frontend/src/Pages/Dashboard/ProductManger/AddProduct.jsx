@@ -19,6 +19,7 @@ const ProductForm = () => {
     description: "",
     category: "",
     subcategory: "",
+    detail: "",
     price: "",
     discount: "",
   });
@@ -35,8 +36,6 @@ const ProductForm = () => {
       }
     }).then((response)=>setCategory(response.data.data))
   },[])
-console.log(product.category)
-console.log(subcategory)
   useEffect(()=>{
     if(product.category){ 
       axios.get(`${APIURL}/admin/category/${product.category}/subcategory`,{
@@ -115,8 +114,9 @@ console.log(subcategory)
     formData.append("description", product.description);
     formData.append("price", product.price);
     formData.append("discount", product.discount);
+    formData.append("details_id", product.detail);
 
-    colorSelects.forEach((colorItem, colorIndex) => {
+    colorSelects.forEach((colorItem) => {
       formData.append(`colors[]`, colorItem.name);
       if (colorItem.image) {
         formData.append(`product_pictures[]`, colorItem.image);
@@ -137,6 +137,7 @@ console.log(subcategory)
       setMessage({ type: "danger", text: error.response?.data?.data || "An error occurred" });
     }
   };
+  console.log(product.detail); 
 
   return (
     <>
@@ -202,8 +203,8 @@ console.log(subcategory)
         detail && detail.length > 0 &&
         <Form.Group className="mb-3">
         <Form.Label>category detail</Form.Label>
-        <Form.Select value={product.subcategory} name="subcategory" onChange={handleProductChange}>
-          <option value="" disabled selected >Select subcategory</option>
+        <Form.Select value={product.detail} name="detail" onChange={handleProductChange}>
+          <option value="" disabled selected >Select Category Detail</option>
           {detail.map((item)=>(
           <option key={item.id} value={item.id}>{item.categoryDetails}</option>
           
@@ -225,7 +226,7 @@ console.log(subcategory)
 
       <Form.Group className="mb-3">
         <Form.Label>Discount</Form.Label>
-        <Form.Control
+        <Form.Control min={0}
           type="number"
           name="discount"
           placeholder="Enter Product Discount (%)"

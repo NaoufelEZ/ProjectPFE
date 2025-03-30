@@ -28,7 +28,6 @@ import Purchases from "./Pages/public/Setting/Purchases.jsx";
 import SavedAddresses from "./Pages/public/Setting/SavedAddresses.jsx";
 import AccountChangePassword from "./Pages/public/Setting/AccountChangePassword.jsx";
 import AccountChangeEmail from "./Pages/public/Setting/AccountChangeEmail.jsx";
-import Employers from "./Pages/Dashboard/Admin/Employers.jsx";
 import Message from "./Pages/Dashboard/Admin/Message.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
 import Home from "./Pages/Home.jsx";
@@ -38,6 +37,14 @@ import Category from "./Pages/Dashboard/ProductManger/Category.jsx";
 import AddCategory from "./Pages/Dashboard/ProductManger/AddCategory.jsx";
 import Subcategory from "./Pages/Dashboard/ProductManger/Subcatgeory.jsx";
 import CategoryDetails from "./Pages/Dashboard/ProductManger/CategoryDetails.jsx";
+import DeliveryCompany from "./Pages/Dashboard/Admin/DeliveryCompany.jsx";
+import AddDeliveryCompany from "./Pages/Dashboard/Admin/AddDeliveryCompany.jsx";
+import AddSubcategory from "./Pages/Dashboard/ProductManger/AddSubcatgeory.jsx";
+import AddCategoryDetails from "./Pages/Dashboard/ProductManger/AddCategoryDetails.jsx";
+import DashboardSetting from "./Pages/Dashboard/DashboardSetting.jsx";
+import DashboardChangeMail from "./Pages/Dashboard/DashboardChangeMail.jsx";
+import DashboardChangePassword from "./Pages/Dashboard/DashboardChangePassword.jsx";
+import Overview from "./Pages/Dashboard/Overview.jsx";
 
 function App() {
   return (
@@ -78,14 +85,19 @@ function App() {
       {/* Protected Routes*/}
       <Route element={<ReqRule allowedRule={["Admin","Product Manager"]}/>}>
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="overview" element={<Message />} />
+          <Route path="overview" element={<Overview />} />
           <Route path="inventory" element={<DashboardProducts />} />
+          <Route path="setting" element={<DashboardSetting />} />
+          <Route path="setting/change-email" element={<DashboardChangeMail />} />
+          <Route path="setting/change-password" element={<DashboardChangePassword />} />
 
         {/* Admin */}
           <Route element={<ReqRule allowedRule={["Admin"]}/>}>
-              <Route path="users" element={<Employers />}/>
+              <Route path="users" element={<Users />}/>
               <Route path="users/add" element={<AddUsers />} />
               <Route path="orders" element={<Orders />} />
+              <Route path="delivery-company" element={<DeliveryCompany />} />
+              <Route path="delivery-company/add" element={<AddDeliveryCompany />} />
             </Route>
           {/* Product Manger */}
           <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
@@ -94,6 +106,8 @@ function App() {
               <Route path="subcategory" element={<Subcategory />} />
               <Route path="category-details" element={<CategoryDetails />} />
               <Route path="category/add" element={<AddCategory />} />
+              <Route path="subcategory/add" element={<AddSubcategory />} />
+              <Route path="category-details/add" element={<AddCategoryDetails />} />
           </Route>
         </Route>
       </Route>

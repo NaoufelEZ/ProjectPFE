@@ -5,6 +5,7 @@ import { ApiKey,APIURL, IMAGEURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -17,6 +18,8 @@ const Subcategory = () => {
   const [subcategory,setSubcategory] = useState([]);
   const [search,setSearch] = useState("");
   const [subcategoryFilter,setSubcategoryFilter] = useState([]);
+
+  const navigate = useNavigate();
   useEffect(()=>{
     axios.get(`${APIURL}/admin/subcategory`,{
       headers:{
@@ -47,7 +50,7 @@ const Subcategory = () => {
       <span className="fw-bold h5">Subcategory Management</span>
       <div className="d-flex align-items-center">
         <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search subcategory"/>
-        <Button className="w-75">Add New Item</Button>
+        <Button onClick={()=>navigate("add")} className="w-75">Add New Item</Button>
       </div>
     </div>
     <hr/>
