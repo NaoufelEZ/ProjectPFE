@@ -43,7 +43,7 @@ class CategoryController extends Controller
             $categoryValidation = $request->validate([
                 "category_id"=>"required|integer",
                 "subcategories"=>"required|string|min:3",
-                "subcategories_image"=>"required|image",
+                "subcategories_image"=>"required|mimes:jpeg,png,jpg,mp4",
             ]);
             $fileExtension = $categoryValidation["subcategories_image"]->getClientOriginalExtension();
             $imageName = time() . "_".uniqid() . "." . $fileExtension;
@@ -95,13 +95,13 @@ class CategoryController extends Controller
         ->get();
         return $categoryDetails;
     }
-    public function storeCategorydetails(Request $request){
+    public function storeCategoryDetails(Request $request){
         try{
             $CategorydetailsValidation = $request->validate([
                 "categoryDetails"=>"required|string",
                 "category_id"=>"required|integer",
                 "subcategory_id"=>"required|integer",
-                "category_details_image"=>"required|image",
+                "category_details_image"=>"required|mimes:jpeg,png,jpg,mp4",
             ]);
             $imageExtension = $CategorydetailsValidation["category_details_image"]->getClientOriginalExtension();
             $imageName = time() . "_" . uniqid() . "." . $imageExtension;
@@ -150,4 +150,5 @@ class CategoryController extends Controller
         }
         return response()->json(["message"=>"category details ","data"=>$categoryDetails,"status"=>200],200);
     }
+    
 }

@@ -10,7 +10,6 @@ class ProductStock extends Model
     use HasFactory;
     protected $table = "product-stock";
     protected $fillable = [
-        "id",
         "product_id",
         "color",
         "product_picture",

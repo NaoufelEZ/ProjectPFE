@@ -5,6 +5,7 @@ use App\Http\Controllers\authController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DeliveryCompanyController;
 use App\Http\Controllers\optController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\otpController;
@@ -12,9 +13,6 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\useController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
-use App\Models\Addresse;
-use App\Models\Brand;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Profiler\Profile;
@@ -157,10 +155,10 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("admin/subcategory/{id}","getSubcategory");
             // category details
             Route::get("admin/category-details","adminCategoryDetailsShow");
-            Route::post("admin/categorydetails/add","storeCategorydetails");
-            Route::put("admin/categorydetails/update/{id}","updateCategorydetails");
-            Route::delete("admin/categorydetails/delete/{id}","deleteCategorydetails");
-            Route::get("admin/categorydetails/{id}","getCategorydetails");
+            Route::post("admin/category-details/add","storeCategoryDetails");
+            Route::put("admin/category-details/update/{id}","updateCategoryDetails");
+            Route::delete("admin/category-details/delete/{id}","deleteCategoryDetails");
+            Route::get("admin/category-details/{id}","getCategoryDetails");
         });
         // public
         Route::get("category","showCategories");
@@ -181,6 +179,17 @@ Route::middleware('authenticateApiKey')->group(function(){
         });
         // public
         
+    });
+    // Delivery Company
+    Route::controller(DeliveryCompanyController::class)->group(function(){
+        Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
+            Route::get("delivery-company","index");
+            Route::post("delivery-company/add","store");
+            Route::get("delivery-company/{id}","getCompany");
+            Route::delete("delivery-company/delete/{id}","index");
+            Route::put("delivery-company/update/{id}","index");
+
+        });
     });
 
 });

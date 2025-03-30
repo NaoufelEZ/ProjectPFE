@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItems extends Model
 {
+    use HasFactory;
     protected $table = "order_items";
     protected $fillable = [
         "order_id",
@@ -17,5 +18,7 @@ class OrderItems extends Model
         "price",
     ];
     public $timestamps = false;
-    use HasFactory;
+    function order(){
+        return $this->belongsTo(Order::class,"order_id");
+    }
 }

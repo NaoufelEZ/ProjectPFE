@@ -71,7 +71,7 @@ class ProductController extends Controller
         return response()->json(["data"=>$product,"status"=>200], 200);
     }
     public function roleIndex(){
-        $products = Product::get();
+        $products = Product::with("productStock")->get();
         if($products->isEmpty()){
             return response()->json(["message"=>"Not Products","status"=>404],404);
         }

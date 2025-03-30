@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\User as ModelsUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Models\user;
 
 class Order extends Model
 {
@@ -17,4 +16,11 @@ class Order extends Model
         "method_payment"
     ];
     public $timestamps = false;
+    public function orderItems(){
+        return $this->hasMany(OrderItems::class);
+    }
+    public function user(){
+        return $this->belongsTo(ModelsUser::class);
+    }
+
 }

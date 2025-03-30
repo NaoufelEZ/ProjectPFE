@@ -50,12 +50,12 @@ class OrderController extends Controller
         }
     }
     public function index(){
-        $orders = Order::get();
-        $orederByUser = array();
-        foreach($orders as $key => $order){
-            $orederByUser[$key] = $order;
+        $orders = Order::with("orderItems")->with("user")->get();
+        if($orders->isEmpty()){
+            return response()->json(["message"=>"Orders are Empty","status"=>404],404);
         }
-        return $orederByUser;
+        return response()->json(["message"=>"Succeed","data"=>$orders,"status"=>200],200);
+
 
     }
 }
