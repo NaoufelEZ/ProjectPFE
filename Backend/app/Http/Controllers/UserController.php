@@ -55,27 +55,6 @@ class UserController extends Controller
             return response()->json(["data"=>$e->errors(),"status"=>422], 422);
         }
     }
-    public function avatar(Request $request){
-        $user = $request->user();
-        try{
-        $validAvatar = $request->validate([
-            "avatar"=>"required|image"
-        ]);
-        $avatar = $request->file("avatar");
-        $fileExtension = $avatar->getClientOriginalExtension();
-        $imgName = time() . "_" . uniqid() . "." . $fileExtension;
-        $path = public_path("images/avatars/");
-        $avatar->move($path,$imgName);
-        $user->update([
-            "avatar"=>$imgName
-        ]);
-        return response()->json(["data"=>"Your Avatar has been updated","status"=>200], 200);
-
-        }catch(ValidationException $e){
-            return response()->json(["data"=>$e->errors(),"status"=>"422"], 422);
-        }
-
-    }
     // Admin
     public function index(){
         $user = User::all();
@@ -102,17 +81,16 @@ class UserController extends Controller
             "phone"=>"required|digits:8",
             "role"=>"required|in:Admin,Product Manager",
         ]);
-        if($validUser){
-            $user = User::create([
+            User::create([
                 "first_name"=>$validUser["first_name"],
                 "last_name"=>$validUser["last_name"],
                 "email"=>$validUser["email"],
                 "password"=>Hash::make($validUser["password"]),
                 "phone"=>$validUser["phone"],
+                "email_verify"=>true,
                 "role"=>$validUser["role"],
             ]);
             return response()->json(["message"=>"User Add","status"=>201], 201);
-        }
     }catch(ValidationException $e){
         return response()->json(["message"=>$e->errors(),"status"=>422], 422);
     }

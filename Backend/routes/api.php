@@ -2,18 +2,14 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\authController;
-use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DeliveryCompanyController;
 use App\Http\Controllers\optController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\otpController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\useController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 
@@ -110,19 +106,6 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::delete("wishlist/delete/{id}","delete");
         });
     });
-    // Comments
-    Route::controller(CommentController::class)->group(function(){
-        Route::get("/product/{id}/comments","index");
-        Route::middleware("auth:sanctum")->group(function(){
-            Route::post("/product/{id}/comment/add","store");
-            Route::delete("/product/{id}/comment/delete/{id}","delete");
-            Route::put("/product/{id}/comment/update/{id}","update");  
-        });
-        Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
-            Route::get("/comments","all");
-            Route::put("/product/{id}/comment/banned/{id}","banned");  
-        });
-    });
     // Order
     Route::controller(OrderController::class)->group(function(){
         // users 
@@ -167,18 +150,6 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::get("category/details","showCategoryDetails");
         Route::get("category/{cat}/subcategory/details","showDetailsByCategory");
         Route::get("category/{cat}/subcategory/{sub}","showDetails");
-    });
-    // brand
-    Route::controller(BrandController::class)->group(function(){
-        // admin
-        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
-            Route::post("/brand/add","store");
-            Route::put("/brand/update{id}","update");
-            Route::delete("/brand/delete/{id}","delete");
-            Route::get("/brand/{id}","brand");
-        });
-        // public
-        
     });
     // Delivery Company
     Route::controller(DeliveryCompanyController::class)->group(function(){
