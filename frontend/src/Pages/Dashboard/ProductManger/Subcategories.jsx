@@ -6,11 +6,12 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from 'react-router-dom';
+import useDeleteItem from '../../../Hooks/useDeleteItem';
 
 
 
 
-const Subcategory = () => {
+const Subcategories = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
 
@@ -18,6 +19,8 @@ const Subcategory = () => {
   const [subcategory,setSubcategory] = useState([]);
   const [search,setSearch] = useState("");
   const [subcategoryFilter,setSubcategoryFilter] = useState([]);
+
+  const  deleteItem = useDeleteItem();
 
   const navigate = useNavigate();
   useEffect(()=>{
@@ -31,6 +34,13 @@ const Subcategory = () => {
   useEffect(()=>{
     setSubcategoryFilter(subcategory.filter((element)=>element.subcategories.toLowerCase().includes(search.toLowerCase().trim())));
   },[search])
+
+  const handleSubcategoryDelete = (id) => {
+    deleteItem(id, "admin/subcategory/delete", token, () => {
+      window.location.reload();
+    })
+  }
+
   const itemsPerPage = 6;
   
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -73,10 +83,10 @@ const Subcategory = () => {
                 <td>{item.category.category}</td>
                 <td>{item.subcategories}</td>
                   <td>
-                    <Button variant="outline-primary" size="sm" className="me-2">
+                    <Button onClick={()=>navigate(`${item.id}`)} variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
                     </Button>
-                    <Button variant="outline-danger" size="sm">
+                    <Button onClick={()=>handleSubcategoryDelete(item.id)} variant="outline-danger" size="sm">
                       <FaTrash />
                     </Button>
                   </td>
@@ -130,4 +140,4 @@ const Subcategory = () => {
   );
 };
 
-export default Subcategory;
+export default Subcategories;

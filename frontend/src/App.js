@@ -33,9 +33,9 @@ import Address from "./Pages/public/Setting/Address.jsx";
 import Home from "./Pages/Home.jsx";
 import Filter from "./Components/Filter.jsx";
 import Orders from "./Pages/Dashboard/Admin/Orders.jsx";
-import Category from "./Pages/Dashboard/ProductManger/Category.jsx";
+import Categories from "./Pages/Dashboard/ProductManger/Categories.jsx";
 import AddCategory from "./Pages/Dashboard/ProductManger/AddCategory.jsx";
-import Subcategory from "./Pages/Dashboard/ProductManger/Subcatgeory.jsx";
+import Subcategories from "./Pages/Dashboard/ProductManger/Subcategories.jsx";
 import CategoryDetails from "./Pages/Dashboard/ProductManger/CategoryDetails.jsx";
 import DeliveryCompany from "./Pages/Dashboard/Admin/DeliveryCompany.jsx";
 import AddDeliveryCompany from "./Pages/Dashboard/Admin/AddDeliveryCompany.jsx";
@@ -45,6 +45,9 @@ import DashboardSetting from "./Pages/Dashboard/DashboardSetting.jsx";
 import DashboardChangeMail from "./Pages/Dashboard/DashboardChangeMail.jsx";
 import DashboardChangePassword from "./Pages/Dashboard/DashboardChangePassword.jsx";
 import Overview from "./Pages/Dashboard/Overview.jsx";
+import Category from "./Pages/Dashboard/ProductManger/Catgeory.jsx";
+import Subcategory from "./Pages/Dashboard/ProductManger/Subcategory.jsx";
+import Detail from "./Pages/Dashboard/ProductManger/Detail.jsx";
 
 function App() {
   return (
@@ -102,9 +105,12 @@ function App() {
           {/* Product Manger */}
           <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
               <Route path="product/add" element={<AddProduct />} />
-              <Route path="category" element={<Category />} />
-              <Route path="subcategory" element={<Subcategory />} />
+              <Route path="Categories" element={<Categories />} />
+              <Route path="Categories/:catId" element={<Category />} />
+              <Route path="subcategories" element={<Subcategories />} />
+              <Route path="subcategories/:subId" element={<Subcategory />} />
               <Route path="category-details" element={<CategoryDetails />} />
+              <Route path="category-details/:delId" element={<Detail />} />
               <Route path="category/add" element={<AddCategory />} />
               <Route path="subcategory/add" element={<AddSubcategory />} />
               <Route path="category-details/add" element={<AddCategoryDetails />} />

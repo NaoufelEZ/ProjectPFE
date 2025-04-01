@@ -7,6 +7,8 @@ import axios from 'axios';
 import useUser from '../../../Hooks/useUser';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import useDeleteItem from '../../../Hooks/useDeleteItem';
+
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,6 +18,7 @@ const Users = () => {
 
   const user = useUser();
 
+  const deleteItem = useDeleteItem();
 const cookie = new Cookies();
 const token = cookie.get("auth");
 const navigate = useNavigate();
@@ -47,6 +50,11 @@ const navigate = useNavigate();
         return <Badge bg="danger">Not Active</Badge>;
     }
   };
+  const handleUserDelete = (id) => {
+    deleteItem(id, "admin/user/delete", token, () => {
+      window.location.reload();
+    });
+  }
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -102,6 +110,7 @@ const navigate = useNavigate();
                     variant="outline-danger"
                     size="sm"
                     title="Delete User"
+                    onClick={()=>handleUserDelete(item.id)}
                   >
                     <FaTrash />
                   </Button>

@@ -6,11 +6,12 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from 'react-router-dom';
+import useDeleteItem from '../../../Hooks/useDeleteItem';
 
 
 
 
-const Category = () => {
+const Categories = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
 
@@ -18,6 +19,8 @@ const Category = () => {
   const [category,setCategory] = useState([]);
   const [search,setSearch] = useState("");
   const [categoryFilter,setCategoryFilter] = useState([]);
+
+  const deleteItem = useDeleteItem();
 
   const navigate = useNavigate();
   useEffect(()=>{
@@ -30,7 +33,13 @@ const Category = () => {
   },[])
   useEffect(()=>{
     setCategoryFilter(category.filter((element)=>element.category.toLowerCase().includes(search.toLowerCase().trim())));
-  },[search])
+  },[search]);
+
+  const handleCategoryDelete = (id) => {
+    deleteItem(id, "admin/category/delete", token, () => {
+      window.location.reload();
+    });
+  }
   const itemsPerPage = 6;
   
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -43,11 +52,11 @@ const Category = () => {
   return (
     <>
     <Helmet>
-      <title>Category|Nalouti Dashboard</title>
+      <title>Categories|Nalouti Dashboard</title>
     </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
-      <span className="fw-bold h5">Category Management</span>
+      <span className="fw-bold h5">Categories Management</span>
       <div className="d-flex align-items-center">
         <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Category"/>
           <Button className="w-75" onClick={()=>navigate("add")}>Add New Item</Button>
@@ -69,10 +78,10 @@ const Category = () => {
                 <td>{index+1}</td>
                 <td>{item.category}</td>
                   <td>
-                    <Button variant="outline-primary" size="sm" className="me-2">
+                    <Button onClick={()=>navigate(`${item.id}`)} variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
                     </Button>
-                    <Button variant="outline-danger" size="sm">
+                    <Button onClick={()=>handleCategoryDelete(item.id)} variant="outline-danger" size="sm">
                       <FaTrash />
                     </Button>
                   </td>
@@ -126,4 +135,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Categories;

@@ -105,13 +105,13 @@ const LefBar = () => {
           <FaShoppingCart className="h4 text-white mb-0" />
           <Nav.Link href="/dashboard/product/add" className="text-white">Product Management</Nav.Link>
         </Nav.Item>
-        <Nav.Item role="button" className={`d-flex align-items-center ms-2 px-2 mb-1 ${currentLocation === "category" && "bg-primary rounded-3"}`}>
+        <Nav.Item role="button" className={`d-flex align-items-center ms-2 px-2 mb-1 ${currentLocation === "Categories" && "bg-primary rounded-3"}`}>
           <BiSolidCategory className="h4 text-white mb-0" />
-          <Nav.Link href="/dashboard/category" className="text-white">Category</Nav.Link>
+          <Nav.Link href="/dashboard/Categories" className="text-white">Categories</Nav.Link>
         </Nav.Item>
-        <Nav.Item role="button" className={`d-flex align-items-center ms-2 px-2 mb-1 ${currentLocation === "subcategory" && "bg-primary rounded-3"}`}>
+        <Nav.Item role="button" className={`d-flex align-items-center ms-2 px-2 mb-1 ${currentLocation === "subcategories" && "bg-primary rounded-3"}`}>
           <MdCategory  className="h4 text-white mb-0" />
-          <Nav.Link href="/dashboard/subcategory" className="text-white">Subcategory</Nav.Link>
+          <Nav.Link href="/dashboard/subcategories" className="text-white">subcategories</Nav.Link>
         </Nav.Item>
         <Nav.Item role="button" className={`d-flex align-items-center ms-2 px-2 mb-1 ${currentLocation === "category-details" && "bg-primary rounded-3"}`}>
           <FaTags  className="h4 text-white mb-0" />

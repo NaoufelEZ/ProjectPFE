@@ -8,6 +8,7 @@ import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
 import { IoMdEye } from "react-icons/io";
 import StatusBox from './StatusBox';
+import useDeleteItem from '../../../Hooks/useDeleteItem';
 
 
 
@@ -23,6 +24,8 @@ const Products = () => {
   const [search,setSearch] = useState("");
   const [productsFilter,setProductsFilter] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const deleteItem = useDeleteItem();
 
 
   useEffect(()=>{
@@ -57,6 +60,11 @@ const Products = () => {
         return <Badge bg="secondary">{status}</Badge>;
     }
   };
+  const handleProductDelete = (id) => {
+    deleteItem(id, "product/delete", token, () => {
+      window.location.reload();
+    });
+  }
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -113,7 +121,7 @@ const Products = () => {
                     <Button variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
                     </Button>
-                    <Button variant="outline-danger" size="sm">
+                    <Button onClick={()=>handleProductDelete(item.id)} variant="outline-danger" size="sm">
                       <FaTrash />
                     </Button>
                   </td>

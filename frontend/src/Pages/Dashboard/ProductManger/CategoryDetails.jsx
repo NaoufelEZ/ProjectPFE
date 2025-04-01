@@ -6,6 +6,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from 'react-router-dom';
+import useDeleteItem from '../../../Hooks/useDeleteItem';
 
 const CategoryDetails = () => {
   const cookie = new Cookies();
@@ -15,6 +16,8 @@ const CategoryDetails = () => {
   const [categoryDetails,setCategoryDetails] = useState([]);
   const [search,setSearch] = useState("");
   const [categoryDetailsFilter,setCategoryDetailsFilter] = useState([]);
+
+  const deleteItem = useDeleteItem();
   const navigate = useNavigate();
   useEffect(()=>{
     axios.get(`${APIURL}/admin/category-details`,{
@@ -28,7 +31,14 @@ const CategoryDetails = () => {
   console.log(categoryDetails)
   useEffect(()=>{
     setCategoryDetailsFilter(categoryDetails.filter((element)=>element.categoryDetails.toLowerCase().includes(search.toLowerCase().trim())));
-  },[search])
+  },[search]);
+
+  const handleCategoryDetails = (id) => {
+    deleteItem(id, "admin/category-details/delete", token, () => {
+      window.location.reload();
+    });
+  }
+
   const itemsPerPage = 6;
   
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -73,10 +83,10 @@ const CategoryDetails = () => {
                 <td>{item.subcategory.subcategories}</td>
                 <td>{item.categoryDetails}</td>
                   <td>
-                    <Button variant="outline-primary" size="sm" className="me-2">
+                    <Button onClick={()=>navigate(`${item.id}`)} variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
                     </Button>
-                    <Button variant="outline-danger" size="sm">
+                    <Button onClick={()=>handleCategoryDetails(item.id)} variant="outline-danger" size="sm">
                       <FaTrash />
                     </Button>
                   </td>
