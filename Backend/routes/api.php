@@ -41,8 +41,9 @@ Route::middleware('authenticateApiKey')->group(function(){
     Route::controller(UserController::class)->group(function(){
         // user
         Route::middleware("auth:sanctum")->group(function(){
-            Route::put("user/profile","profile");
-            Route::put("user/password","password");
+            Route::put("user/update/profile","profile");
+            Route::put("user/update/email","email");
+            Route::put("user/update/password","password");
         });
         // Admin
         Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
@@ -50,7 +51,7 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("/users","index");
             Route::put("admin/user/{id}","update");
             Route::post("admin/user/add","store");
-            Route::delete("admin/delete/{id}","delete");
+            Route::delete("admin/user/delete/{id}","delete");
         });
     });
     // otp Controller
@@ -81,7 +82,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::get("/products","roleIndex");
             Route::post("/product/add","store");
-            Route::post("/product/delete/{id}","delete");
+            Route::delete("/product/delete/{id}","delete");
 
         });
     });
@@ -127,18 +128,18 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("admin/category/{id}/subcategory","adminSubcategory");
             Route::put("admin/category/update/{id}","updateCategory");
             Route::delete("admin/category/delete/{id}","deleteCategory");
-            Route::get("admin/category/{id}","getCategory");
+            Route::get("admin/category/{id}","getAdminCategory");
             // subcategory
             Route::post("admin/subcategory/add","storeSubcategory");
             Route::get("admin/subcategory","adminSubcategoryShow");
-            Route::put("admin/subcategory/update/{id}","updateSubcategory");
+            Route::post("admin/subcategory/update/{id}","updateSubcategory");
             Route::get("admin/category/{id}/subcategory/{id_sub}","adminDetail");
             Route::delete("admin/subcategory/delete/{id}","deleteSubcategory");
             Route::get("admin/subcategory/{id}","getSubcategory");
             // category details
             Route::get("admin/category-details","adminCategoryDetailsShow");
             Route::post("admin/category-details/add","storeCategoryDetails");
-            Route::put("admin/category-details/update/{id}","updateCategoryDetails");
+            Route::post("admin/category-details/update/{id}","updateCategoryDetails");
             Route::delete("admin/category-details/delete/{id}","deleteCategoryDetails");
             Route::get("admin/category-details/{id}","getCategoryDetails");
         });

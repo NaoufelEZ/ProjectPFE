@@ -143,12 +143,164 @@ class CategoryController extends Controller
         }
         return response()->json(["message"=>"subcategory","data"=>$subcategory,"status"=>200],200);
     }
-    function adminCategoryDetailsShow(){
+    public function adminCategoryDetailsShow(){
         $categoryDetails = CategoryDetails::with("category")->with("subcategory")->get();
         if($categoryDetails->isEmpty()){
             return response()->json(["message"=>"category details are empty","status"=>404],404);
         }
         return response()->json(["message"=>"category details ","data"=>$categoryDetails,"status"=>200],200);
+    }
+    public function deleteCategory($id){
+        $category = Categories::find($id);
+        if(!$category){
+            return response()->json(["message"=>"Category Not Found","status"=>404],404);
+        }
+        $category->delete();
+        return response()->json(["message"=>"Category deleted successfully","status"=>200],200);
+    }
+
+    public function getAdminCategory($id){
+        $category = Categories::find($id);
+        if(!$category){
+            return response()->json(["message"=>"Category Not Found","status"=>404],404);
+        }
+        return response()->json(["message"=>"Category get successfully","data"=>$category,"status"=>200],200);
+    }
+
+    public function updateCategory(Request $request,$id){
+        try{
+            $validationCategory = $request->validate([
+                "category"=>"string|min:3"
+            ]);
+            $category = Categories::find($id);
+
+            if (!$category) {
+                return response()->json(["message" => "Category not found", "status" => 404], 404);
+            }
+            $category->update([
+                "category"=>$validationCategory["category"],
+            ]);
+            return response()->json(["message"=>"Category Updated successfully","data"=>$category,"status"=>200],200);
+
+        }catch(ValidationException $e){
+            return response()->json(["message"=>"Error","data"=>$e->errors(),"status"=>422],422);
+        }
+       
+    }
+
+    public function getSubcategory($id){
+        $subcategory = Subcategories::find($id);
+        if(!$subcategory){
+            return response()->json(["message"=>"Subcategory Not Found","status"=>404],404);
+        }
+        return response()->json(["message"=>"SubCategory get successfully","data"=>$subcategory,"status"=>200],200);
+    }
+
+    public function updateSubcategory(Request $request,$id){
+        try{
+            $subcategory = Subcategories::find($id);
+            if (!$subcategory) {
+                return response()->json(["message" => "subcategory not found", "status" => 404], 404);
+            }
+            $validationSubcategory = $request->validate([
+                "category_id"=>"integer|required",
+                "subcategories"=>"integer|required",
+                "subcategories_image"=>"mimes:jpeg,png,jpg,mp4"
+            ]); 
+            if(!$request->hasFile("subcategories_image")){
+                $subcategory->update([
+                    "category_id"=>$validationSubcategory["category_id"],
+                    "subcategories"=>$validationSubcategory["subcategories"],
+                ]);
+            return response()->json(["message"=>"Subcategory Updated successfully","status"=>200],200);
+
+            }
+            $fileExtension = $validationSubcategory["subcategories_image"]->getClientOriginalExtension();
+            $fileName = time() . "_" . uniqid() . "." . $fileExtension;
+            $path = public_path("images/categories/");
+            $validationSubcategory["subcategories_image"]->move($path,$fileName);
+
+            $subcategory->update([
+                "category_id"=>$validationSubcategory["category_id"],
+                "subcategories"=>$validationSubcategory["subcategory_id"],
+                "subcategories_image"=> $fileName,
+            ]);
+
+            return response()->json(["message"=>"Category Details Updated successfully","status"=>200],200);
+
+
+        }catch(ValidationException $e){
+            return response()->json(["message"=>"Error","data"=>$e->errors(),"status"=>422],422);
+        }
+       
+    }
+
+    public function deleteSubcategory($id){
+        $subcategory = Subcategories::find($id);
+        if(!$subcategory){
+            return response()->json(["message"=>"Subcategory Not Found","status"=>404],404);
+        }
+        $subcategory->delete();
+        return response()->json(["message"=>"Category deleted successfully","status"=>200],200);
+    }
+
+    public function getCategoryDetails($id){
+        $categoryDetails = CategoryDetails::find($id);
+        if(!$categoryDetails){
+            return response()->json(["message"=>"category Detail Not Found","status"=>404],404);
+        }
+        return response()->json(["message"=>"category Detail get successfully","data"=>$categoryDetails,"status"=>200],200);
+    }
+
+    public function updateCategoryDetails(Request $request,$id){
+        try{
+            $categoryDetails = CategoryDetails::find($id);
+            if (!$categoryDetails) {
+                return response()->json(["message" => "Category details not found", "status" => 404], 404);
+            }
+            $validationCategoryDetails = $request->validate([
+                "category_id"=>"integer|required",
+                "subcategory_id"=>"integer|required",
+                "categoryDetails"=>"string|min:3|required",
+                "category_details_image"=>"mimes:jpeg,png,jpg,mp4"
+            ]);
+            
+            if(!$request->hasFile("category_details_image")){
+                $categoryDetails->update([
+                    "category_id"=>$validationCategoryDetails["category_id"],
+                    "subcategory_id"=>$validationCategoryDetails["subcategory_id"],
+                    "categoryDetails"=>$validationCategoryDetails["categoryDetails"],
+                ]);
+            return response()->json(["message"=>"Category Details Updated successfully","status"=>200],200);
+
+            }
+            $fileExtension = $validationCategoryDetails["category_details_image"]->getClientOriginalExtension();
+            $fileName = time() . "_" . uniqid() . "." . $fileExtension;
+            $path = public_path("images/categories/");
+            $validationCategoryDetails["category_details_image"]->move($path,$fileName);
+
+            $categoryDetails->update([
+                "category_id"=>$validationCategoryDetails["category_id"],
+                "subcategory_id"=>$validationCategoryDetails["subcategory_id"],
+                "categoryDetails"=>$validationCategoryDetails["categoryDetails"],
+                "category_details_image"=> $fileName,
+            ]);
+
+            return response()->json(["message"=>"Category Details Updated successfully","data"=>$categoryDetails,"status"=>200],200);
+
+
+        }catch(ValidationException $e){
+            return response()->json(["message"=>"Error","data"=>$e->errors(),"status"=>422],422);
+        }
+       
+    }
+    public function deleteCategoryDetails($id){
+        $categoryDetails = CategoryDetails::find($id);
+        if(!$categoryDetails){
+            return response()->json(["message"=>"Category Details Not Found","status"=>404],404);
+        }
+        $categoryDetails->delete();
+        return response()->json(["message"=>"Category Details deleted successfully","status"=>200],200);
     }
     
 }

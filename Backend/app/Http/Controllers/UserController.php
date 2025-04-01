@@ -44,15 +44,19 @@ class UserController extends Controller
             "new_password"=>"required|String|min:6",
         ]);
         if(!Hash::check($validUser["old_password"],$user->password)){
-            return response()->json(["data"=>"Incorrect password","status"=>401], 401);
+            return response()->json(["message"=>"Incorrect password","status"=>401], 401);
         }
+        elseif(Hash::check($validUser["new_password"],$user->password)){
+            return response()->json(["message"=>"Password already Used","status"=>403], 403);
+        }
+    
         $user->update([
             "password"=>$validUser["new_password"],
         ]);
-        return response()->json(["data"=>"Your Password has been updated","status"=>200], 200);
+        return response()->json(["message"=>"Your Password has been updated","status"=>200], 200);
 
         }catch(ValidationException $e){
-            return response()->json(["data"=>$e->errors(),"status"=>422], 422);
+            return response()->json(["message"=>$e->errors(),"status"=>422], 422);
         }
     }
     // Admin
@@ -61,15 +65,15 @@ class UserController extends Controller
         if(!$user->isEmpty()){
             return response()->json(["data"=>$user,"status"=>200], 200);
         }
-        return response()->json(["data"=>"Users are Empty","status"=>404], 404);
+        return response()->json(["message"=>"Users are Empty","status"=>404], 404);
     }
     public function delete($id){
         $user = User::find($id);
         if(!$user){
-            return response()->json(["data"=>"User Not Found","status"=>404], 404);
+            return response()->json(["message"=>"User Not Found","status"=>404], 404);
         }
         $user->delete();
-        return response()->json(["data"=>"User Is Deleted","status"=>200], 200);
+        return response()->json(["message"=>"User Is Deleted","status"=>200], 200);
     }
     public function store(Request $request){
         try{
