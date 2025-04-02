@@ -78,9 +78,9 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::get("/products/{cat}/{subcat}/{detail}","index");
         Route::get("/products/{cat}/new","new");
         Route::get("products/product/{id}","product");
+        Route::get("/products","roleIndex");
         // private
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
-            Route::get("/products","roleIndex");
             Route::post("/product/add","store");
             Route::delete("/product/delete/{id}","delete");
 

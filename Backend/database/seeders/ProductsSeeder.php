@@ -14,7 +14,7 @@ class ProductsSeeder extends Seeder
     public function run(): void
     {
         Product::factory()->createMany([
-            ["title"=>"tets","description"=>"ddd","price"=>1,"discount"=>0,"details_id"=>1],
+            ["title"=>"test","description"=>"ddd","price"=>1,"discount"=>0,"details_id"=>1],
         ]);
     }
 }
