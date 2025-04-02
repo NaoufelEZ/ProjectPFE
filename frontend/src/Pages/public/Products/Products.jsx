@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ApiKey, IMAGEURL } from "../../../Api/Api";
+import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import Header from "../../../Components/Header";
 import "./products.css";
 import { Link, useParams } from "react-router-dom";
@@ -19,8 +19,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(isOpen)
-
+  const [filterProduct, setFilterProduct] = useState([]);
   const { cat } = useParams();
   const { sub } = useParams();
   const { detail } = useParams();
@@ -28,13 +27,13 @@ const Products = () => {
   const user = useUser();
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/v1/products/${cat}/${sub}/${detail}`, {
+      .get(`${APIURL}/products/${cat}/${sub}/${detail}`, {
         headers: {
           Accept: "application/json",
           "x-api-key": ApiKey,
         },
       })
-      .then((data) => setData(data.data.data))
+      .then((response) => {setData(response.data.data);setFilterProduct(response.data.data)})
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
@@ -44,7 +43,7 @@ const Products = () => {
     <Helmet>
       <title>{cat}'s {sub}|Nalouti Store</title>
     </Helmet>
-    <Filter setIsOpen={setIsOpen} isOpen={isOpen} />
+    <Filter setIsOpen={setIsOpen} isOpen={isOpen} setFilterProduct={setFilterProduct} products ={data} />
       <Header />
       <main className="mt-3 px-3">
         {error ? (
@@ -55,7 +54,7 @@ const Products = () => {
               <Skeleton key={i} height={300} width={250} />
             ))}
           </div>
-        ) : data && data.length > 0 ? (
+        ) : filterProduct && filterProduct.length > 0 ? (
           <section className="w-100">
             <div className="w-100 d-flex justify-content-end">
               <div onClick={()=>setIsOpen(true)} role="button" className="rounded-pill border p-2">
@@ -64,7 +63,7 @@ const Products = () => {
               </div>
             </div>
             <section className="products-container">
-          {data.map((e, key) => (
+          {filterProduct.map((e, key) => (
             <Link className="text-decoration-none" to={`/product/${e.id}`} key={key}>
               <div className="product-box position-relative">
                 <div className="img-container overflow-hidden">
