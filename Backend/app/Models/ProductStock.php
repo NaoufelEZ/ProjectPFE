@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductStock extends Model
 {
     use HasFactory;
-    protected $table = "product-stock";
+    protected $table = "product_stock";
     protected $fillable = [
         "product_id",
         "color",
@@ -19,5 +19,8 @@ class ProductStock extends Model
     public $timestamps = false;
     public function product(){
         return $this->belongsTo(Product::class);
+    }
+    public function orderItems(){
+        return $this->hasMany(OrderItems::class);
     }
 }

@@ -22,5 +22,7 @@ class Order extends Model
     public function user(){
         return $this->belongsTo(ModelsUser::class);
     }
-
+    public function address(){
+        return $this->belongsTo(Address::class);
+    }
 }

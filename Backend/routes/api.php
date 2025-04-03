@@ -115,7 +115,8 @@ Route::middleware('authenticateApiKey')->group(function(){
         // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::get("orders","index");
-            Route::put("order/update/{id}","update");
+            Route::get("order/{id}","getOrder");
+            Route::post("order/update/{id}","update");
         });
 
     });

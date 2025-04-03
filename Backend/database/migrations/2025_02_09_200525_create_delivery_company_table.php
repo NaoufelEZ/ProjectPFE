@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("mail",100);
             $table->double("fee")->default(7);
             $table->string("duration");
+            $table->timestamps();
         });
     }
 
