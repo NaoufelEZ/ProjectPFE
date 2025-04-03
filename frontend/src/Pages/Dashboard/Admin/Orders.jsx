@@ -1,9 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table, Badge, Button, Pagination, Form, Dropdown } from 'react-bootstrap';
+import { Table, Badge, Button, Pagination, Form, Dropdown, InputGroup } from 'react-bootstrap';
 import { FaEye, FaTruck, FaCheck, FaTimes } from 'react-icons/fa';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+
 
 const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +17,7 @@ const Orders = () => {
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const navigate = useNavigate();
 
   useEffect(()=>{
     axios.get(`${APIURL}/orders`,{
@@ -22,7 +26,9 @@ const Orders = () => {
         Authorization:`Bearer ${token}`,
         "x-api-key":ApiKey,
       }
-    }).then((response)=>{setOrders(response.data.data);setOrdersFilter(response.data.data)})
+    }).then((response)=>{setOrders(response.data.data);setOrdersFilter(response.data.data)
+
+    }).catch((err)=>console.log(err))
   },[]);
 
   useEffect(()=>{
@@ -91,6 +97,10 @@ const Orders = () => {
 
 
   return (
+    <>
+    <Helmet>
+      <title>Orders | Nalouti Dashboard</title>
+    </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
       <span className="fw-bold h5">Order Management</span>
@@ -109,10 +119,10 @@ const Orders = () => {
         <Table hover>
           <thead>
             <tr>
-              <th>#</th>
+              <th></th>
+              <th>Ref</th>
               <th>Customer</th>
               <th>Date</th>
-              <th>Items</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -120,14 +130,12 @@ const Orders = () => {
           <tbody>
             {currentItems.length > 0 ? currentItems.map((order,index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
+                <td><InputGroup.Checkbox className="bg-white"/></td>
+                <td>ORD-{order.id}</td>
                 <td>{order.user.first_name + " " + order.user.last_name}</td>
                 <td>{order.order_date.split(" ")[0]}</td>
-                <td><FaEye /></td>
                 <td>{getStatusBadge(order.status)}</td>
-                <td>
-                  {getActionButtons(order.status)}
-                </td>
+                <td onClick={()=>navigate(`${order.id}`)}><FaEye role='button' color="green" size={20} /></td>
               </tr>
             ))
             :
@@ -174,6 +182,7 @@ const Orders = () => {
         </Pagination>
       </div>
     </div>
+    </>
   );
 };
 

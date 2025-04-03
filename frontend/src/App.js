@@ -48,11 +48,13 @@ import Overview from "./Pages/Dashboard/Overview.jsx";
 import Category from "./Pages/Dashboard/ProductManger/Catgeory.jsx";
 import Subcategory from "./Pages/Dashboard/ProductManger/Subcategory.jsx";
 import Detail from "./Pages/Dashboard/ProductManger/Detail.jsx";
+import Order from "./Pages/Dashboard/Admin/Order.jsx";
+import UseRule from "./Pages/Auth/UseRule.jsx";
 
 function App() {
   return (
     <Routes>
-    <Route path="/filter" element={<Filter />} />
+    <Route element={<UseRule />}>
      <Route path="/" element={<Navigate to="/Man" replace />} />
      <Route path="/:cat" element={<Home/>} />
       <Route path="/addressbox" element={<AddressBox />} />
@@ -82,7 +84,7 @@ function App() {
         <Route path="change-password" element={<AccountChangePassword />}/>
         <Route path="change-email" element={<AccountChangeEmail />}/>
         <Route path="address" element={<Address />} />
-
+      </Route>
       </Route>
       </Route>
       {/* Protected Routes*/}
@@ -99,6 +101,7 @@ function App() {
               <Route path="users" element={<Users />}/>
               <Route path="users/add" element={<AddUsers />} />
               <Route path="orders" element={<Orders />} />
+              <Route path="orders/:ordId" element={<Order />} />
               <Route path="delivery-company" element={<DeliveryCompany />} />
               <Route path="delivery-company/add" element={<AddDeliveryCompany />} />
             </Route>

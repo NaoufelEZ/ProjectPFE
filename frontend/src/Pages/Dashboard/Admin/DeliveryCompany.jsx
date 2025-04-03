@@ -32,6 +32,9 @@ const navigate = useNavigate();
     }
     )
   }, []);
+  const handleCompanyDelete = (id) => {
+    return id;
+  }
 
   const itemsPerPage = 6;
   const getStatus = (status) => {
@@ -80,24 +83,20 @@ const navigate = useNavigate();
             {currentItems && currentItems.length > 0 ? currentItems.map((item,index) => (
               <tr key={index}>
                 <td>{index+1}</td>
-                <td>{item.first_name}</td>
-                <td>{item.email}</td>
-                <td>{item.email}</td>
-                <td>{item.email}</td>
-                <td>{item.role}</td>
-                <td>{getStatus(item.email_verify)}</td>
+                <td>{item.name}</td>
+                <td>{item.mail}</td>
+                <td>{item.address}</td>
+                <td>{item.phone}</td>
+                <td>{item.fee}</td>
+                <td>{item.duration}</td>
                 <td>
-                  <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2 " title="Edit User">
-                    <FaEdit size={13} className="mb-0" />
-                  </Button>
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    title="Delete User"
-                  >
-                    <FaTrash />
-                  </Button>
-                </td>
+                    <Button onClick={()=>navigate(`${item.id}`)} variant="outline-primary" size="sm" className="me-2">
+                      <FaEdit />
+                    </Button>
+                    <Button onClick={()=>handleCompanyDelete(item.id)} variant="outline-danger" size="sm">
+                      <FaTrash />
+                    </Button>
+                  </td>
               </tr>
              
             ))

@@ -46,20 +46,8 @@ const Products = () => {
   };
 
   const itemsPerPage = 6;
-  // Mock inventory data
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'In Stock':
-        return <Badge bg="success">In Stock</Badge>;
-      case 'Low Stock':
-        return <Badge bg="warning" text="dark">Low Stock</Badge>;
-      case 'Out of Stock':
-        return <Badge bg="danger">Out of Stock</Badge>;
-      default:
-        return <Badge bg="secondary">{status}</Badge>;
-    }
-  };
+
   const handleProductDelete = (id) => {
     deleteItem(id, "product/delete", token, () => {
       window.location.reload();

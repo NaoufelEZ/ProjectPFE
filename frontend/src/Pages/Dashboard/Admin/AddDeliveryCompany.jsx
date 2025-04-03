@@ -1,7 +1,11 @@
+import axios from "axios";
 import { useFormik } from "formik";
 import { Button, Form } from "react-bootstrap";
 import { Helmet } from "react-helmet-async";
 import * as Yup from "yup";
+import { ApiKey, APIURL } from "../../../Api/Api";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 const DeliverySchema = Yup.object().shape({
     name:Yup.string()
     .min(2,"Name of Company Should Be At Less 3 characters")
@@ -24,6 +28,9 @@ const DeliverySchema = Yup.object().shape({
 });
 
 const AddDeliveryCompany = () => {
+    const cookie = new Cookies();
+    const token = cookie.get("auth");
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues:{
             name:"",
@@ -35,7 +42,22 @@ const AddDeliveryCompany = () => {
         },
         validationSchema:DeliverySchema,
         onSubmit: async (values)=>{
-            console.log(values)
+            await axios.post(`${APIURL}/delivery-company/add`,{
+                "name":values.name,
+                "address":values.address,
+                "phone":values.phone,
+                "mail":values.email,
+                "fee":values.fee,
+                "duration":values.duration,
+                },
+                {
+                headers:{
+                    Accept:"Application/json",
+                    Authorization:`Bearer ${token}`,
+                    "x-api-key":ApiKey,
+                }
+            });
+            navigate("/dashboard/delivery-company");
         }
     })
   return (
@@ -65,6 +87,12 @@ const AddDeliveryCompany = () => {
                 <Form.Label>Email Of Company</Form.Label>
                 <Form.Control name="email" value={formik.values.email}  onChange={formik.handleChange} isInvalid={formik.touched.email && formik.errors.email} isValid={formik.touched.email && !formik.errors.email} placeholder="Email Of Company"/>
                 <Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
+                <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>Phone Of Company</Form.Label>
+                <Form.Control name="phone" value={formik.values.phone}  onChange={formik.handleChange} isInvalid={formik.touched.phone && formik.errors.phone} isValid={formik.touched.phone && !formik.errors.phone} placeholder="phone Of Company"/>
+                <Form.Control.Feedback type="invalid">{formik.errors.phone}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">

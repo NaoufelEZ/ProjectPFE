@@ -5,8 +5,8 @@ import axios from "axios";
 import "./productStyle.css";
 import Header from "../../../Components/Header";
 import { Button } from "react-bootstrap";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import Loading from "../../../Components/Loading";
 import Err404 from "../Errors/Err404";
 
@@ -32,32 +32,36 @@ const Product = () => {
     const nav = useNavigate();
 
     useEffect(() => {
-        axios.get(`${APIURL}/products/product/${id}`, {
-            headers: {
-                Accept: "application/json",
-                "x-api-key": ApiKey
-            }
-        }).then((response) => {
-            const productData = response.data.data;
-            setData(productData);
-            setLoading(false);
+        axios
+            .get(`${APIURL}/products/product/${id}`, {
+                headers: {
+                    Accept: "application/json",
+                    "x-api-key": ApiKey
+                }
+            })
+            .then((response) => {
+                const productData = response.data.data;
+                setData(productData);
+                setLoading(false);
 
-            // Extract unique colors from stock
-            const colors = [...new Set(productData.product_stock.map(product => product.color))];
-            setUniqueColor(colors);
+                // Extract unique colors from stock
+                const colors = [...new Set(productData.product_stock.map(product => product.color))];
+                setUniqueColor(colors);
 
-            if (productData.product_stock.length > 0) {
-                const firstProduct = productData.product_stock[0];
-                setColor(firstProduct.color);
-                setSelectedImage(firstProduct.product_picture);
+                if (productData.product_stock.length > 0) {
+                    const firstProduct = productData.product_stock[0];
+                    setColor(firstProduct.color);
+                    setSelectedImage(firstProduct.product_picture);
 
-                // Get available sizes for the first color
-                const sizeOptions = productData.product_stock
-                    .filter(product => product.color === firstProduct.color)
-                    .map(product => product.size);
-                setSize([...new Set(sizeOptions)]);
-            }
-        }).catch(() => setError(true)).finally(() => setLoading(false));
+                    // Get available sizes for the first color
+                    const sizeOptions = productData.product_stock
+                        .filter(product => product.color === firstProduct.color)
+                        .map(product => product.size);
+                    setSize([...new Set(sizeOptions)]);
+                }
+            })
+            .catch(() => setError(true))
+            .finally(() => setLoading(false));
     }, [id]);
 
     useEffect(() => {
@@ -82,9 +86,32 @@ const Product = () => {
     };
 
     const handleClick = () => {
+        if (!selectedSize) {
+            setSizeVerify(true);
+            return;
+        }
+
+        // Find the matching product stock entry
+        const selectedStock = data.product_stock.find(
+            (product) => product.color === color && product.size === selectedSize
+        );
+
+        if (!selectedStock) {
+            MySwal.fire({
+                toast: true,
+                position: "bottom-end",
+                icon: "error",
+                title: "Stock not found for selected color and size!",
+                showConfirmButton: false,
+                timer: 3000,
+            });
+            return;
+        }
+
         const items = JSON.parse(localStorage.getItem("card")) || [];
         const newItem = {
-            id: id,
+            id: id, // product_id
+            stock_id: selectedStock.id, // product_stock.id
             title: data.title,
             price: discount === 0 ? data.price : data.price - discount,
             image: selectedImage,
@@ -93,15 +120,8 @@ const Product = () => {
             count: count
         };
 
-        if (!selectedSize) {
-            setSizeVerify(true);
-            return;
-        }
-
         const existingItem = items.find(item =>
-            item.id === newItem.id &&
-            item.color === newItem.color &&
-            item.size === newItem.size
+            item.stock_id === newItem.stock_id
         );
 
         if (!existingItem) {
@@ -116,11 +136,6 @@ const Product = () => {
                 title: "The product has been added to the basket!",
                 showConfirmButton: false,
                 timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = MySwal.stopTimer;
-                    toast.onmouseleave = MySwal.resumeTimer;
-                }
             });
         } else {
             MySwal.fire({
@@ -130,11 +145,6 @@ const Product = () => {
                 title: "Required quantity exceeds the available quantity!",
                 showConfirmButton: false,
                 timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = MySwal.stopTimer;
-                    toast.onmouseleave = MySwal.resumeTimer;
-                }
             });
         }
     };
