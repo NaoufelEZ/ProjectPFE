@@ -18,7 +18,7 @@ const Order = () => {
     const OrderStatus = (orderStatusSelected === "Pending" || orderStatusSelected === "Processing" ) ? 
         ["Cancelled","Processing","Pending","Shipped","Delivered"]
         :
-        orderStatusSelected === "Shipped" ?
+        orderStatusSelected === "Shipped"|| orderStatusSelected === "Delivered" ?
         ["Return"]
         :
         [orderStatusSelected]
@@ -122,7 +122,7 @@ const Order = () => {
             <Table className="w-75" hover>
                 <thead>
                     <tr>
-                        <th>Product ID</th>
+                        <th>Product Title</th>
                         <th>Color</th>
                         <th>Size</th>
                         <th>Quantity</th>
@@ -151,7 +151,7 @@ const Order = () => {
                 <h4>Status</h4>
                 <Form>
                     <Form.Group className="mb-3">
-                        <Form.Select value={orderStatusSelected} className="w-25">
+                        <Form.Select value={orderStatusSelected} onChange={(e)=>setOrderStatusSelected(e.target.value)} className="w-25">
                             {
                                 OrderStatus.map((item,index)=>(
                                     <option key={index} value={item}>{item}</option>

@@ -66,7 +66,7 @@ function App() {
       <Route path="/test" element={<HeaderTest />} />
       <Route path="/:cat/new" element={<New />} />
       <Route path="/:cat/:sub/:detail" element={<Products />} />
-      <Route path="/:cat/product/:id" element={<Product/>} />
+      <Route path="/product/:id" element={<Product/>} />
       <Route path="/*" element={<Err404 />} />
       <Route element={<ReqLogin />}>
         <Route path="/login" element={<Login/>} />

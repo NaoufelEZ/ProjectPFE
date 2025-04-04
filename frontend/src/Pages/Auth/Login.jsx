@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios
+      const res = await axios
         .post(
           "http://127.0.0.1:8000/api/v1/login",
           { email, password },
@@ -29,10 +29,8 @@ const Login = () => {
             },
           }
         )
-        .then((data) => {
-          cookie.set("auth", data.data.token);
-          nav("/");
-        });
+        cookie.set("auth", res.data.token);
+        res.data.data.role === "admin" || res.data.data.role === "Product Manager"? nav("/dashboard") : nav("/");
     } catch (err) {
       setError(true);
       setLoading(false);

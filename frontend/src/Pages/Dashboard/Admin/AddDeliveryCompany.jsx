@@ -73,37 +73,37 @@ const AddDeliveryCompany = () => {
         <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3">
                 <Form.Label>Name Of Company</Form.Label>
-                <Form.Control name="name" value={formik.values.name} onChange={formik.handleChange} isInvalid={formik.touched.name && formik.errors.name} isValid={formik.touched.name && !formik.errors.name} placeholder="Name Of Company"/>
+                <Form.Control name="name" value={formik.values.name} onChange={formik.handleChange} isInvalid={formik.touched.name && formik.errors.name} isValid={formik.touched.name && !formik.errors.name} />
                 <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Address Of Company</Form.Label>
-                <Form.Control name="address" value={formik.values.address}  onChange={formik.handleChange} isInvalid={formik.touched.address && formik.errors.address} isValid={formik.touched.address && !formik.errors.address} placeholder="Address Of Company"/>
+                <Form.Control name="address" value={formik.values.address}  onChange={formik.handleChange} isInvalid={formik.touched.address && formik.errors.address} isValid={formik.touched.address && !formik.errors.address} />
                 <Form.Control.Feedback type="invalid">{formik.errors.address}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Email Of Company</Form.Label>
-                <Form.Control name="email" value={formik.values.email}  onChange={formik.handleChange} isInvalid={formik.touched.email && formik.errors.email} isValid={formik.touched.email && !formik.errors.email} placeholder="Email Of Company"/>
+                <Form.Control name="email" value={formik.values.email}  onChange={formik.handleChange} isInvalid={formik.touched.email && formik.errors.email} isValid={formik.touched.email && !formik.errors.email}/>
                 <Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Phone Of Company</Form.Label>
-                <Form.Control name="phone" value={formik.values.phone}  onChange={formik.handleChange} isInvalid={formik.touched.phone && formik.errors.phone} isValid={formik.touched.phone && !formik.errors.phone} placeholder="phone Of Company"/>
+                <Form.Control name="phone" value={formik.values.phone}  onChange={formik.handleChange} isInvalid={formik.touched.phone && formik.errors.phone} isValid={formik.touched.phone && !formik.errors.phone} />
                 <Form.Control.Feedback type="invalid">{formik.errors.phone}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Fee Of Company(TND)</Form.Label>
-                <Form.Control name="fee" value={formik.values.fee}  onChange={formik.handleChange} isInvalid={formik.touched.fee && formik.errors.fee} isValid={formik.touched.fee && !formik.errors.fee} placeholder="Fee Of Company(TND)"/>
+                <Form.Control name="fee" value={formik.values.fee}  onChange={formik.handleChange} isInvalid={formik.touched.fee && formik.errors.fee} isValid={formik.touched.fee && !formik.errors.fee} />
                 <Form.Control.Feedback type="invalid">{formik.errors.fee}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
                 <Form.Label>Duration Of Company(By Day)</Form.Label>
-                <Form.Control name="duration" value={formik.values.duration}  onChange={formik.handleChange} isInvalid={formik.touched.duration && formik.errors.duration} isValid={formik.touched.duration && !formik.errors.duration} placeholder="Duration Of Company(By Day)"/>
+                <Form.Control name="duration" value={formik.values.duration}  onChange={formik.handleChange} isInvalid={formik.touched.duration && formik.errors.duration} isValid={formik.touched.duration && !formik.errors.duration}/>
                 <Form.Control.Feedback type="invalid">{formik.errors.duration}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>

@@ -44,7 +44,8 @@ const Subcategory = () => {
             Authorization:`Bearer ${token}`,
             "x-api-key":ApiKey,
           }
-        }).then((response)=>setSubcategorySelected(response.data.data))
+        }).then((response)=>setSubcategorySelected(response.data.data)
+    ).catch((err)=>console.log(err))
       },[subId]);
 
 

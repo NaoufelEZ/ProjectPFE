@@ -86,6 +86,24 @@ const Orders = () => {
         );
     }
   };
+  const handleChecked = async (id) => {
+
+    await axios.put(`${APIURL}/order/checked/${id}`, {
+    }, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "x-api-key": ApiKey,
+      }
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching order:", error);
+      });
+  }
+
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -135,7 +153,7 @@ const Orders = () => {
                 <td>{order.user.first_name + " " + order.user.last_name}</td>
                 <td>{order.order_date.split(" ")[0]}</td>
                 <td>{getStatusBadge(order.status)}</td>
-                <td onClick={()=>navigate(`${order.id}`)}><FaEye role='button' color="green" size={20} /></td>
+                <td onClick={(id)=>{navigate(`${order.id}`);handleChecked(id)}}><FaEye role='button' color="green" size={20} /></td>
               </tr>
             ))
             :

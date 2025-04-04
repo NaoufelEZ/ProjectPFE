@@ -68,9 +68,7 @@ const Checkout = () => {
        formData.append("address_id",selectedAddress);
        formData.append("paymentChoose",payment[paymentChoose].method);
        carts.forEach((item)=>{
-        formData.append("product_id[]",item.id);
-        formData.append("color[]",item.color);
-        formData.append("size[]",item.size);
+        formData.append("product_stock_id[]",item.stock_id);
         formData.append("price[]",item.price);
         formData.append("quantity[]",item.count);
     });

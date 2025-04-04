@@ -150,51 +150,91 @@ const Product = () => {
     };
 
     const dataFetch = data ? (
-        <div className="d-flex w-100 bg-light text-dark p-3">
-            <div className="me-3">
-                <img width={500} src={`${IMAGEURL}/products/${selectedImage}`} alt="product" />
+        <div className="product-container">
+            <div className="product-gallery">
+                <div className="main-image">
+                    <img src={`${IMAGEURL}/products/${selectedImage}`} alt={data.title} />
+                </div>
             </div>
-            <div className="w-100 mb-4">
-                <p>{data.title}</p>
-                {discount === 0 ? (
-                    <p>{data.price.toFixed(2)} TND</p>
-                ) : (
-                    <div>
-                        <span className="h5 text-black me-3">{(data.price - discount).toFixed(2)}</span>
-                        <span className="text-decoration-line-through text-secondary">{data.price}</span>
+            
+            <div className="product-details">
+                <h1 className="product-title">{data.title}</h1>
+                
+                <div className="price-container">
+                    {discount === 0 ? (
+                        <span className="current-price">{data.price.toFixed(2)} TND</span>
+                    ) : (
+                        <>
+                            <span className="current-price">{(data.price - discount).toFixed(2)} TND</span>
+                            <span className="original-price">{data.price.toFixed(2)} TND</span>
+                            <span className="discount-badge">-{data.discount}%</span>
+                        </>
+                    )}
+                </div>
+                
+                <div className="color-selection">
+                    <h3>Color: <span className="selected-color">{color}</span></h3>
+                    <div className="color-options">
+                        {uniqueColor.map((e, index) => (
+                            <div 
+                                key={index} 
+                                onClick={() => handleColorSelect(e)} 
+                                className={`color-option-container ${color === e ? 'selected' : ''}`}
+                            >
+                                <div 
+                                    className="color-option" 
+                                    style={{ backgroundColor: e }}
+                                    aria-label={`Select color ${e}`}
+                                />
+                            </div>
+                        ))}
                     </div>
-                )}
-                <p>Color</p>
-                <p>{color}</p>
-                <div className="d-flex w-100 gap-1">
-                    {uniqueColor.map((e, index) => (
-                        <div key={index} onClick={() => handleColorSelect(e)} className="border border-1 border-dark rounded-circle p-1 s">
-                            <span role="button" className={`${color === e && "sizing"} rounded-circle d-block`} style={{ height: "30px", width: "30px", backgroundColor: e }}></span>
-                        </div>
-                    ))}
                 </div>
-                <p>Size</p>
-                <div className="d-flex">
-                    {size.map((e, key) => (
-                        <div key={key} onClick={() => { setSelectedSize(e); setSizeVerify(false); }} role="button" style={{ height: "30px", width: "30px" }} className={`${selectedSize === e && "bg-dark text-white"} bg-light rounded-circle text-dark me-2 d-flex justify-content-center align-items-center border border-2`}>
-                            {e}
-                        </div>
-                    ))}
+                
+                <div className="size-selection">
+                    <h3>Size</h3>
+                    <div className="size-options">
+                        {size.map((e, key) => (
+                            <button
+                                key={key}
+                                onClick={() => { setSelectedSize(e); setSizeVerify(false); }}
+                                className={`size-option ${selectedSize === e ? 'selected' : ''}`}
+                            >
+                                {e}
+                            </button>
+                        ))}
+                    </div>
+                    {sizeVerify && <p className="size-error">Please select a size</p>}
                 </div>
-                {sizeVerify && <p className="text-danger">Select a size</p>}
-                <span className="mb-3">Quantity</span>
-                <div style={{ width: "100px" }} className="p-2 border-white d-flex justify-content-between align-items-center bg-white rounded-4 text-dark mb-3">
-                    <span className="user-select-none" role="button" onClick={() => count !== 1 && setCount(prev => prev - 1)}>-</span>
-                    <span>{count}</span>
-                    <span className="user-select-none" role="button" onClick={() => setCount(prev => prev + 1)}>+</span>
+                
+                <div className="quantity-selection">
+                    <h3>Quantity</h3>
+                    <div className="quantity-selector">
+                        <button 
+                            onClick={() => count !== 1 && setCount(prev => prev - 1)}
+                            disabled={count === 1}
+                        >
+                            -
+                        </button>
+                        <span>{count}</span>
+                        <button onClick={() => setCount(prev => prev + 1)}>+</button>
+                    </div>
                 </div>
-                <Button onClick={handleClick} type="button">Add to Cart</Button>
+                
+                <button className="add-to-cart" onClick={handleClick}>
+                    Add to Cart
+                </button>
+                
+                <div className="product-description">
+                    <h3>Product Details</h3>
+                    <p>{data.description || "No description available."}</p>
+                </div>
             </div>
         </div>
     ) : null;
 
     return (
-        <div>
+        <div className="product-page">
             <Header />
             {loading ? <Loading /> : (error ? <Err404 /> : dataFetch)}
         </div>

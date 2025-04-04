@@ -32,7 +32,8 @@ const AddSubcategory = () => {
             Accept:"application/json",
             "x-api-key":ApiKey,
           }
-        }).then((response)=>setCategory(response.data.data))
+        }).then((response)=>setCategory(response.data.data)
+    ).catch((err)=>console.log(err))
       },[])
 
     const navigate = useNavigate();
