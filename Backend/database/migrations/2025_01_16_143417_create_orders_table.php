@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign("address_id")->references("id")->on("addresses");
             $table->string("status")->default("Pending");
             $table->string("method_payment");
+            $table->string("delivery_company")->nullable();
             $table->boolean("delivery_pay")->default(true);
             $table->timestamp("order_date")->useCurrent();
         });

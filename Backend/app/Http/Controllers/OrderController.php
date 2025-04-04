@@ -16,7 +16,6 @@ class OrderController extends Controller
     public function store(Request $request){
         try{
             $orderValidation = $request->validate([
-                "product_id"=>"required",
                 "product_stock_id"=>"required",
                 "address_id"=>"required",
                 "quantity"=>"required",
@@ -98,5 +97,15 @@ class OrderController extends Controller
             return response()->json(["message"=>$e->errors(),"status"=>422],422);
             
         }   
+    }
+    public function checked($id){
+        $order = Order::find($id);
+        if(!$order){
+            return response()->json(["message"=>"Order Not Found","status"=>404],404);
+        }
+        $order->status = "Processing";
+        $order->save();
+       
+        return response()->json(["message"=>"Order Are Checked","status"=>200],200);
     }
 }

@@ -117,6 +117,7 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("orders","index");
             Route::get("order/{id}","getOrder");
             Route::post("order/update/{id}","update");
+            Route::post("order/checked/{id}","checked");
         });
 
     });
