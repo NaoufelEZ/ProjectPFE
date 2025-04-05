@@ -36,6 +36,14 @@ class UserController extends Controller
             return response()->json(["data"=>$e->errors(),"status"=>422], 422);
         }
     }
+    public function user($id){
+        $user = User::find($id);
+        if(!$user){
+            return response()->json(["message"=>"Users Not Found","status"=>404], 404);
+        }
+        return response()->json(["message"=>"User Is Found It","data"=>$user,"status"=>200], 200);
+
+    }
     public function password(request $request){
         $user = $request->user();
         try{
