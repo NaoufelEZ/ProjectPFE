@@ -4,24 +4,33 @@ import { useParams } from "react-router-dom";
 import { ApiKey, APIURL } from "../../../Api/Api";
 import Cookies from "universal-cookie";
 import { Accordion, Badge, Button, Form, Table } from "react-bootstrap";
+import * as Yup from 'yup';
 
+const deliverySchema = Yup.object().shape([
+    delivery_company
+]);
+.shape
 const Order = () => {
     const [order, setOrder] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
     const [deliveryCompany,setDeliveryCompany] = useState([]);
     const [orderStatusSelected,setOrderStatusSelected] = useState("Pending");
+    const [orderStatus,setOrderStatus] = useState("Pending");
     
     const { ordId } = useParams();
     const cookie = new Cookies();
     const token = cookie.get("auth");
 
-    const OrderStatus = (orderStatusSelected === "Pending" || orderStatusSelected === "Processing" ) ? 
-        ["Cancelled","Processing","Pending","Shipped","Delivered"]
+    const OrderStatus = (orderStatus === "Pending" || orderStatus === "Processing" ) ? 
+        ["Cancelled","Processing","Pending","Shipped"]
         :
-        orderStatusSelected === "Shipped"|| orderStatusSelected === "Delivered" ?
-        ["Return"]
+        orderStatus === "Shipped" ?
+        ["Return","Delivered"]
         :
-        [orderStatusSelected]
+        orderStatus === "Delivered" ?
+        ["Return","Shipped"]
+        :
+        [orderStatus]
 
 
     
@@ -37,6 +46,7 @@ const Order = () => {
             const orderData = response.data.data;
             setOrder(orderData);
             setOrderStatusSelected(orderData.status);
+            setOrderStatus(orderData.status);
 
             // Calculate total price
             const total = orderData.order_items.reduce((sum, item) => {
@@ -46,7 +56,7 @@ const Order = () => {
         })
         .catch(error => console.error("Error fetching order:", error));
     }, [ordId, token]);
-
+    console.log(order)
     const getStatus = (status) => {
         switch (status) {
           case 'Delivered':

@@ -103,7 +103,7 @@ const navigate = useNavigate();
                 <td>
                 <div className={`d-flex ${user && item.id === user.id && "w-50 justify-content-center"}`}>
                   <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2 " title="Edit User">
-                    <FaEdit size={13} className="mb-0" />
+                    <FaEdit onClick={()=>navigate(`${item.id}`)} size={13} className="mb-0" />
                   </Button>
                   { user && item.id !== user.id ?
                   <Button

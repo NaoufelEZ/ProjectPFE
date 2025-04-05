@@ -61,25 +61,29 @@ const AddUsers = () => {
         <title>Add User|Nalouti Store</title>
     </Helmet>
     <div className="w-100 p-4">
+        <span className="fw-bold h5">User Management</span>
+        <hr/>
         <Form className="w-50" onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3 d-flex gap-2" controlId="formBasicEmail">
             <div className="w-50">
-                <Form.Control  name="first_name" onChange={formik.handleChange} value={formik.values.first_name} type="text" placeholder="Enter First Name" />
+                <Form.Label>First Name</Form.Label>
+                <Form.Control  name="first_name" onChange={formik.handleChange} value={formik.values.first_name} type="text"/>
                 <div className="text-danger">{formik.touched.first_name && formik.errors.first_name ? formik.errors.first_name : null }</div>
             </div>
             <div className="w-50">
-                <Form.Control name="last_name" onChange={formik.handleChange} value={formik.values.last_name} type="text" placeholder="Enter Last Name" />
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control name="last_name" onChange={formik.handleChange} value={formik.values.last_name} type="text" />
                 <div className="text-danger">{formik.touched.last_name && formik.errors.last_name ? formik.errors.last_name : null }</div>
             </div>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email</Form.Label>
-                <Form.Control name="email" onChange={formik.handleChange} value={formik.values.email} type="email" placeholder="Enter Email" />
+                <Form.Control name="email" onChange={formik.handleChange} value={formik.values.email} type="email" />
             </Form.Group>
             <div className="text-danger">{formik.touched.email && formik.errors.email ? formik.errors.email : null }</div>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Password</Form.Label>
-                <Form.Control name="password" onChange={formik.handleChange} value={formik.values.password} type="password" placeholder="Enter Password" />
+                <Form.Control name="password" onChange={formik.handleChange} value={formik.values.password} type="password"  />
             </Form.Group>
             <div className="text-danger">{formik.touched.password && formik.errors.password ? formik.errors.password : null }</div>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -93,10 +97,10 @@ const AddUsers = () => {
             <div className="text-danger">{formik.touched.role && formik.errors.role ? formik.errors.role : null }</div>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Phone</Form.Label>
-                <Form.Control name="phone" onChange={formik.handleChange} value={formik.values.phone} type="text" placeholder="Enter Phone" />
+                <Form.Control name="phone" onChange={formik.handleChange} value={formik.values.phone} type="text"  />
             </Form.Group>
             <div className="text-danger">{formik.touched.phone && formik.errors.phone ? formik.errors.phone : null }</div>
-            <Button variant="primary" type="submit">Submit</Button>
+            <Button variant="primary" type="submit">Add User</Button>
             <div className="text-danger">{error && "Email is already exist"}</div>
         </Form>
     </div>

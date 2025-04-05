@@ -1,16 +1,90 @@
 .sidebar {
   width: 250px;
   height: 100vh;
-  background: #2c3e50;
+  background: #1f2d3d;
   padding: 10px;
   position: sticky;
   top: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
+  transition: width 0.3s ease;
 }
-.sidebar.active{
-  width: 25px;
+
+.sidebar.collapsed {
+  width: 80px;
 }
-.nav-item:hover{
-  background-color: #425262;
-  border-radius: 5px;
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-icon {
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 10px 5px;
+}
+
+.user-info.collapsed {
+  justify-content: center;
+}
+
+.user-icon {
+  color: white;
+  font-size: 1.8rem;
+  margin-right: 10px;
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  color: white;
+  font-weight: bold;
+}
+
+.user-role {
+  color: #adb5bd;
+  font-size: 0.85rem;
+}
+
+.nav-item {
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: #324256;
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+  margin-right: 12px;
+}
+.nav-icon.active {
+  font-size: 1.2rem;
+  margin-right: 0;
+}
+.nav-icon svg {
+  font-size: 1.2rem;
+}
+
+.nav-item.active {
+  background-color: #007bff;
+}
+
+.logout {
+  color: #ff6b6b;
 }

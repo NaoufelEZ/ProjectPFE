@@ -50,6 +50,7 @@ import Subcategory from "./Pages/Dashboard/ProductManger/Subcategory.jsx";
 import Detail from "./Pages/Dashboard/ProductManger/Detail.jsx";
 import Order from "./Pages/Dashboard/Admin/Order.jsx";
 import UseRule from "./Pages/Auth/UseRule.jsx";
+import User from "./Pages/Dashboard/Admin/User.jsx";
 
 function App() {
   return (
@@ -100,6 +101,7 @@ function App() {
           <Route element={<ReqRule allowedRule={["Admin"]}/>}>
               <Route path="users" element={<Users />}/>
               <Route path="users/add" element={<AddUsers />} />
+              <Route path="users/:userId" element={<User />} />
               <Route path="orders" element={<Orders />} />
               <Route path="orders/:ordId" element={<Order />} />
               <Route path="delivery-company" element={<DeliveryCompany />} />
