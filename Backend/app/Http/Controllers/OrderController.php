@@ -46,7 +46,7 @@ class OrderController extends Controller
         }
     }
     public function index(){
-        $orders = Order::with(["user","orderItems"])->get();
+        $orders = Order::with(["user","orderItems.product_stock.product"])->get();
         if($orders->isEmpty()){
             return response()->json(["message"=>"Orders are Empty","status"=>404],404);
         }
@@ -66,12 +66,12 @@ class OrderController extends Controller
                 return response()->json(["message"=>"Order Not Found","status"=>404],404);
             }
             $orderValidate = $request->validate([
-                "deliveryCompany"=>"required|integer",
-                "deliveryStatus"=>"string|nullable",
+                "deliveryCompany"=>"nullable|string",
+                "deliveryStatus"=>"string|required",
             ]);
             $order->update([
                 "status" => $orderValidate["deliveryStatus"],
-                "delivery_company_id" => $orderValidate["deliveryCompany"],
+                "delivery_company" => $orderValidate["deliveryCompany"],
             ]);
             $orderItems = OrderItems::with("product_stock")->where("order_id",$id)->get();
             if($orderValidate["deliveryStatus"] == "Shipped"){
@@ -92,7 +92,6 @@ class OrderController extends Controller
             }   
                 Mail::to($order->user->email)->send(new OrderMail($orderItems,$orderValidate["deliveryStatus"],$order));
                 return response()->json(["message"=>"Order Are Updated","status"=>200],200);
-
         }catch(ValidationException $e){
             return response()->json(["message"=>$e->errors(),"status"=>422],422);
             

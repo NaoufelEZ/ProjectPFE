@@ -131,7 +131,7 @@ class UserController extends Controller
         try{
             $user = $request->user();
             $optValidation = $request->validate([
-                "otp_code"=>"required|integer|digits:8",
+                "otp_code"=>"required|integer|digits:6",
             ]);
             $otpCode = Otp::where("user_id",$user->id)->latest()->first();
             if($optValidation["otp_code"] != $otpCode->otp_code){
