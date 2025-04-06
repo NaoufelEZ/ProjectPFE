@@ -91,7 +91,7 @@ function App() {
       {/* Protected Routes*/}
       <Route element={<ReqRule allowedRule={["Admin","Product Manager"]}/>}>
         <Route path="/dashboard" element={<Dashboard />}>
-          <Route path="overview" element={<Overview />} />
+          <Route path="" element={<Overview />} />
           <Route path="inventory" element={<DashboardProducts />} />
           <Route path="setting" element={<DashboardSetting />} />
           <Route path="setting/change-email" element={<DashboardChangeMail />} />

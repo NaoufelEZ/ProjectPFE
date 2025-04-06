@@ -33,7 +33,7 @@ const Order = () => {
       : orderStatus === "Processing"
       ? ["Cancelled", "Processing", "Shipped"]
       : orderStatus === "Shipped"
-      ? ["Return", "Delivered"]
+      ? ["Return", "Delivered","Shipped"]
       : orderStatus === "Delivered"
       ? ["Return"]
       : [orderStatus];
@@ -73,6 +73,7 @@ const Order = () => {
       .then((response) => setDeliveryCompany(response.data.data))
       .catch((error) => console.error("Error fetching delivery companies:", error));
   }, [ordId]);
+  console.log(order)
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -113,6 +114,7 @@ const Order = () => {
         return <Badge bg="secondary">{status}</Badge>;
     }
   };
+  console.log(formik.values.delivery_company)
 
   const getStatusBadge = (orderQuantity, stockQuantity) => {
     if (stockQuantity > orderQuantity) {
@@ -215,7 +217,7 @@ const Order = () => {
                   value={formik.values.delivery_company}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  isInvalid={formik.touched.delivery_company && !!formik.errors.delivery_company}
+                  isInvalid={formik.touched.delivery_company && !formik.errors.delivery_company}
                   className="w-25"
                 >
                   <option value="">Select Delivery Company</option>

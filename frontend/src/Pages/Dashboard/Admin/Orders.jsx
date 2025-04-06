@@ -62,6 +62,12 @@ const Orders = () => {
 
   const handleChecked = async (id) => {
     try {
+      const order = orders.find(order => order.id === id);
+      if (order && order.status !== "Pending") {
+      console.log("order status is not pending");
+        navigate(`${id}`);
+        return;
+      }
       await axios.put(`${APIURL}/order/checked/${id}`, {}, {
         headers: {
           Accept: "application/json",
@@ -116,7 +122,7 @@ const Orders = () => {
         <div className="d-flex justify-content-between align-items-center">
           <span className="fw-bold h5">Order Management</span>
           <Form.Select onChange={(e) => setOrderSelected(e.target.value)} className="w-25">
-            <option value="" selected disabled>All Orders</option>
+            <option value="" selected >All Orders</option>
             <option value="Pending">Pending</option>
             <option value="Cancelled">Cancelled</option>
             <option value="Processing">Processing</option>

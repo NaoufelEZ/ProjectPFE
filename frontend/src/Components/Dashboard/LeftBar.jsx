@@ -35,6 +35,7 @@ const LeftBar = () => {
   const user = useUser();
   const location = useLocation();
   const currentPath = location.pathname.split("/")[2];
+  console.log(currentPath)
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -56,8 +57,8 @@ const LeftBar = () => {
     {
       title: "Dashboard",
       icon: <AiFillDashboard />,
-      path: "/dashboard/overview",
-      key: "overview"
+      path: "/dashboard",
+      key: undefined
     },
     ...(user?.role === "Admin"
       ? [
