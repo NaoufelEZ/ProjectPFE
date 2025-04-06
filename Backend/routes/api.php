@@ -43,6 +43,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::middleware("auth:sanctum")->group(function(){
             Route::put("user/update/profile","profile");
             Route::put("user/update/email","email");
+            Route::put("user/update/email/verify","codeEmailVerify");
             Route::put("user/update/password","password");
         });
         // Admin
@@ -117,7 +118,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
             Route::get("orders","index");
             Route::get("order/{id}","getOrder");
-            Route::post("order/update/{id}","update");
+            Route::put("order/update/{id}","update");
             Route::put("order/checked/{id}","checked");
         });
 

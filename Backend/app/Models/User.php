@@ -46,9 +46,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function comment(){
-        return $this->HasMany(Comment::class);
-    }
     public function order(){
         return $this->hasMany(Order::class);
     }

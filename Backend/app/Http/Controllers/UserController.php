@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Validation\ValidationException as ValidationException;
 use Illuminate\Http\Request;
@@ -15,25 +16,18 @@ class UserController extends Controller
         try{
         $validUser = $request->validate([
             "first_name"=>"required|string|min:3",
-            "last_name"=>"required|String|min:3",
-            "email"=>"required|email|unique:users,email," . $user->id,
+            "last_name"=>"required|string|min:3",
+            // "email"=>"required|email|unique:users,email," . $user->id,
             "phone"=>"required|digits:8",
         ]);
-        $emailCheck = $user->email == $validUser["email"];
             $user->update([
                 "first_name"=>$validUser["first_name"],
                 "last_name"=>$validUser["last_name"],
-                "email"=>$validUser["email"],
                 "phone"=>$validUser["phone"],
-                "email_verify" => $emailCheck ? $user->email_verify : false,
             ]);
-            if(!$emailCheck){
-                $otpController = new otpController;
-                $otpController->sendRegister($validUser["email"],$validUser["first_name"],$user->id);
-            }
-            return response()->json(["data"=>"Your data has been updated","status"=>200], 200);
+            return response()->json(["message"=>"Your data has been updated","status"=>200], 200);
         }catch(ValidationException $e){
-            return response()->json(["data"=>$e->errors(),"status"=>422], 422);
+            return response()->json(["message"=>$e->errors(),"status"=>422], 422);
         }
     }
     public function user($id){
@@ -106,5 +100,50 @@ class UserController extends Controller
     }catch(ValidationException $e){
         return response()->json(["message"=>$e->errors(),"status"=>422], 422);
     }
+    }
+    public function email(Request $request){
+        try{
+            $user = $request->user();
+            $emailValidation = $request->validate([
+                "current_email"=>"required|email",
+                "new_email"=>"required|email",
+            ]);
+            if($emailValidation["current_email"] != $user->email){
+                return response()->json(["message"=>"Current Email Is Wrong","status"=>403],403);
+            }
+            elseif($emailValidation["new_email"] == $user->email){
+                return response()->json(["message"=>"The New Email Should be Difference Then Old One","status"=>402],402);
+            }
+            $user->update([
+                "email"=>$emailValidation["new_email"],
+                "email_verify"=>false,
+
+            ]);
+            $otpController = new otpController;
+            $otpController->sendRegister($user->email, $user->first_name, $user->id);
+            return response()->json(["message"=>"Email Change","status"=>200],200);
+
+        }catch(ValidationException $e){
+            return response()->json(["message"=>$e->errors(),"status"=>422],422);
+        }
+    }
+    public function codeEmailVerify(Request $request){
+        try{
+            $user = $request->user();
+            $optValidation = $request->validate([
+                "otp_code"=>"required|integer|digits:8",
+            ]);
+            $otpCode = Otp::where("user_id",$user->id)->latest()->first();
+            if($optValidation["otp_code"] != $otpCode->otp_code){
+                return response()->json(["message"=>"Otp Code Is Wrong","status"=>403],403);
+            }
+            $user->update([
+                "email_verify"=>true,
+            ]);
+            return response()->json(["message"=>"Account Now Is Valid","status"=>200],200);
+
+        }catch(ValidationException $e){
+            return response()->json(["message"=>$e->errors(),"status"=>422],422);
+        }
     }
 }

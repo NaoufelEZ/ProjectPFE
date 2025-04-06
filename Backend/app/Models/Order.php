@@ -13,7 +13,9 @@ class Order extends Model
     protected $fillable = [
         "user_id",
         "address_id",
-        "method_payment"
+        "status",
+        "delivery_company",
+        "method_payment",
     ];
     public $timestamps = false;
     public function orderItems(){

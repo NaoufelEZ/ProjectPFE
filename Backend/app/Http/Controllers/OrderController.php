@@ -53,7 +53,7 @@ class OrderController extends Controller
         return response()->json(["message"=>"Succeed","data"=>$orders,"status"=>200],200);
     }
     public function getOrder($id){
-        $order = Order::with(["user","orderItems.product_stock","address"])->find($id);
+        $order = Order::with(["user","orderItems.product_stock.product","address"])->find($id);
         if(!$order){
             return response()->json(["message"=>"Order Not Found","Status"=>404],404);
         }
@@ -67,11 +67,11 @@ class OrderController extends Controller
             }
             $orderValidate = $request->validate([
                 "deliveryCompany"=>"required|integer",
-                "deliveryStatus"=>"required|string",
+                "deliveryStatus"=>"string|nullable",
             ]);
             $order->update([
                 "status" => $orderValidate["deliveryStatus"],
-                // "delivery_company_id" => $orderValidate["deliveryCompany"],
+                "delivery_company_id" => $orderValidate["deliveryCompany"],
             ]);
             $orderItems = OrderItems::with("product_stock")->where("order_id",$id)->get();
             if($orderValidate["deliveryStatus"] == "Shipped"){
