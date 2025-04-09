@@ -3,7 +3,7 @@ import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import { Button, Form } from "react-bootstrap";
 import Cookies from "universal-cookie";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import flouci from "../../../Assets/images/flouci.png";
 import delivery from "../../../Assets/images/delivery-van.png";
 import AddressBox from "./AddressBox";
@@ -11,11 +11,14 @@ import AddressBox from "./AddressBox";
 const Checkout = () => {
     const [carts, setCarts] = useState([]);
     const [total, setTotal] = useState(0);
-    const [address,setAddress] = useState([]);
-    const [payment,setPayment] = useState([{"method":"Flouci","icon":flouci},{"method":"Cash payment on delivery","icon":delivery}]);
-    const [paymentChoose,setPaymentChoose] = useState(1);
-    const [popup,setPopup] = useState(false);
-    const [user,setUser] = useState([]);
+    const [address, setAddress] = useState([]);
+    const [payment, setPayment] = useState([
+        { "method": "Flouci", "icon": flouci },
+        { "method": "Cash payment on delivery", "icon": delivery }
+    ]);
+    const [paymentChoose, setPaymentChoose] = useState(1);
+    const [popup, setPopup] = useState(false);
+    const [user, setUser] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const cookie = new Cookies();
     const token = cookie.get("auth");
@@ -27,142 +30,272 @@ const Checkout = () => {
             setCarts(JSON.parse(storedData));
         }
     }, []);
-    useEffect(()=>{
-        axios.get(`${APIURL}/user`,{
-          headers:{
-            Accept:"application/json",
-            Authorization:`Bearer ${token}`,
-            "x-api-key":ApiKey,
-          }
-        }).then((response)=>setUser(response.data.data));
-      },[]);
+
+    useEffect(() => {
+        axios.get(`${APIURL}/user`, {
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+                "x-api-key": ApiKey,
+            }
+        }).then((response) => setUser(response.data.data));
+    }, [token]);
 
     useEffect(() => {
         const totalPrice = carts.reduce((sum, e) => sum + e.price * e.count, 0);
         setTotal(totalPrice);
     }, [carts]);
-    const deliveryFee = total <= 150 ? 7 : 0;
-    useEffect(()=>{
-        axios.get(`${APIURL}/address`,{
-            headers:{
-                Accept:"application",
-                "x-api-key":ApiKey,
-                Authorization:`Bearer ${token}`,
-            }
-        }).then((response)=>setAddress(response.data.data))
-        .catch((err)=>{err.status === 500 && navigate("/")});
-    },[]);
 
-        const handleSelect = (index) => {
-            axios.put(`${APIURL}/address/default/update/${index}`,{},{
-                headers:{
-                    Accept:"application",
-                    "x-api-key":ApiKey,
-                    Authorization:`Bearer ${token}`,
+    const deliveryFee = total <= 150 ? 7 : 0;
+
+    const fetchAddresses = async () => {
+        try {
+            const response = await axios.get(`${APIURL}/address`, {
+                headers: {
+                    Accept: "application/json",
+                    "x-api-key": ApiKey,
+                    Authorization: `Bearer ${token}`,
                 }
-            })
-            setSelectedAddress(index);
-        };
-       const formData = new FormData();
-       formData.append("user_id",user.id);
-       formData.append("address_id",selectedAddress);
-       formData.append("paymentChoose",payment[paymentChoose].method);
-       carts.forEach((item)=>{
-        formData.append("product_stock_id[]",item.stock_id);
-        formData.append("price[]",item.price);
-        formData.append("quantity[]",item.count);
-    });
-    //    for (let [key, value] of formData.entries()) {
-    //     console.log(`${key}: ${value}`);
-    // }
-       const handleOrder = async (e)=>{
-        e.preventDefault();
-        if(selectedAddress !== null){
-        try{
-        await axios.post(`${APIURL}/order/add`,formData,
-            {
-                headers:{
-                    Accept:"application",
-                    "x-api-key":ApiKey,
-                    Authorization:`Bearer ${token}`,
-                    }
             });
-            localStorage.removeItem("card");
-            navigate("/");
-        }catch(err){
-            console.log(err)
+            setAddress(response.data.data);
+            
+            // Set the default address if one exists
+            const defaultAddress = response.data.data.find(addr => addr.is_default);
+            if (defaultAddress) {
+                setSelectedAddress(defaultAddress.id);
+            }
+        } catch (err) {
+            if (err.response?.status === 500) {
+                navigate("/");
+            }
         }
+    };
+
+    useEffect(() => {
+        fetchAddresses();
+    }, [token, navigate]);
+
+    const handleSelect = async (index) => {
+        try {
+            await axios.put(`${APIURL}/address/default/update/${index}`, {}, {
+                headers: {
+                    Accept: "application/json",
+                    "x-api-key": ApiKey,
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            setSelectedAddress(index);
+            // Refresh addresses to update the default status
+            fetchAddresses();
+        } catch (err) {
+            console.error("Error updating default address:", err);
         }
-       }
+    };
+
+    const handleAddressAdded = (newAddress) => {
+        // Update the addresses list with the new address
+        setAddress(prev => [...prev, newAddress]);
+        // Select the new address by default
+        setSelectedAddress(newAddress.id);
+    };
+
+    const formData = new FormData();
+    formData.append("user_id", user.id);
+    formData.append("address_id", selectedAddress);
+    formData.append("paymentChoose", payment[paymentChoose].method);
+    carts.forEach((item) => {
+        formData.append("product_stock_id[]", item.stock_id);
+        formData.append("price[]", item.price);
+        formData.append("quantity[]", item.count);
+    });
+
+    const handleOrder = async (e) => {
+        e.preventDefault();
+        if (selectedAddress !== null) {
+            try {
+                await axios.post(`${APIURL}/order/add`, formData,
+                    {
+                        headers: {
+                            Accept: "application/json",
+                            "x-api-key": ApiKey,
+                            Authorization: `Bearer ${token}`,
+                        }
+                    });
+                localStorage.removeItem("card");
+                navigate("/order-confirmation"); // Redirect to confirmation page
+            } catch (err) {
+                console.error("Order error:", err);
+                alert("There was an error placing your order. Please try again.");
+            }
+        } else {
+            alert("Please select a delivery address");
+        }
+    };
+
     return (
-        <Form onSubmit={handleOrder} className="d-flex w-100 p-3 gap-4">
-        {popup ? <div style={{height:"100vh"}} className="position-absolute w-100 d-flex justify-content-center align-items-center "><AddressBox setOpen={setPopup} /></div> : null}
-        <table className="table w-100 align-middle">
-            <tbody>
-                {carts && carts.length > 0 ? (
-                    carts.map((cart, key) => (
-                        <tr className="border-1" key={key}>
-                            <td className="w-25">
-                                <img width={100} height={100} src={`${IMAGEURL}/products/${cart.image}`} alt="cart" />
-                            </td>
-                            <td className="w-50">x {cart.count} pieces</td>
-                            <td className="w-25">{(cart.price * cart.count).toFixed(2)} TND</td>
-                        </tr>
-                    ))
-                
-                ) : (
-                <tr>
-                    <td colSpan={3} className="text-center">Cart is empty</td>
-                </tr>
+        <div className="container-fluid p-3">
+            <Form onSubmit={handleOrder} className="d-flex flex-column flex-lg-row gap-4">
+                {popup && (
+                    <div style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        zIndex: 1000,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <AddressBox
+                            setOpen={setPopup}
+                            onAddressAdded={handleAddressAdded}
+                        />
+                    </div>
                 )}
-                <tr className="border-1">
-                    <td colSpan={2}>Cart subtotal</td>
-                    <td>{(total).toFixed(2)} TND</td>
-                </tr>
-                <tr className="border-1">
-                    <td colSpan={2}>Delivery</td>
-                    <td className={`${deliveryFee === 0 ? "text-success fw-bold h5" : "" }`}>{deliveryFee === 0 ? "Free" : deliveryFee + " TND"}</td>
-                </tr>
-                <tr className="border-1">
-                    <td colSpan={2}>Order total</td>
-                    <td className="fw-bold">{(total + deliveryFee).toFixed(2)} TND</td>
-                </tr>
-            </tbody>
-        </table>
-        <div className="w-75 d-flex flex-column gap-4">
-            <h4>Order summary</h4>
-            <table className="table w-100">
-                <tbody>
-                    <tr className="border-1">
-                        <h4>Delivery address</h4>
-                        <div>
-                            <Button onClick={()=>setPopup(prev => true)} type="button">Add New Address</Button>
-                            <div style={{ height:address && address.length > 0 ? "200px" : "auto"}} className="p-1 bg-light mt-2 rounded-2 overflow-x-auto">{address && address.length > 0 ? address.map((e,key)=>(<div className="p-1 bg-white mb-1" key={key}><label className="me-3">Choose as delivery address</label><Form>
-                            <Form.Check
-                                type="switch"
-                                value={e.id}
-                                name="address"
-                                checked={selectedAddress === e.id}
-                                onChange={() => handleSelect(e.id)}
-                            />
-                        </Form><p>{e.address}</p><p>{e.state}</p><p>{e.street}</p><p>{e.zip}</p></div>)) : <p>You don't have any registered addresses, you must add a new address!</p>}</div>
+                
+                <div className="w-100 w-lg-50">
+                    <h3 className="mb-4">Order Summary</h3>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {carts && carts.length > 0 ? (
+                                carts.map((cart, key) => (
+                                    <tr className="border-1" key={key}>
+                                        <td className="w-25">
+                                            <img 
+                                                width={100} 
+                                                height={100} 
+                                                src={`${IMAGEURL}/products/${cart.image}`} 
+                                                alt={cart.name} 
+                                                className="img-thumbnail"
+                                            />
+                                            <span className="ms-2">{cart.name}</span>
+                                        </td>
+                                        <td className="w-25">x {cart.count}</td>
+                                        <td className="w-25">{(cart.price * cart.count).toFixed(2)} TND</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={3} className="text-center">Your cart is empty</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+
+                    <div className="mt-4 p-3 bg-light rounded">
+                        <div className="d-flex justify-content-between mb-2">
+                            <span>Cart subtotal:</span>
+                            <span>{total.toFixed(2)} TND</span>
                         </div>
-                    </tr>
-                    <tr className="border-1">
+                        <div className="d-flex justify-content-between mb-2">
+                            <span>Delivery:</span>
+                            <span className={deliveryFee === 0 ? "text-success fw-bold" : ""}>
+                                {deliveryFee === 0 ? "Free" : deliveryFee + " TND"}
+                            </span>
+                        </div>
+                        <div className="d-flex justify-content-between mt-3 pt-2 border-top">
+                            <strong>Order total:</strong>
+                            <strong>{(total + deliveryFee).toFixed(2)} TND</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="w-100 w-lg-50">
+                    <div className="mb-4">
+                        <h4 className="mb-3">Delivery Address</h4>
+                        <Button 
+                            onClick={() => setPopup(true)} 
+                            type="button"
+                            variant="outline-primary"
+                            className="mb-3"
+                        >
+                            Add New Address
+                        </Button>
+                        
+                        <div 
+                            style={{ 
+                                height: address?.length > 0 ? "300px" : "auto",
+                                maxHeight: "300px"
+                            }} 
+                            className="p-3 bg-light rounded overflow-auto"
+                        >
+                            {address && address.length > 0 ? (
+                                address.map((e, key) => (
+                                    <div 
+                                        className={`p-3 mb-3 bg-white rounded ${selectedAddress === e.id ? "border border-primary" : ""}`} 
+                                        key={key}
+                                    >
+                                        <div className="form-check">
+                                            <input
+                                                className="form-check-input"
+                                                type="radio"
+                                                name="address"
+                                                id={`address-${e.id}`}
+                                                checked={selectedAddress === e.id}
+                                                onChange={() => handleSelect(e.id)}
+                                            />
+                                            <label className="form-check-label" htmlFor={`address-${e.id}`}>
+                                                <strong>Address {key + 1} {e.is_default && "(Default)"}</strong>
+                                            </label>
+                                        </div>
+                                        <p className="mb-1">{e.address}</p>
+                                        <p className="mb-1">{e.state}, {e.street}</p>
+                                        <p className="mb-0">Zip: {e.zip}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center p-4">
+                                    <p>You don't have any registered addresses.</p>
+                                    <p>Please add a new address to continue.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <h4 className="mb-3">Payment Method</h4>
                         <div className="list-group">
-                        <h4>Payment method</h4>
-                        <div className="mt-3">
-                            {payment.map((element,key)=>(
-                                <Button key={key} onClick={()=>setPaymentChoose(key)} disabled={element.method === "Flouci"} type="button" className={`list-group-item list-group-item-action mb-2  ${paymentChoose === key && "active"}`}><img className="me-2" width={30} src={element.icon} alt="method"/>{element.method}{element.method === "Flouci" && " (Coming Soon)"}</Button>
+                            {payment.map((element, key) => (
+                                <button
+                                    key={key}
+                                    onClick={() => setPaymentChoose(key)}
+                                    disabled={element.method === "Flouci"}
+                                    type="button"
+                                    className={`list-group-item list-group-item-action mb-2 d-flex align-items-center ${paymentChoose === key ? "active" : ""}`}
+                                >
+                                    <img className="me-3" width={30} src={element.icon} alt="method" />
+                                    <span>
+                                        {element.method}
+                                        {element.method === "Flouci" && " (Coming Soon)"}
+                                    </span>
+                                </button>
                             ))}
                         </div>
+                    </div>
+
+                    <Button 
+                        type="submit" 
+                        variant="primary" 
+                        size="lg" 
+                        className="w-100 mt-3"
+                        disabled={!selectedAddress || carts.length === 0}
+                    >
+                        {paymentChoose === 1 ? 
+                            `Place Order (${(total + deliveryFee).toFixed(2)} TND)` : 
+                            `Pay with ${payment[paymentChoose].method} (${(total + deliveryFee).toFixed(2)} TND)`}
+                    </Button>
                 </div>
-            </tr>
-        </tbody>
-    </table>
-        <Button className="w-50" type="submit">{paymentChoose === 1 ? "Place order" : `Payer (${total + deliveryFee} TND)`}</Button>
+            </Form>
         </div>
-        </Form>
     );
 };
 
