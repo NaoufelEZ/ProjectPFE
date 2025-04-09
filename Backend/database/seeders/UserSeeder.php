@@ -17,13 +17,22 @@ class UserSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         User::factory()->create([
-            'first_name' => 'admin',
-            'last_name' => 'admin',
+            'first_name' => 'Naoufel',
+            'last_name' => 'Abdelli',
             'email' => 'admin@admin.com',
             'password' => Hash::make("123456"),
             'email_verify' => true,
             'phone' => "24365390",
             'role' => 'admin',
+        ]);
+        User::factory()->create([
+            'first_name' => 'Nidhal',
+            'last_name' => 'Abdelli',
+            'email' => 'productmanager@gmail.com',
+            'password' => Hash::make("123456"),
+            'email_verify' => true,
+            'phone' => "55205429",
+            'role' => 'Product Manager',
         ]);
     }
 }

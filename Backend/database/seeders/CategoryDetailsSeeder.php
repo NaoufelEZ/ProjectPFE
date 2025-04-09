@@ -14,38 +14,44 @@ class CategoryDetailsSeeder extends Seeder
     public function run(): void
     {
         CategoryDetails::factory()->createMany([
-            ["categoryDetails"=>"Jackets and blazers","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Dresses and Jumpsuits","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Jeans","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Trousers","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"1741797605_67d1b8e57405d.jpg"],
-            ["categoryDetails"=>"Skirts","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Shorts and bermudas","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Tops and bodysuits","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"T-shirts","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Shirts and blouses","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Sweatshirts and hoodies","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Sweaters and cardigans","category_id"=>2,"subcategory_id"=>3],
-            
-            ["categoryDetails"=>"Boots and Ankle Boots","category_id"=>2,"subcategory_id"=>3],
-            ["categoryDetails"=>"Heeled shoes","category_id"=>2,"subcategory_id"=>4],
-            ["categoryDetails"=>"Flat shoes","category_id"=>2,"subcategory_id"=>4],
-            ["categoryDetails"=>"Trainers","category_id"=>2,"subcategory_id"=>4],
-            ["categoryDetails"=>"SandalsNew Items","category_id"=>2,"subcategory_id"=>4],
-            
-            ["categoryDetails"=>"Basics","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1742912093_67e2ba5d9ec4b.jpg"],
-            ["categoryDetails"=>"Jackets and coats","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1742912317_67e2bb3dc1ff8.jpg"],
-            ["categoryDetails"=>"Sweatshirts and hoodies","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1742912523_67e2bc0b73328.jpg"],
-            ["categoryDetails"=>"Knitwear","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1741797773_67d1b98dd77ea.jpg"],
-            ["categoryDetails"=>"Sweaters and cardigans","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1742912613_67e2bc650a6b3.jpg"],
-            ["categoryDetails"=>"Jeans","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1741797727_67d1b95f64d86.jpg"],
-            ["categoryDetails"=>"Shirts","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1741797659_67d1b91b55cc6.jpg"],
-            ["categoryDetails"=>"T-shirts","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"1741797697_67d1b9417b459.jpg"],
 
-            ["categoryDetails"=>"Ankle boots","category_id"=>1,"subcategory_id"=>2],
-            ["categoryDetails"=>"Ankle boots","category_id"=>1,"subcategory_id"=>2],
-            ["categoryDetails"=>"Trainers","category_id"=>1,"subcategory_id"=>2],
-            ["categoryDetails"=>"Sneakers","category_id"=>1,"subcategory_id"=>2],
-            ["categoryDetails"=>"Smart Shoes","category_id"=>1,"subcategory_id"=>2],
+ //---MEN/CLOTHES---
+
+["categoryDetails"=>"JACKETS/COATS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"01576677800-21-a9o.jpg"],
+["categoryDetails"=>"JEANS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"05340352401-21-a9o.jpg"],
+["categoryDetails"=>"SHIRTS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"01248218712-p.jpg"],
+["categoryDetails"=>"SWEATERS/CARDIGANS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"07326623251-21-a9o.jpg"],
+["categoryDetails"=>"SWEATSHIRTS/HOODIES","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"02240498812-21-a9o.jpg"],
+["categoryDetails"=>"TROUSERS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"00415054712-21-a9o.jpg"],
+["categoryDetails"=>"T-SHIRTS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"02869443106-a3o.jpg"],
+
+//---MEN/SHOES---
+
+["categoryDetails"=>"ANKLE BOOTS","category_id"=>1,"subcategory_id"=>2,"category_details_image"=>"12100560040-a4o.jpg"],
+["categoryDetails"=>"SANDALS","category_id"=>1,"subcategory_id"=>2,"category_details_image"=>"12701560107-a4o.jpg"],
+["categoryDetails"=>"SMART SHOES","category_id"=>1,"subcategory_id"=>2,"category_details_image"=>"12628560131-a4o.jpg"],
+["categoryDetails"=>"SNEAKERS","category_id"=>1,"subcategory_id"=>2,"category_details_image"=>"12310560040-a4o.jpg"],
+["categoryDetails"=>"TRAINERS","category_id"=>1,"subcategory_id"=>2,"category_details_image"=>"12420560004-a4o.jpg"],
+
+//---WOMEN/CLOTHES---
+
+["categoryDetails"=>"DRESSES/JUMPSUITS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"00700187802-a3o.jpg"],
+["categoryDetails"=>"JACKETS/BLAZERS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"01524718700-28-a9o.jpg"],
+["categoryDetails"=>"JEANS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"05023335800-28-a10o.jpg"],
+["categoryDetails"=>"SHIRTS/BLOUSES","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"06271741401-28-a9o.jpg"],
+["categoryDetails"=>"SWEATERS/CARDIGANS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"07262686711-p.jpg"],
+["categoryDetails"=>"SWEATSHIRTS/HOODIES","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"07077033250-p.jpg"],
+["categoryDetails"=>"TROUSERS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"00097478505-28-a7o.jpg"],
+["categoryDetails"=>"T-SHIRTS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"02428705106-a7o.jpg"],
+
+//---WOMEN/SHOES---
+
+["categoryDetails"=>"BOOTS/ANKLE BOOTS","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11050460040-a4o.jpg"],
+["categoryDetails"=>"FLAT SHOES","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11616560102-a4o.jpg"],
+["categoryDetails"=>"HEELED SHOES","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11326560004-w.jpg"],
+["categoryDetails"=>"SANDALS","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11815560040-01-w.jpg"],
+["categoryDetails"=>"TRAINERS","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11444560050-w.jpg"],
+
         ]);
     }
 }
