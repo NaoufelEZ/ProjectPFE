@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200px" height="250px" viewBox="0 0 200 250" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>PULL&BEAR Product</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#F5F5F5" x="0" y="0" width="200" height="250"></rect>
+        <g transform="translate(50, 40)">
+            <!-- T-shirt outline -->
+            <path d="M100,30 C100,30 95,10 75,10 L25,10 C5,10 0,30 0,30 L15,45 L15,150 L85,150 L85,45 L100,30 Z" stroke="#333" stroke-width="2" fill="#333"></path>
+            <!-- Collar -->
+            <path d="M40,10 L40,30 L60,30 L60,10" stroke="#FFFFFF" stroke-width="2" fill="none"></path>
+            <!-- Brand logo -->
+            <text x="30" y="90" font-family="Arial" font-size="10" fill="#FFFFFF">PULL&BEAR</text>
+        </g>
+    </g>
+</svg>

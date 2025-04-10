@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="50px" viewBox="0 0 80 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Delivery Icon</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="80" height="50" rx="5"></rect>
+        <g transform="translate(12, 5)">
+            <!-- Truck body -->
+            <path d="M0,30 L0,12 C0,10.895 0.895,10 2,10 L38,10 L44,20 L54,20 C55.105,20 56,20.895 56,22 L56,30 L0,30 Z" fill="#000000"></path>
+            <!-- Truck cabin -->
+            <path d="M0,30 L0,12 C0,10.895 0.895,10 2,10 L25,10 L25,30 L0,30 Z" fill="#333333"></path>
+            <!-- Windshield -->
+            <path d="M2,10 L5,5 L22,5 L25,10" stroke="#333333" stroke-width="1" fill="#CCCCCC"></path>
+            <!-- Side window -->
+            <rect fill="#CCCCCC" x="4" y="11" width="8" height="6" rx="1"></rect>
+            <!-- Wheels -->
+            <circle fill="#333333" cx="12" cy="36" r="6"></circle>
+            <circle fill="#666666" cx="12" cy="36" r="4"></circle>
+            <circle fill="#333333" cx="12" cy="36" r="1"></circle>
+            <circle fill="#333333" cx="44" cy="36" r="6"></circle>
+            <circle fill="#666666" cx="44" cy="36" r="4"></circle>
+            <circle fill="#333333" cx="44" cy="36" r="1"></circle>
+            <!-- Headlight -->
+            <rect fill="#FFCC00" x="0" y="17" width="2" height="3" rx="1"></rect>
+            <!-- Package box with modern delivery icon -->
+            <rect fill="#FFFFFF" stroke="#333333" stroke-width="1" x="32" y="23" width="17" height="13" rx="2"></rect>
+            <path d="M35,30 L46,30 M40.5,26 L40.5,35" stroke="#333333" stroke-width="1.5"></path>
+            <!-- Front grille details -->
+            <rect fill="#CCCCCC" x="2" y="25" width="10" height="2" rx="1"></rect>
+        </g>
+    </g>
+</svg>

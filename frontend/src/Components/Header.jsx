@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import logo from "../Assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import "./HeaderTest.css";
 import { FiUser } from "react-icons/fi";
 import axios from "axios";
@@ -28,9 +28,23 @@ const Header = () => {
   const [categories, setCategories] = useState([]);
   const [lastNav, setLastNav] = useState(localStorage.getItem("navTo") || "");
 
+  const megaMenuRef = useRef(null);
+  const headerRef = useRef(null);
+
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const navigate = useNavigate();
+
+  const imagePreviews = {
+    Clothes: {
+      Shirts: "/Assets/images/clothes-shirts.jpg",
+      Pants: "/Assets/images/clothes-pants.jpg",
+    },
+    Shoes: {
+      Sneakers: "/Assets/images/shoes-sneakers.jpg",
+      Boots: "/Assets/images/shoes-boots.jpg",
+    },
+  };
 
   useEffect(() => {
     if (token) {
@@ -86,6 +100,28 @@ const Header = () => {
     }
   }, [choseMenu, cat, lastNav]);
 
+  const handleMouseLeave = (e) => {
+    if (megaMenuRef.current && !megaMenuRef.current.contains(e.relatedTarget)) {
+      setClick({ action: false });
+    }
+  };
+
+  useEffect(() => {
+    if (click.action && megaMenuRef.current) {
+      megaMenuRef.current.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    return () => {
+      if (megaMenuRef.current) {
+        megaMenuRef.current.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, [click.action]);
+
+  const isFeaturedCategory = (category) => {
+    return ['Clothes', 'Shoes'].includes(category);
+  };
+
   return (
     <>
       {(click.action || basket) && (
@@ -98,7 +134,7 @@ const Header = () => {
         ></div>
       )}
 
-      <header className="bg-light position-sticky w-100 top-0" style={{ height: "70px" }}>
+      <header className="bg-white position-sticky w-100 top-0 shadow-sm" ref={headerRef}>
         <nav className="d-flex align-items-center h-100 p-3 position-relative">
           <div className="d-flex flex-grow-1">
             {categories.length > 0 ? (
@@ -134,6 +170,7 @@ const Header = () => {
                   <FontAwesomeIcon
                     className={`${click.action && click.section === e.category ? "rotate-180" : ""}`}
                     icon={faChevronDown}
+                    style={{ fontSize: '0.8rem' }}
                   />
                 </div>
               ))
@@ -167,48 +204,81 @@ const Header = () => {
           </div>
         </nav>
 
-        <div className={`mega bg-light ${click.action ? "show" : ""}`}>
-          <Row className="p-2 w-100 text-black">
-            <Col className="col-3 d-flex flex-column">
-              <span className="mb-3" role="button">New</span>
-              {subcategory
-                .filter((item) => item.subcategories !== "New")
-                .map((element, key) => (
-                  <span
-                    className="mb-3"
-                    onClick={() =>
-                      setChoseMenu({
-                        cat: cat,
-                        sub: element.subcategories,
-                        change: true,
-                      })
-                    }
-                    role="button"
-                    key={key}
-                  >
-                    {element.subcategories}
-                  </span>
-                ))}
-            </Col>
-            <Col className="menu-grid">
-              {choseMenu.change ? (
-                <div className="grid-container">
-                  {categoryDetails.map((element, index) => (
-                    <Link
-                      className="text-decoration-none"
-                      to={`/${choseMenu.cat}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`}
-                      role="button"
-                      key={index}
+        <div className={`mega-menu bg-white ${click.action ? "show" : ""}`} ref={megaMenuRef}>
+          <div className="container-fluid py-4">
+            <Row className="w-100 text-black mega-row">
+              <Col className="col-3 d-flex flex-column pe-4">
+                <h5 onClick={()=>navigate(`/${choseMenu.cat}/new`)} role="button" className="fw-bold mb-4">NEW</h5>
+                {subcategory
+                  .filter((item) => item.subcategories !== "New")
+                  .map((element, key) => (
+                    <div
+                      className="subcategory-item mb-3"
+                      key={key}
+                      onClick={() =>
+                        setChoseMenu({
+                          cat: cat,
+                          sub: element.subcategories,
+                          change: true,
+                        })
+                      }
                     >
-                      {element.categoryDetails}
-                    </Link>
+                      <div className="d-flex align-items-center">
+                        <span className={`subcategory-name ${isFeaturedCategory(element.subcategories) ? 'featured' : ''}`}>
+                          {element.subcategories}
+                        </span>
+                        {isFeaturedCategory(element.subcategories) && (
+                          <div className="arrow-container">
+                            <span className="arrow-line"></span>
+                            <FontAwesomeIcon icon={faChevronRight} className="arrow-icon" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   ))}
-                </div>
-              ) : (
-                <span className="text-muted">Select a category</span>
-              )}
-            </Col>
-          </Row>
+              </Col>
+
+              <Col className="menu-grid ps-0 position-relative">
+                <div className="vertical-line"></div>
+                {choseMenu.change ? (
+                  <div className="details-columns">
+                    <div className="details-column">
+                      {categoryDetails.slice(0, Math.ceil(categoryDetails.length / 2)).map((element, index) => (
+                        <Link
+                          className="detail-item"
+                          to={`/${choseMenu.cat}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`}
+                          key={index}
+                        >
+                          {element.categoryDetails}
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="details-column">
+                      {categoryDetails.slice(Math.ceil(categoryDetails.length / 2)).map((element, index) => (
+                        <Link
+                          className="detail-item"
+                          to={`/${choseMenu.cat}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`}
+                          key={index + Math.ceil(categoryDetails.length / 2)}
+                        >
+                          {element.categoryDetails}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <span>Select a category</span>
+                  </div>
+                )}
+
+                {(imagePreviews[choseMenu.cat]?.[choseMenu.sub]) && (
+                  <div className="image-preview">
+                    <img src={imagePreviews[choseMenu.cat][choseMenu.sub]} alt={choseMenu.sub} />
+                  </div>
+                )}
+              </Col>
+            </Row>
+          </div>
         </div>
 
         {basket && (

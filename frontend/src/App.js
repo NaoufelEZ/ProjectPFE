@@ -51,12 +51,16 @@ import Detail from "./Pages/Dashboard/ProductManger/Detail.jsx";
 import Order from "./Pages/Dashboard/Admin/Order.jsx";
 import UseRule from "./Pages/Auth/UseRule.jsx";
 import User from "./Pages/Dashboard/Admin/User.jsx";
+import ProductDashboard from "./Pages/Dashboard/ProductManger/ProductDashboard.jsx";
+import CashOrderConfirmation from "./Pages/public/Products/CashOrderConfirmation.jsx";
+import VisaOrderConfirmation from "./Pages/public/Products/VisaOrderConfirmation.jsx";
+import VisaPayment from "./Pages/public/Products/VisaPayment.jsx";
 
 function App() {
   return (
     <Routes>
     <Route element={<UseRule />}>
-     <Route path="/" element={<Navigate to="/Man" replace />} />
+     <Route path="/" element={<Navigate to="/Men" replace />} />
      <Route path="/:cat" element={<Home/>} />
       <Route path="/addressbox" element={<AddressBox />} />
       
@@ -65,7 +69,7 @@ function App() {
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
       <Route path="/password/change/:token" element={<ChangePassword />} />
       <Route path="/test" element={<HeaderTest />} />
-      <Route path="/:cat/new" element={<New />} />
+      <Route path="/:cat/New" element={<New />} />
       <Route path="/:cat/:sub/:detail" element={<Products />} />
       <Route path="/product/:id" element={<Product/>} />
       <Route path="/*" element={<Err404 />} />
@@ -78,6 +82,9 @@ function App() {
       <Route element={<ReqAuth />}>
       <Route path="/auth/verify" element={<AuthOtp/>} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/checkout/visa-payment" element={<VisaPayment />} />
+      <Route path="/checkout/order-confirmation/cash" element={<CashOrderConfirmation />} />
+      <Route path="/checkout/visa-payment/order-confirmation" element={<VisaOrderConfirmation />} />
       <Route path="/setting"  element={<Setting />}>
         <Route path="personal-details" element={<Profile />}/>
         <Route path="saved-addresses" element={<SavedAddresses />}/>
@@ -109,6 +116,7 @@ function App() {
             </Route>
           {/* Product Manger */}
           <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
+              <Route path="inventory/:idProd" element={<ProductDashboard />} />
               <Route path="product/add" element={<AddProduct />} />
               <Route path="Categories" element={<Categories />} />
               <Route path="Categories/:catId" element={<Category />} />

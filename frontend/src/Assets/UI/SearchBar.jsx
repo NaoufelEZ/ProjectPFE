@@ -12,6 +12,7 @@ const SearchBar = () => {
   const [resultsFilter, setResultsFilter] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const searchContainerRef = useRef(null);
+  const resultsContainerRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div 
+    <div
       className={`search-container ${isFocused || query ? "expanded" : ""}`}
       ref={searchContainerRef}
     >
@@ -77,16 +78,23 @@ const SearchBar = () => {
         <FontAwesomeIcon className="search-icon" icon={faMagnifyingGlass} />
       </div>
       {resultsFilter.length > 0 && isFocused && (
-        <ul className="search-results move-left">
-          {resultsFilter.map((item) => (
-            <li 
-              onClick={() => handleProductClick(item.id)} 
-              key={item.id} 
+        <ul
+          className="search-results move-left"
+          ref={resultsContainerRef}
+        >
+          {resultsFilter.slice(0, 5).map((item) => (
+            <li
+              onClick={() => handleProductClick(item.id)}
+              key={item.id}
               className="search-item"
             >
               {item.title}
             </li>
           ))}
+          {/* Show "Scroll down for more..." only if there are more than 5 results */}
+          {resultsFilter.length > 5 && (
+            <div className="scroll-notice">Scroll down for more...</div>
+          )}
         </ul>
       )}
     </div>

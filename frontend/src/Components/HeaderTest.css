@@ -1,104 +1,4 @@
-svg {
-  font-size: 10px;
-  transition: .5s ease-in-out;
-}
-
-.rotate-180 {
-  transform: rotate(180deg);
-}
-
-.mega {
-  height: 300px;
-  transition: .5s ease-in-out;
-  opacity: 0;
-  transform: translateY(-300px);
-  visibility: hidden;
-  position: relative;
-  z-index: 12;
-}
-
-.mega.show {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
-}
-
-nav img {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-}
-
-.grid-container {
-  height: 250px;
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  grid-auto-flow: column;
-  grid-gap: 10px;
-  padding: 10px;
-  width: 100%;
-  font-size: 15px;
-}
-
-.menu-item {
-  cursor: pointer;
-  padding: 5px;
-  font-weight: bold;
-}
-
-.mega-menu {
-  position: absolute;
-  top: 50px;
-  left: 0;
-  width: 100%;
-  background: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  display: none;
-  transition: all 0.3s ease-in-out;
-  z-index: 1000;
-}
-
-.mega-menu.show {
-  display: block;
-}
-
-.menu-item {
-  padding: 10px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.menu-item:hover {
-  color: #ff3e6c;
-}
-
-.menu-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  padding: 10px;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.grid-item {
-  padding: 8px;
-  font-size: 14px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.grid-item:hover {
-  color: #ff3e6c;
-}
-
-/* New overlay styles */
+/* Overlay and basket */
 .overlay {
   position: fixed;
   top: 0;
@@ -106,7 +6,7 @@ nav img {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10;
+  z-index: 90;
   transition: opacity 0.3s ease;
 }
 
@@ -121,7 +21,7 @@ nav img {
   width: 400px;
   height: 100%;
   background: white;
-  z-index: 11;
+  z-index: 1001;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
   transform: translateX(100%);
   animation: slideIn 0.3s forwards;
@@ -129,13 +29,165 @@ nav img {
 
 @keyframes slideIn {
   from {
-      transform: translateX(100%);
+    transform: translateX(100%);
   }
   to {
-      transform: translateX(0);
+    transform: translateX(0);
   }
 }
 
 header {
-  z-index: 13;
+  z-index: 1000;
+}
+
+/* Mega Menu */
+.mega-menu {
+  height: 300px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  padding: 1rem 2rem;
+}
+
+.mega-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mega-row {
+  height: 100%;
+}
+
+/* Subcategory items */
+.subcategory-item {
+  cursor: pointer;
+  padding: 8px 0;
+  transition: all 0.2s ease;
+}
+
+.subcategory-item:hover {
+  background-color: #f8f9fa;
+}
+
+.subcategory-name {
+  font-size: 0.9rem;
+  position: relative;
+  padding-right: 15px;
+  color: #333;
+}
+
+.subcategory-name.featured {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #000;
+}
+
+/* Arrows */
+.arrow-container {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.arrow-line {
+  width: 15px;
+  height: 2px;
+  background-color: #000;
+  margin-right: 5px;
+  border-radius: 1px;
+}
+
+.arrow-icon {
+  font-size: 0.75rem;
+  color: #000;
+}
+
+.arrow-container:hover .arrow-icon {
+  transform: translateX(3px);
+  transition: transform 0.2s ease;
+}
+
+/* Vertical Line */
+.vertical-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #e0e0e0;
+}
+
+/* Details Columns */
+.details-columns {
+  display: flex;
+  height: 100%;
+  padding-left: 20px;
+  padding-right: 280px;
+}
+
+.details-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+}
+
+.detail-item {
+  padding: 8px 0;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.detail-item:hover {
+  color: #ff3e6c;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+}
+
+/* Image preview section */
+.image-preview {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 240px;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.image-preview img:hover {
+  transform: scale(1.05);
+}
+
+/* Chevron rotate */
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
 }

@@ -1,0 +1,102 @@
+.btn-black {
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0;
+  }
+  
+  .btn-black:hover {
+    background-color: #333;
+    border-color: #333;
+    color: #fff;
+  }
+  
+  /* Product item styling */
+  .product-item {
+    display: flex;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .product-image {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 1rem;
+  }
+  
+  .product-details {
+    flex: 1;
+  }
+  
+  .product-price {
+    font-weight: 600;
+  }
+  
+  /* Checkout sections */
+  .checkout-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .checkout-section:last-child {
+    border-bottom: none;
+  }
+  
+  /* Payment method styling */
+  .payment-method {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .payment-method:hover, .payment-method.selected {
+    border-color: #000;
+    background-color: #f8f8f8;
+  }
+  
+  .payment-method-icon {
+    width: 36px;
+    height: 36px;
+    margin-right: 1rem;
+  }
+  
+  /* Address card styling */
+  .address-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #ddd;
+  }
+  
+  .address-card:hover, .address-card.selected {
+    border-color: #000;
+    background-color: #f8f8f8;
+  }
+  
+  /* Order summary box */
+  .order-summary-box {
+    background-color: #f8f8f8;
+    padding: 1.5rem;
+    border-radius: 4px;
+  }
+  
+  /* Confirmation page styling */
+  .thank-you-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  
+  .check-icon {
+    width: 60px;
+    height: 60px;
+    color: #28a745;
+  }

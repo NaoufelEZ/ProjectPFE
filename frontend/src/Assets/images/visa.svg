@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="50px" viewBox="0 0 80 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Visa Card</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="80" height="50" rx="4"></rect>
+        <!-- Visa Logo -->
+        <g transform="translate(10, 15)">
+            <!-- Blue background -->
+            <polygon fill="#1434CB" points="25.5,0 4.5,0 0,20 21,20"></polygon>
+            <!-- Yellow background -->
+            <polygon fill="#F7B600" points="46.63,0 36.33,0 31.83,20 42.13,20"></polygon>
+            <!-- Red background -->
+            <path fill="#EC1C2E" d="M33.93,0 C29.13,0 25.8,2.7 25.8,6.6 C25.8,12.5 33.03,12.5 33.03,15.4 C33.03,16.7 31.33,17.9 28.33,17.9 C25.2,17.9 23.1,16.8 23.1,16.8 L22.2,19.7 C22.2,19.7 24.63,20.2 28.03,20.2 C33.43,20.2 36.83,17.4 36.83,13.3 C36.83,7.2 29.53,7.5 29.53,4.5 C29.53,3.1 31.23,2.2 33.63,2.2 C36.23,2.2 38.23,3.1 38.23,3.1 L39.03,0.3 C39.03,0.3 37.13,0 33.93,0 Z"></path>
+            <!-- Visa Text -->
+            <path fill="#FFFFFF" d="M13.92,6.93 L10.65,13.03 L10.14,10.43 C9.33,7.93 7.08,5.13 4.59,3.63 L7.56,19.93 L11.22,19.93 L17.1,6.93 L13.92,6.93 Z"></path>
+            <path fill="#FFFFFF" d="M7.86,6.93 L2.28,6.93 L2.19,7.23 C6.06,8.33 8.52,11.23 9.42,14.53 L8.13,8.23 C7.95,7.23 7.47,6.93 6.87,6.93 L7.86,6.93 Z"></path>
+            <!-- Additional Visa details -->
+            <path fill="#FFFFFF" d="M58.86,19.83 L62.22,19.83 L59.55,0.13 L56.61,0.13 C55.41,0.13 54.51,0.73 54.09,1.83 L47.55,19.83 L51.21,19.83 L52.29,16.73 L58.05,16.73 L58.86,19.83 Z M53.55,13.73 L55.89,6.93 L57.33,13.73 L53.55,13.73 Z"></path>
+        </g>
+    </g>
+</svg>
