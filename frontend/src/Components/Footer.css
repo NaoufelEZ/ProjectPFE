@@ -1,0 +1,41 @@
+/* Footer Component */
+.footer {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .hover-underline {
+    position: relative;
+    transition: color 0.3s ease;
+  }
+  
+  .hover-underline:hover {
+    color: #000;
+  }
+  
+  .hover-underline::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    transition: width 0.3s ease;
+  }
+  
+  .hover-underline:hover::after {
+    width: 100%;
+  }
+  
+  .hover-scale {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.15);
+  }
+  
+  /* Optional gradient border */
+  .footer .border-top {
+    border-image: linear-gradient(to right, transparent, #dee2e6, transparent) 1;
+  }
