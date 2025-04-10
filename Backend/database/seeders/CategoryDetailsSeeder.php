@@ -17,11 +17,11 @@ class CategoryDetailsSeeder extends Seeder
 
  //---MEN/CLOTHES---
 
-["categoryDetails"=>"JACKETS/COATS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"01576677800-21-a9o.jpg"],
+["categoryDetails"=>"JACKETS AND COATS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"01576677800-21-a9o.jpg"],
 ["categoryDetails"=>"JEANS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"05340352401-21-a9o.jpg"],
 ["categoryDetails"=>"SHIRTS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"01248218712-p.jpg"],
-["categoryDetails"=>"SWEATERS/CARDIGANS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"07326623251-21-a9o.jpg"],
-["categoryDetails"=>"SWEATSHIRTS/HOODIES","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"02240498812-21-a9o.jpg"],
+["categoryDetails"=>"SWEATERS AND CARDIGANS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"07326623251-21-a9o.jpg"],
+["categoryDetails"=>"SWEATSHIRTS AND HOODIES","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"02240498812-21-a9o.jpg"],
 ["categoryDetails"=>"TROUSERS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"00415054712-21-a9o.jpg"],
 ["categoryDetails"=>"T-SHIRTS","category_id"=>1,"subcategory_id"=>1,"category_details_image"=>"02869443106-a3o.jpg"],
 
@@ -35,18 +35,18 @@ class CategoryDetailsSeeder extends Seeder
 
 //---WOMEN/CLOTHES---
 
-["categoryDetails"=>"DRESSES/JUMPSUITS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"00700187802-a3o.jpg"],
-["categoryDetails"=>"JACKETS/BLAZERS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"01524718700-28-a9o.jpg"],
+["categoryDetails"=>"DRESSES AND JUMPSUITS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"00700187802-a3o.jpg"],
+["categoryDetails"=>"JACKETS AND BLAZERS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"01524718700-28-a9o.jpg"],
 ["categoryDetails"=>"JEANS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"05023335800-28-a10o.jpg"],
-["categoryDetails"=>"SHIRTS/BLOUSES","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"06271741401-28-a9o.jpg"],
-["categoryDetails"=>"SWEATERS/CARDIGANS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"07262686711-p.jpg"],
-["categoryDetails"=>"SWEATSHIRTS/HOODIES","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"07077033250-p.jpg"],
+["categoryDetails"=>"SHIRTS AND BLOUSES","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"06271741401-28-a9o.jpg"],
+["categoryDetails"=>"SWEATERS AND CARDIGANS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"07262686711-p.jpg"],
+["categoryDetails"=>"SWEATSHIRTS AND HOODIES","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"07077033250-p.jpg"],
 ["categoryDetails"=>"TROUSERS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"00097478505-28-a7o.jpg"],
 ["categoryDetails"=>"T-SHIRTS","category_id"=>2,"subcategory_id"=>3,"category_details_image"=>"02428705106-a7o.jpg"],
 
 //---WOMEN/SHOES---
 
-["categoryDetails"=>"BOOTS/ANKLE BOOTS","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11050460040-a4o.jpg"],
+["categoryDetails"=>"BOOTS AND ANKLE BOOTS","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11050460040-a4o.jpg"],
 ["categoryDetails"=>"FLAT SHOES","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11616560102-a4o.jpg"],
 ["categoryDetails"=>"HEELED SHOES","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11326560004-w.jpg"],
 ["categoryDetails"=>"SANDALS","category_id"=>2,"subcategory_id"=>4,"category_details_image"=>"11815560040-01-w.jpg"],

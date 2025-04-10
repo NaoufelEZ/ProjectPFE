@@ -12,19 +12,24 @@ class WishlistController extends Controller
         $user = $request->user();
         $product = Product::find($id);
         if(!$product){
-            return response()->json(["data"=>"Product Not Found","status"=>404], 404);
+            return response()->json(["message"=>"Product Not Found","status"=>404], 404);
+        }
+        $wishlist = Wishlist::where("product_id",$product->id)->where("user_id",$user->id)->first();
+        if($wishlist){
+            $wishlist->delete();
+            return response()->json(["message" => "Product Removed from Your Wishlist", "status" => 200], 200);
         }
         Wishlist::create([
             "user_id"=>$user->id,
             "product_id"=>$id,
         ]);
-        return response()->json(["data"=>"Product Add TO Your List","status"=>200], 200);
+        return response()->json(["message"=>"Product Add To Your List","status"=>200], 200);
     }
     public function index(Request $request) {
         $user = $request->user()->id;
         $wishlist = Wishlist::where("user_id",$user)->get();
         if(!$wishlist){
-            return response()->json(["data"=>"You Wishlist Are Empty","status"=>404], 404);
+            return response()->json(["message"=>"You Wishlist Are Empty","status"=>404], 404);
         }
         return response()->json(["data"=>$wishlist,"status"=>200], 200);
     }

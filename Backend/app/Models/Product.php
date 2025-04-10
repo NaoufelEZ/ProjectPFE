@@ -22,5 +22,8 @@ class Product extends Model
     public function wishlist(){
         return $this->hasMany(Wishlist::class);
     }
+    public function details(){
+        return $this->belongsTo(CategoryDetails::class);
+    }
     
 }

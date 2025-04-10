@@ -163,7 +163,6 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("delivery-company/{id}","getCompany");
             Route::delete("delivery-company/delete/{id}","index");
             Route::put("delivery-company/update/{id}","index");
-
         });
     });
 

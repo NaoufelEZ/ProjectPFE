@@ -87,4 +87,14 @@ class ProductController extends Controller
         return response()->json(["message"=>"Product deleted successfully","status"=>200],200);
         
     }
+    public function new($cat){
+        $products = Product::with(["details.category","productStock"])
+            ->whereHas('details.category', function($query) use ($cat) {
+                $query->where('category', $cat);
+            })
+            ->latest('created_at')
+            ->get();
+        
+        return response()->json(["data"=>$products,"status"=>200],200);
+    }
 }
