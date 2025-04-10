@@ -16,10 +16,10 @@ class SubcategoriesSeeder extends Seeder
         Subcategories::factory()->createMany([
             ["category_id"=>1,"subcategories"=>"Clothes","subcategories_image"=>"1741709376_67d0604068eac.jpg"],
             ["category_id"=>1,"subcategories"=>"Shoes","subcategories_image"=>"1741709322_67d0600ac664a.jpg"],
-            ["category_id"=>2,"subcategories"=>"Clothes","subcategories_image"=>"00688710060-a7o.jpg"],
-            ["category_id"=>2,"subcategories"=>"Shoes","subcategories_image"=>"11759560001-05-a7o.jpg"],
-            ["category_id"=>1,"subcategories"=>"New","subcategories_image"=>"01387109800-13-a7o.jpg"],
-            ["category_id"=>2,"subcategories"=>"New","subcategories_image"=>"03229360800-a7o.jpg"],
+            ["category_id"=>2,"subcategories"=>"Clothes","subcategories_image"=>"maxim-shibakov-U8DXIS7h52Y-unsplash.jpg"],
+            ["category_id"=>2,"subcategories"=>"Shoes","subcategories_image"=>"fray-bekele-DDzjU627-eI-unsplash.jpg"],
+            ["category_id"=>1,"subcategories"=>"New","subcategories_image"=>"clark-street-mercantile-qnKhZJPKFD8-unsplash.jpg"],
+            ["category_id"=>2,"subcategories"=>"New","subcategories_image"=>"freestocks-_3Q3tsJ01nc-unsplash.jpg"],
         ]);
     }
 }
