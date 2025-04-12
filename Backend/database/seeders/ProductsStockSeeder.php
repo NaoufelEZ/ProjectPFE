@@ -333,7 +333,9 @@ class ProductsStockSeeder extends Seeder
 ["product_id" => 25, "color" => "Black", "product_picture" => "11400560040-b.jpg", "size" => "38", "quantity" => 20],
 ["product_id" => 25, "color" => "Black", "product_picture" => "11400560040-b.jpg", "size" => "39", "quantity" => 20],
 ["product_id" => 25, "color" => "Black", "product_picture" => "11400560040-b.jpg", "size" => "40", "quantity" => 20],
-["product_id" => 25, "color" => "Black", "product_picture" => "11400560040-b.jpg", "size" => "41", "quantity" => 20],       
+["product_id" => 25, "color" => "Black", "product_picture" => "11400560040-b.jpg", "size" => "41", "quantity" => 20], 
+
+     
 ]);
     }
 }
