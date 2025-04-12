@@ -1,0 +1,109 @@
+.users-table-container {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .users-table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(67, 97, 238, 0.03);
+  }
+  
+  .users-table th {
+    font-weight: 600;
+    color: #495057;
+    white-space: nowrap;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .users-table th:hover {
+    background-color: rgba(67, 97, 238, 0.05);
+  }
+  
+  .users-table th span {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .users-table td {
+    vertical-align: middle;
+    padding: 1rem 0.75rem;
+  }
+  
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #4361ee;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+  
+  .search-box {
+    position: relative;
+    min-width: 250px;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+  }
+  
+  .search-input {
+    padding-left: 40px;
+    border-radius: 0.75rem;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+  }
+  
+  .bulk-select {
+    width: 180px;
+    border-radius: 0.75rem;
+  }
+  
+  .table-controls {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+  
+  .pagination {
+    margin-bottom: 0;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #4361ee;
+    border-color: #4361ee;
+  }
+  
+  .pagination .page-link {
+    color: #4361ee;
+    border-radius: 0.5rem;
+    margin: 0 3px;
+  }
+  
+  .pagination .page-link:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+  }
+  
+  .badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    border-radius: 0.5rem;
+  }

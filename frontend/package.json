@@ -19,6 +19,8 @@
     "formik": "^2.4.6",
     "framer-motion": "^12.4.11",
     "gsap": "^3.12.7",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "ldrs": "^1.0.2",
     "lucide-react": "^0.475.0",
     "react": "^18.3.1",
