@@ -233,7 +233,7 @@ const Orders = () => {
                     {currentItems.length > 0 ? (
                       currentItems.map(order => (
                         <tr key={order.id}>
-                          <td><Form.Check checked={selectedOrders.includes(order.id)} onChange={() => handleCheckboxChange(order.id)} /></td>
+                          <td><Form.Check disabled={order.status !== "Shipped"} checked={selectedOrders.includes(order.id)} onChange={() => handleCheckboxChange(order.id)} /></td>
                           <td><strong>ORD-{order.id}</strong></td>
                           <td>{order.user.first_name} {order.user.last_name}</td>
                           <td>{new Date(order.order_date).toLocaleDateString()}</td>

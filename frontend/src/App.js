@@ -57,9 +57,11 @@ import VisaPayment from "./Pages/public/Products/VisaPayment.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
 import Wishlist from "./Pages/public/Products/Wishlist.jsx";
 
+
 function App() {
   return (
     <Routes>
+      
     <Route element={<UseRule />}>
      <Route path="/" element={<Navigate to="/Men" replace />} />
      <Route path="/:cat" element={<Home/>} />
