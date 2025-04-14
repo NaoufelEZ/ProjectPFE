@@ -45,6 +45,7 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::put("user/update/email","email");
             Route::put("user/update/email/verify","codeEmailVerify");
             Route::put("user/update/password","password");
+            Route::delete("user/delete","userDelete");
         });
         // Admin
         Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
@@ -113,6 +114,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         // users 
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/order/add","store");
+            Route::get("user/order","userOrder");
         });
         // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){

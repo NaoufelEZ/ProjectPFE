@@ -107,4 +107,12 @@ class OrderController extends Controller
        
         return response()->json(["message"=>"Order Are Checked","status"=>200],200);
     }
+    public function userOrder(Request $request){
+        $user = $request->user();
+        $orders = Order::where("user_id",$user->id)->get();
+        if($orders->isEmpty()){
+            return response()->json(["message"=>"Order Not Found","status"=>404],404);
+        }
+        return response()->json(["message"=>"Order Found","data"=>$orders,"status"=>200],200);
+    }
 }

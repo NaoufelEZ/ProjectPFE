@@ -146,4 +146,10 @@ class UserController extends Controller
             return response()->json(["message"=>$e->errors(),"status"=>422],422);
         }
     }
+    public function userDelete(Request $request){
+        $user = $request->user();
+        $user->delete();
+        return response()->json(["message"=>"User Are Delete","status"=>200],200);
+
+    }
 }

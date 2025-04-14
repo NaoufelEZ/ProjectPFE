@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("address_id");
             $table->foreign("user_id")->references("id")->on("users");
-            $table->foreign("address_id")->references("id")->on("addresses");
+            $table->foreign("address_id")->references("id")->on("addresses")->onDelete("cascade");
             $table->string("status")->default("Pending");
             $table->string("method_payment");
             $table->string("delivery_company")->nullable();
