@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("address_id");
-            $table->foreign("user_id")->references("id")->on("users");
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->foreign("address_id")->references("id")->on("addresses")->onDelete("cascade");
             $table->string("status")->default("Pending");
             $table->string("method_payment");
             $table->string("delivery_company")->nullable();
             $table->boolean("delivery_pay")->default(true);
+            $table->boolean("dot_notify")->default(false);
             $table->timestamp("order_date")->useCurrent();
+            $table->timestamp("order_update")->useCurrent();
         });
     }
 
