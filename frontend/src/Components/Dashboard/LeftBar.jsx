@@ -35,7 +35,6 @@ const LeftBar = () => {
   const user = useUser();
   const location = useLocation();
   const currentPath = location.pathname.split("/")[2];
-  console.log(currentPath)
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -95,12 +94,6 @@ const LeftBar = () => {
             key: "inventory"
           },
           {
-            title: "Product Management",
-            icon: <FaShoppingCart />,
-            path: "/dashboard/product/add",
-            key: "product"
-          },
-          {
             title: "Categories",
             icon: <BiCategoryAlt />,
             path: "/dashboard/Categories",
@@ -129,7 +122,7 @@ const LeftBar = () => {
 
   return (
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
-      <div className="sidebar-header">
+      <div className={`sidebar-header ${isCollapsed ? "justify-content-center" : "justify-content-between"}`}>
         <h5 className="text-white">{!isCollapsed && "Dashboard"}</h5>
         <div role="button" onClick={() => setIsCollapsed(!isCollapsed)}>
           {isCollapsed ? (
@@ -159,7 +152,7 @@ const LeftBar = () => {
           </div>
           <hr />
 
-          <Nav className="flex-column">
+          <Nav className="flex-column gap-2">
             {menuItems.map((item) => (
               <Nav.Link
                 key={item.key}
@@ -168,7 +161,7 @@ const LeftBar = () => {
                   currentPath === item.key ? "active" : ""
                 }`}
               >
-                <span className={`nav-icon ${isCollapsed && "active"}`}>{item.icon}</span>
+                <span className={`nav-icon ${isCollapsed ? "me-0" : "me-2"}`}>{item.icon}</span>
                 {!isCollapsed && <span>{item.title}</span>}
               </Nav.Link>
             ))}

@@ -5,12 +5,14 @@ import { IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
 import "./basket.css";
 import useCloseOut from '../Hooks/useClose';
+import useUser from '../Hooks/useUser';
 
 const Basket = (props) => {
     const [storage, setStorage] = useState([]);
     const [total, setTotal] = useState(0);
     const navigate = useNavigate();
     const basketRef = useRef(null);
+    const user = useUser();
 
     useEffect(() => {
         const storedData = window.localStorage.getItem("card");
@@ -60,7 +62,7 @@ const Basket = (props) => {
                     {props.token && (
                         <div className="wishlist-btn">
                             <FontAwesomeIcon className="heart-icon" icon={faHeart} />
-                            <span>Wishlist</span>
+                            <span onClick={()=>navigate("/wishlist")}>Wishlist</span>
                         </div>
                     )}
                 </div>
@@ -120,9 +122,19 @@ const Basket = (props) => {
                                 <span>Total</span>
                                 <span className="total-price">{(total + deliveryFee).toFixed(2)} TND</span>
                             </div>
+
+                            {user && !user.email_verify && (
+                                <div className="email-warning-box">
+                                <p>Please verify your email to proceed with checkout.</p>
+                                <div className="triangle"></div>
+                                </div>
+                            )}
+
+
                             <button 
+                            disabled={user?.email_verify}
                                 className="checkout-btn"
-                                onClick={() => props.token ? navigate("/checkout") : navigate("/login")}
+                                onClick={() => props.token ? user.email_verify ? navigate("/checkout") : null : navigate("/login")}
                             >
                                 Process order
                             </button>

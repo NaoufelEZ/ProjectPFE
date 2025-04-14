@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaHouseChimney, FaPen } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
+import Swal from 'sweetalert2';
+
 
 const SavedAddresses = () => {
   const [addresses, setAddresses] = useState([]);
   const [error, setError] = useState(false);
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -28,23 +33,38 @@ const SavedAddresses = () => {
 
   // Function to delete an address
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${APIURL}/address/delete/${id}`, {
-        headers: {
-          Accept: "application/json",
-          "x-api-key": ApiKey,
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    window.location.reload();
-    } catch (error) {
-      console.error("Error deleting address:", error);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios.delete(`${APIURL}/address/delete/${id}`, {
+            headers: {
+              Accept: "application/json",
+              "x-api-key": ApiKey,
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        } catch (error) {
+          console.error("Error deleting address:", error);
+        }
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        }).then(()=>window.location.reload());
+      }
+    });
   };
 
-  // Function to modify an address (redirecting to a form)
   const handleModify = (id) => {
-    window.location.href = `/edit-address/${id}`;
+    navigate(`${id}`);
   };
 
   return (
@@ -72,7 +92,7 @@ const SavedAddresses = () => {
             <ul className="list-group w-100">
               {addresses.map((address, index) => (
                 <li key={address.id} className="list-group-item d-flex flex-column">
-                  <h5 className="mb-2">🏠 Address {index + 1}</h5>
+                  <h5 className="mb-2"><FaHouseChimney className="mb-0" /> Address {index + 1}</h5>
                   <p className="mb-1"><strong>Street:</strong> {address.street}</p>
                   <p className="mb-1"><strong>State:</strong> {address.state}</p>
                   <p className="mb-1"><strong>ZIP Code:</strong> {address.zip}</p>
@@ -82,13 +102,13 @@ const SavedAddresses = () => {
                       className="btn btn-warning me-2" 
                       onClick={() => handleModify(address.id)}
                     >
-                      ✏ Modify
+                      <FaPen /> Modify
                     </button>
                     <button 
                       className="btn btn-danger" 
                       onClick={() => handleDelete(address.id)}
                     >
-                      ❌ Delete
+                      <MdDelete /> Delete
                     </button>
                   </div>
                 </li>

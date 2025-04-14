@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Badge, Button, Pagination, Form } from 'react-bootstrap';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { Table, Badge, Button, Pagination, Form, Dropdown, InputGroup } from 'react-bootstrap';
+import { FaTrash } from 'react-icons/fa';
 import { ApiKey,APIURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import useUser from '../../../Hooks/useUser';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import useDeleteItem from '../../../Hooks/useDeleteItem';
+import Swal from 'sweetalert2';
 
 
 const Users = () => {
@@ -17,6 +18,7 @@ const Users = () => {
   const [filterUsers,setFilterUsers] = useState([]);
 
   const user = useUser();
+  const role = ["Admin","Client","Product Manager"]
 
   const deleteItem = useDeleteItem();
 const cookie = new Cookies();
@@ -53,6 +55,22 @@ const navigate = useNavigate();
   const handleUserDelete = (id) => {
     deleteItem(id, "admin/user/delete", token, () => {
       window.location.reload();
+    });
+  }
+  const handleChangeRole = (id,role,name) => {
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      text:`Do You Want To update the User ${name} to ${role}`,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Saved!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
     });
   }
 
@@ -98,13 +116,16 @@ const navigate = useNavigate();
                 <td>{item.first_name +" "+ item.last_name}</td>
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
-                <td>{item.role}</td>
+                <td>
+                  <Form.Select disabled={item.id === user?.id} onChange={(e)=>handleChangeRole(item.id,e.target.value,item.first_name)}>
+                    {role.map(element=>(
+                      <option selected={item.role === element} value={element}>{element}</option>
+                    ))}
+                  </Form.Select>
+                </td>
                 <td>{getStatus(item.email_verify)}</td>
                 <td>
                 <div className={`d-flex ${user && item.id === user.id && "w-50 justify-content-center"}`}>
-                  <Button variant="outline-primary" size="sm" className="me-1 d-flex p-2 " title="Edit User">
-                    <FaEdit onClick={()=>navigate(`${item.id}`)} size={13} className="mb-0" />
-                  </Button>
                   { user && item.id !== user.id ?
                   <Button
                     variant="outline-danger"

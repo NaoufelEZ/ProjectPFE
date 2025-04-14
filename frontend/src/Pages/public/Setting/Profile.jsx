@@ -8,6 +8,11 @@ import useUser from '../../../Hooks/useUser';
 import * as Yup from 'yup';
 import { useFormik } from 'formik'
 import Loading from '../../../Components/Loading'
+import axios from 'axios'
+import { ApiKey, APIURL } from '../../../Api/Api'
+import Cookies from 'universal-cookie'
+import Swal from 'sweetalert2'
+
 
 const updateProfile = Yup.object().shape({
   first_name: Yup.string().matches(/^[a-zA-Z]+$/, "First Name should be alpha").min(3, "First Name Should Be At Least 3 Letters").required("First Name is required"),
@@ -18,6 +23,8 @@ const updateProfile = Yup.object().shape({
 const Profile = () => {
   const user = useUser();
   const navigate = useNavigate();
+  const cookie = new Cookies();
+  const token = cookie.get("auth");
 
   const [loading, setLoading] = useState(true);
 
@@ -39,6 +46,34 @@ const Profile = () => {
       console.log(values);
     },
   });
+  const handleUserDelete = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`${APIURL}/user/delete`,{
+          headers:{
+            Accept:"application/json",
+            Authorization: `Bearer ${token}`,
+            "x-api-key": ApiKey,
+          }
+        });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        }).then(()=>{
+          cookie.remove("auth");
+        }).finally(()=>navigate("/"));
+      }
+    });
+  }
 
   if (loading) {
     return <Loading />
@@ -125,7 +160,7 @@ const Profile = () => {
         </div>
         <div role="button" className="d-flex align-items-center p-3 rounded-3 border border-1 border-muted w-50 mt-3">
           <FontAwesomeIcon className="me-2 h6 mb-0" icon={faTrash} />
-          <span className="h6 mb-0">Delete Account</span>
+          <span onClick={handleUserDelete} className="h6 mb-0">Delete Account</span>
         </div>
       </section>
     </>

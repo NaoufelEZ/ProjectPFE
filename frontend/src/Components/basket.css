@@ -231,6 +231,31 @@
   background: #e9ecef;
 }
 
+.email-warning-box {
+  background-color: #ffe5e5;
+  color: #c00;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  margin-bottom: 10px;
+  font-size: 14px;
+  box-shadow: 0px 0px 8px rgba(255, 0, 0, 0.1);
+}
+
+.email-warning-box .triangle {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #ffe5e5;
+}
+
+
 /* Animation */
 @keyframes slideIn {
   from {

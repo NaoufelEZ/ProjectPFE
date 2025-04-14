@@ -87,13 +87,11 @@ const Overview = () => {
       const orders = response.data.data;
       const totalOrders = orders.length;
       const pendingOrders = orders.filter(order => order.status === "Pending").length;
-
       const validOrders = orders.filter(order => {
         const isOnlinePaidAndShipped = order.method_payment === "credit card" && order.status === "Shipped";
-        const isCashOnDeliveryAndDelivered = order.method_payment === "Cash" && order.status === "Delivered";
+        const isCashOnDeliveryAndDelivered = order.method_payment === "cash" && order.status === "Delivered";
         return isOnlinePaidAndShipped || isCashOnDeliveryAndDelivered;
       });
-
       let totalSales = 0;
       let monthRevenue = 0;
       const productSalesMap = {};

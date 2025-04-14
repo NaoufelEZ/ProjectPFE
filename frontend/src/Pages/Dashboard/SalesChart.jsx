@@ -42,8 +42,8 @@ const SalesChart = ({ APIURL, token, ApiKey }) => {
       const orders = res.data.data;
 
       const validOrders = orders.filter(order => {
-        const isOnlinePaidAndShipped = order.method_payment === "Flousi" && order.status === "Shipped";
-        const isCashOnDeliveryAndDelivered = order.method_payment === "Cash payment on delivery" && order.status === "Delivered";
+        const isOnlinePaidAndShipped = order.method_payment === "credit card" && order.status === "Shipped";
+        const isCashOnDeliveryAndDelivered = order.method_payment === "cash" && order.status === "Delivered";
         return isOnlinePaidAndShipped || isCashOnDeliveryAndDelivered;
       });
 

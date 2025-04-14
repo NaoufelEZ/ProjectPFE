@@ -30,7 +30,7 @@ const Login = () => {
           }
         )
         cookie.set("auth", res.data.token);
-        res.data.data.role === "admin" || res.data.data.role === "Product Manager"? nav("/dashboard") : nav("/");
+        (res.data.data.role === "admin" || res.data.data.role === "Product Manager" ) ? nav("/dashboard") : nav("/");
     } catch (err) {
       setError(true);
       setLoading(false);

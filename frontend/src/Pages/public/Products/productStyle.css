@@ -127,12 +127,48 @@
     background: white;
     cursor: pointer;
     transition: all 0.2s;
+    position: relative;
 }
 
 .size-option.selected {
     border-color: #000;
     background: #000;
     color: white;
+}
+
+.size-option.out-of-stock {
+    opacity: 0.6;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.size-option.out-of-stock::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.stock-indicator {
+    position: absolute;
+    bottom: 2px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #dc3545;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.size-option.selected .stock-indicator {
+    color: white;
+    background: transparent;
 }
 
 .size-error {

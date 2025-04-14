@@ -27,9 +27,7 @@ const New = () => {
   const { cat } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
-  console.log(data)
 
-  const user = useUser();
   useEffect(() => {
     axios
       .get(`${APIURL}/products/${cat}/new`, {

@@ -29,9 +29,8 @@ import SavedAddresses from "./Pages/public/Setting/SavedAddresses.jsx";
 import AccountChangePassword from "./Pages/public/Setting/AccountChangePassword.jsx";
 import AccountChangeEmail from "./Pages/public/Setting/AccountChangeEmail.jsx";
 import Message from "./Pages/Dashboard/Admin/Message.jsx";
-import Address from "./Pages/public/Setting/Address.jsx";
+import AddAddress from "./Pages/public/Setting/AddAddress.jsx";
 import Home from "./Pages/Home.jsx";
-import Filter from "./Components/Filter.jsx";
 import Orders from "./Pages/Dashboard/Admin/Orders.jsx";
 import Categories from "./Pages/Dashboard/ProductManger/Categories.jsx";
 import AddCategory from "./Pages/Dashboard/ProductManger/AddCategory.jsx";
@@ -55,6 +54,8 @@ import ProductDashboard from "./Pages/Dashboard/ProductManger/ProductDashboard.j
 import CashOrderConfirmation from "./Pages/public/Products/CashOrderConfirmation.jsx";
 import VisaOrderConfirmation from "./Pages/public/Products/VisaOrderConfirmation.jsx";
 import VisaPayment from "./Pages/public/Products/VisaPayment.jsx";
+import Address from "./Pages/public/Setting/Address.jsx";
+import Wishlist from "./Pages/public/Products/Wishlist.jsx";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
       <Route path="/verify/:hash" element={<OtpVerify/>} />
       {/* auth */}
       <Route element={<ReqAuth />}>
+      <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/auth/verify" element={<AuthOtp/>} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/checkout/visa-payment" element={<VisaPayment />} />
@@ -88,10 +90,11 @@ function App() {
       <Route path="/setting"  element={<Setting />}>
         <Route path="personal-details" element={<Profile />}/>
         <Route path="saved-addresses" element={<SavedAddresses />}/>
+        <Route path="saved-addresses/:id" element={<Address />}/>
         <Route path="purchases" element={<Purchases />}/>
         <Route path="change-password" element={<AccountChangePassword />}/>
         <Route path="change-email" element={<AccountChangeEmail />}/>
-        <Route path="address" element={<Address />} />
+        <Route path="address" element={<AddAddress />} />
       </Route>
       </Route>
       </Route>

@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./productStyle.css";
 import Header from "../../../Components/Header";
-import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Loading from "../../../Components/Loading";
@@ -23,13 +22,26 @@ const Product = () => {
     const [count, setCount] = useState(1);
     const [discount, setDiscount] = useState(0);
     const [sizeVerify, setSizeVerify] = useState(false);
+    const [change, setChange] = useState(0);
+    const [sizeWithQuantity, setSizeWithQuantity] = useState([]);
     const [select, setSelect] = useState(() => {
         const data = localStorage.getItem("card");
         return data ? JSON.parse(data) : [];
     });
 
     const MySwal = withReactContent(Swal);
-    const nav = useNavigate();
+
+    const updateSizeOptions = (selectedColor, stockData) => {
+        const sizeOptions = stockData
+            .filter(product => product.color === selectedColor)
+            .map(product => ({
+                size: product.size,
+                quantity: product.quantity
+            }));
+        
+        setSizeWithQuantity(sizeOptions);
+        setSize(sizeOptions.map(item => item.size));
+    };
 
     useEffect(() => {
         axios
@@ -52,12 +64,7 @@ const Product = () => {
                     const firstProduct = productData.product_stock[0];
                     setColor(firstProduct.color);
                     setSelectedImage(firstProduct.product_picture);
-
-                    // Get available sizes for the first color
-                    const sizeOptions = productData.product_stock
-                        .filter(product => product.color === firstProduct.color)
-                        .map(product => product.size);
-                    setSize([...new Set(sizeOptions)]);
+                    updateSizeOptions(firstProduct.color, productData.product_stock);
                 }
             })
             .catch(() => setError(true))
@@ -80,12 +87,12 @@ const Product = () => {
         const stockForSelectedColor = data.product_stock.filter(product => product.color === selectedColor);
         if (stockForSelectedColor.length > 0) {
             setSelectedImage(stockForSelectedColor[0].product_picture);
-            const newSizeOptions = stockForSelectedColor.map(product => product.size);
-            setSize([...new Set(newSizeOptions)]);
+            updateSizeOptions(selectedColor, data.product_stock);
         }
     };
 
     const handleClick = () => {
+        setChange(prev => prev + 1);
         if (!selectedSize) {
             setSizeVerify(true);
             return;
@@ -108,10 +115,23 @@ const Product = () => {
             return;
         }
 
+        // Check stock availability
+        if (selectedStock.quantity < count) {
+            MySwal.fire({
+                toast: true,
+                position: "bottom-end",
+                icon: "error",
+                title: "Not enough stock available!",
+                showConfirmButton: false,
+                timer: 3000,
+            });
+            return;
+        }
+
         const items = JSON.parse(localStorage.getItem("card")) || [];
         const newItem = {
-            id: id, // product_id
-            stock_id: selectedStock.id, // product_stock.id
+            id: id,
+            stock_id: selectedStock.id,
             title: data.title,
             price: discount === 0 ? data.price : data.price - discount,
             image: selectedImage,
@@ -194,15 +214,30 @@ const Product = () => {
                 <div className="size-selection">
                     <h3>Size</h3>
                     <div className="size-options">
-                        {size.map((e, key) => (
-                            <button
-                                key={key}
-                                onClick={() => { setSelectedSize(e); setSizeVerify(false); }}
-                                className={`size-option ${selectedSize === e ? 'selected' : ''}`}
-                            >
-                                {e}
-                            </button>
-                        ))}
+                        {sizeWithQuantity.map((item, key) => {
+                            const isOutOfStock = item.quantity === 0;
+                            const isFewLeft = item.quantity > 0 && item.quantity < 5;
+                            
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => { 
+                                        if (!isOutOfStock) {
+                                            setSelectedSize(item.size); 
+                                            setSizeVerify(false); 
+                                        }
+                                    }}
+                                    className={`size-option ${selectedSize === item.size ? 'selected' : ''} ${
+                                        isOutOfStock ? 'out-of-stock' : ''
+                                    }`}
+                                    disabled={isOutOfStock}
+                                >
+                                    {item.size}
+                                    {isOutOfStock && <span className="stock-indicator">X</span>}
+                                    {isFewLeft && <span className="stock-indicator text-center">Low</span>}
+                                </button>
+                            );
+                        })}
                     </div>
                     {sizeVerify && <p className="size-error">Please select a size</p>}
                 </div>
@@ -235,7 +270,7 @@ const Product = () => {
 
     return (
         <div className="product-page">
-            <Header />
+            <Header change={change} />
             {loading ? <Loading /> : (error ? <Err404 /> : dataFetch)}
         </div>
     );

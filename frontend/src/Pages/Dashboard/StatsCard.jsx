@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import PropTypes from 'prop-types';
 
 const StatsCard = ({ title, value, icon, color }) => {
   const getCardClass = () => {

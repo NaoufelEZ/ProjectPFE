@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Helmet } from "react-helmet-async";
 
-const Address = () => {
+const AddAddress = () => {
     const [gov, setGov] = useState([]); 
     const [data, setData] = useState([]); 
     const [cite, setCite] = useState([]); 
@@ -138,11 +138,11 @@ const Address = () => {
                 </Form.Select>
                 <Form.Control placeholder="Zip Code" disabled={selectedCite.length === 0} type="text" value={(selectedCite && zip) && zip[0].zip}/>
             </Form.Group>
-                <Button variant='dark' type="submit">Modify Address</Button>
+                <Button variant='dark' type="submit">Add Address</Button>
             </Form>
         </section>
         </>
     );
 };
 
-export default Address;
+export default AddAddress;

@@ -342,8 +342,8 @@ const Order = () => {
                         !!formik.errors.delivery_company
                       }
                       disabled={
-                        formik.values.order_status !== "Shipped" &&
-                        formik.values.order_status !== "Delivered"
+                        formik.values.order_status !== "Pending" &&
+                        formik.values.order_status !== "Processing"
                       }
                     >
                       <option value="">Select Delivery Company</option>
