@@ -8,14 +8,13 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet-async";
 import { AiFillHeart } from "react-icons/ai";
-import useUser from "../../../Hooks/useUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
 
-const New = () => {
+const SubcategoryPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -25,13 +24,15 @@ const New = () => {
   const [filterProduct, setFilterProduct] = useState([]);
   const [change, setChange] = useState(false);
   const { cat } = useParams();
+  const { sub } = useParams();
+  console.log(cat)
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`${APIURL}/products/${cat}/new`, {
+      .get(`${APIURL}/products/${cat}/${sub}`, {
         headers: {
           Accept: "application/json",
           "x-api-key": ApiKey,
@@ -60,6 +61,7 @@ const New = () => {
       })
       .catch(() => setWishlisttError(false));
   }, [change]);
+  console.log(data)
 
   const handleAddWishlist = async (id) => {
     try {
@@ -164,4 +166,4 @@ const New = () => {
   );
 };
 
-export default New;
+export default SubcategoryPage;

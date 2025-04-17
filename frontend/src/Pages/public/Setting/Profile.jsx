@@ -1,23 +1,31 @@
-import { faEnvelope, faLock, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect, useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
-import { Helmet } from 'react-helmet-async'
-import { useNavigate } from 'react-router-dom'
+import { faEnvelope, faLock, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Card, Container } from 'react-bootstrap';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import useUser from '../../../Hooks/useUser';
 import * as Yup from 'yup';
-import { useFormik } from 'formik'
-import Loading from '../../../Components/Loading'
-import axios from 'axios'
-import { ApiKey, APIURL } from '../../../Api/Api'
-import Cookies from 'universal-cookie'
-import Swal from 'sweetalert2'
-
+import { useFormik } from 'formik';
+import Loading from '../../../Components/Loading';
+import axios from 'axios';
+import { ApiKey, APIURL } from '../../../Api/Api';
+import Cookies from 'universal-cookie';
+import Swal from 'sweetalert2';
+import './Profile.css';
 
 const updateProfile = Yup.object().shape({
-  first_name: Yup.string().matches(/^[a-zA-Z]+$/, "First Name should be alpha").min(3, "First Name Should Be At Least 3 Letters").required("First Name is required"),
-  last_name: Yup.string().matches(/^[a-zA-Z]+$/, "Last Name should be alpha").min(3, "Last Name Should Be At Least 3 Letters").required("Last Name is required"),
-  phone: Yup.string().matches(/^\d{8}$/, "Phone should be a number").required("Phone Number is required"),
+  first_name: Yup.string()
+    .matches(/^[a-zA-Z]+$/, "First Name should be alpha")
+    .min(3, "First Name Should Be At Least 3 Letters")
+    .required("First Name is required"),
+  last_name: Yup.string()
+    .matches(/^[a-zA-Z]+$/, "Last Name should be alpha")
+    .min(3, "Last Name Should Be At Least 3 Letters")
+    .required("Last Name is required"),
+  phone: Yup.string()
+    .matches(/^\d{8}$/, "Phone should be 8 digits")
+    .required("Phone Number is required"),
 });
 
 const Profile = () => {
@@ -25,13 +33,10 @@ const Profile = () => {
   const navigate = useNavigate();
   const cookie = new Cookies();
   const token = cookie.get("auth");
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      setLoading(false);
-    }
+    if (user) setLoading(false);
   }, [user]);
 
   const formik = useFormik({
@@ -46,123 +51,168 @@ const Profile = () => {
       console.log(values);
     },
   });
+
   const handleUserDelete = async () => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Delete Your Account?",
+      text: "All your data will be permanently removed",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Delete Account",
+      cancelButtonText: "Cancel",
+      reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${APIURL}/user/delete`,{
-          headers:{
-            Accept:"application/json",
+        axios.delete(`${APIURL}/user/delete`, {
+          headers: {
+            Accept: "application/json",
             Authorization: `Bearer ${token}`,
             "x-api-key": ApiKey,
           }
         });
         Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
+          title: "Account Deleted",
+          text: "Your account has been permanently removed",
           icon: "success"
-        }).then(()=>{
+        }).then(() => {
           cookie.remove("auth");
-        }).finally(()=>navigate("/"));
+          navigate("/");
+        });
       }
     });
   }
 
-  if (loading) {
-    return <Loading />
-  }
+  if (loading) return <Loading />;
 
   return (
     <>
       <Helmet>
-        <title>Personal Details | Nalouti Store</title>
+        <title>Profile Settings | Nalouti Store</title>
       </Helmet>
-      <section className="w-50">
-        <h3>Personal details</h3>
-        <Form onSubmit={formik.handleSubmit}>
-          <Form.Group className="d-flex gap-2 mb-4">
-          <div className="w-50">
-          <Form.Control
-              value={formik.values.first_name}
-              name="first_name"
-              className="p-2"
-              placeholder="First Name"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.first_name && formik.errors.first_name && (
-            <div className="text-danger">{formik.errors.first_name}</div>
-          )}
-          </div>
-          <div className="w-50">
-            <Form.Control
-              value={formik.values.last_name}
-              name="last_name"
-              className="p-2"
-              placeholder="Last Name"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-             {formik.touched.last_name && formik.errors.last_name && (
-            <div className="text-danger">{formik.errors.last_name}</div>
-            )}
-            </div>
-          </Form.Group>
-          <Form.Group className="w-50 mb-4">
-            <Form.Control
-              value={formik.values.phone}
-              name="phone"
-              className="p-2"
-              placeholder="Phone Number"
-              type="text"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-             {formik.touched.phone && formik.errors.phone && (
-            <div className="text-danger">{formik.errors.phone}</div>
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Button
-              variant="dark"
-              className="p-3"
-              type="submit"
-            >
-              Save
-            </Button>
-          </Form.Group>
-        </Form>
+      
+      <Container className="profile-container">
+        {/* Personal Details Section */}
+        <Card className="profile-section mb-4">
+          <Card.Body>
+            <h4 className="section-title mb-4">Personal Details</h4>
+            <Form onSubmit={formik.handleSubmit}>
+              <div className="row mb-3">
+                <div className="col-md-6 mb-3 mb-md-0">
+                  <Form.Group>
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control
+                      name="first_name"
+                      value={formik.values.first_name}
+                      isInvalid={formik.touched.first_name && !!formik.errors.first_name}
+                      className="form-control-lg"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formik.errors.first_name}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+                <div className="col-md-6">
+                  <Form.Group>
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                      name="last_name"
+                      value={formik.values.last_name}
+                      isInvalid={formik.touched.last_name && !!formik.errors.last_name}
+                      className="form-control-lg"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formik.errors.last_name}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+              </div>
+              
+              <div className="row mb-4">
+                <div className="col-md-6">
+                  <Form.Group>
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                      name="phone"
+                      value={formik.values.phone}
+                      isInvalid={formik.touched.phone && !!formik.errors.phone}
+                      className="form-control-lg"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formik.errors.phone}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </div>
+              </div>
+              
+              <Button variant="dark" size="lg" type="submit" className="save-button">
+                Save Changes
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
 
-        <h3>Account information</h3>
-        <div className="d-flex w-100 gap-2">
-          <div className="d-flex align-items-center p-3 rounded-3 border border-1 border-muted w-100">
-            <FontAwesomeIcon className="me-2 h6 mb-0" icon={faEnvelope} />
-            <span className="h6 mb-0">{user.email}</span>
-            <div className="w-100 d-flex justify-content-end">
-              <span role="button" onClick={() => navigate("/setting/change-email")}>change</span>
+        {/* Account Information Section */}
+        <Card className="profile-section mb-4">
+          <Card.Body>
+            <h4 className="section-title mb-4">Account Information</h4>
+            
+            <Card className="account-card mb-3">
+              <Card.Body className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faEnvelope} className="account-icon me-3" />
+                <div className="flex-grow-1">
+                  <h6 className="mb-0">Email Address</h6>
+                  <p className="mb-0 text-muted">{user.email}</p>
+                </div>
+                <Button 
+                  variant="outline-secondary" 
+                  onClick={() => navigate("/setting/change-email")}
+                >
+                  Change
+                </Button>
+              </Card.Body>
+            </Card>
+            
+            <Card className="account-card">
+              <Card.Body className="d-flex align-items-center">
+                <FontAwesomeIcon icon={faLock} className="account-icon me-3" />
+                <div className="flex-grow-1">
+                  <h6 className="mb-0">Password</h6>
+                  <p className="mb-0 text-muted">••••••••</p>
+                </div>
+                <Button 
+                  variant="outline-secondary"
+                  onClick={() => navigate("/setting/change-password")}
+                >
+                  Change
+                </Button>
+              </Card.Body>
+            </Card>
+          </Card.Body>
+        </Card>
+
+        {/* Delete Account Section */}
+        <Card className="profile-section border-danger">
+          <Card.Body>
+            <div className="d-flex align-items-center">
+              <FontAwesomeIcon icon={faTrash} className="text-danger me-3" />
+              <div className="flex-grow-1">
+                <h6 className="mb-1 text-danger">Delete Account</h6>
+                <p className="small text-muted mb-0">
+                  Permanently remove your account and all data
+                </p>
+              </div>
+              <Button 
+                variant="outline-danger"
+                onClick={handleUserDelete}
+              >
+                Delete
+              </Button>
             </div>
-          </div>
-          <div className="d-flex align-items-center p-3 rounded-3 border border-1 border-muted w-100">
-            <FontAwesomeIcon className="me-2 h6 mb-0" icon={faLock} />
-            <span className="h6 mb-0">Password</span>
-            <div className="w-100 d-flex justify-content-end">
-              <span role="button" onClick={() => navigate("/setting/change-password")}>change</span>
-            </div>
-          </div>
-        </div>
-        <div role="button" className="d-flex align-items-center p-3 rounded-3 border border-1 border-muted w-50 mt-3">
-          <FontAwesomeIcon className="me-2 h6 mb-0" icon={faTrash} />
-          <span onClick={handleUserDelete} className="h6 mb-0">Delete Account</span>
-        </div>
-      </section>
+          </Card.Body>
+        </Card>
+      </Container>
     </>
   );
 };

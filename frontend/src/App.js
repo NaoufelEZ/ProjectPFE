@@ -56,6 +56,7 @@ import VisaOrderConfirmation from "./Pages/public/Products/VisaOrderConfirmation
 import VisaPayment from "./Pages/public/Products/VisaPayment.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
 import Wishlist from "./Pages/public/Products/Wishlist.jsx";
+import SubcategoryPage from "./Pages/public/Products/SubcategoryPage.jsx";
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
       <Route path="/password/change/:token" element={<ChangePassword />} />
       <Route path="/test" element={<HeaderTest />} />
       <Route path="/:cat/New" element={<New />} />
+      <Route path="/:cat/:sub" element={<SubcategoryPage />} />
       <Route path="/:cat/:sub/:detail" element={<Products />} />
       <Route path="/product/:id" element={<Product/>} />
       <Route path="/*" element={<Err404 />} />

@@ -2,79 +2,142 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { 
+  Badge, 
+  Table, 
+  Spinner, 
+  Button,
+  Container
+} from 'react-bootstrap';
 import { ApiKey, APIURL } from '../../../Api/Api';
-import { Badge } from 'react-bootstrap';
+import './Purchases.css';
 
 const Purchases = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [expandedOrder, setExpandedOrder] = useState(null);
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
 
   useEffect(() => {
-    axios.get(`${APIURL}/user/order`, {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-        "x-api-key": ApiKey,
-      }
-    })
-    .then((res) => {
-      setOrders(res.data.data);
-      setError("");
-    })
-    .catch((err) => {
-      console.error(err);
-      setError("No orders found or an error occurred.");
-    })
-    .finally(() => setLoading(false));
-  }, [token]);
-
-  const getStatus = (status) => {
-      switch (status) {
-        case "Delivered":
-          return <Badge bg="success" className="fs-6 p-2">Delivered</Badge>;
-        case "Shipped":
-          return <Badge bg="info" className="fs-6 p-2">Shipped</Badge>;
-        case "Processing":
-          return <Badge bg="primary" className="fs-6 p-2">Processing</Badge>;
-        case "Pending":
-          return <Badge bg="warning" text="dark" className="fs-6 p-2">Pending</Badge>;
-        case "Cancelled":
-          return <Badge bg="danger" className="fs-6 p-2">Cancelled</Badge>;
-        default:
-          return <Badge bg="secondary" className="fs-6 p-2">{status}</Badge>;
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${APIURL}/user/order`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "x-api-key": ApiKey,
+          }
+        });
+        setOrders(response.data.data);
+      } catch (err) {
+        setError("Failed to load orders. Please try again.");
+      } finally {
+        setLoading(false);
       }
     };
+
+    fetchOrders();
+  }, [token]);
+
+  const getStatusColor = (status) => {
+    const statusColors = {
+      Delivered: "success",
+      Shipped: "primary",
+      Processing: "warning",
+      Pending: "secondary",
+      Cancelled: "danger"
+    };
+    return statusColors[status] || "dark";
+  };
+
+  const toggleOrderDetails = (orderId) => {
+    setExpandedOrder(expandedOrder === orderId ? null : orderId);
+  };
 
   return (
     <>
       <Helmet>
         <title>My Purchases | Nalouti Store</title>
       </Helmet>
-      <div className="w-50 mt-4">
-        <h3>My Purchases</h3>
+
+      <Container className="purchases-container">
+        <h3 className="purchases-title">Order History</h3>
+        
         {loading ? (
-          <p>Loading your orders...</p>
+          <div className="text-center py-5">
+            <Spinner animation="border" />
+            <p className="mt-2">Loading your orders...</p>
+          </div>
         ) : error ? (
-          <p className="text-danger">{error}</p>
+          <div className="alert alert-danger">{error}</div>
+        ) : orders.length === 0 ? (
+          <div className="empty-state">
+            <p>No orders found</p>
+            <Button href="/products">Start Shopping</Button>
+          </div>
         ) : (
-          <div className="d-flex w-100 border border-1 p-2 rounded-2">
-            {orders.map(order => (
-              <>
-              <div key={order.id}>
-                <strong>Order #{order.id}</strong> - Total: {order.total_price ?? 'N/A'} TND
-              </div>
-              <div className="d-flex justify-content-end w-50 align-items-center ">
-                <strong>Status:</strong>{getStatus(order.status)}
-              </div>
-              </>
-            ))}
+          <div className="table-responsive">
+            <Table striped hover className="purchases-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Date</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <React.Fragment key={order.id}>
+                    <tr>
+                      <td>#{order.id}</td>
+                      <td>{new Date(order.created_at).toLocaleDateString()}</td>
+                      <td>{order.total_price} TND</td>
+                      <td>
+                        <Badge 
+                          pill 
+                          bg={getStatusColor(order.status)}
+                          className="status-badge"
+                        >
+                          {order.status}
+                        </Badge>
+                      </td>
+                      <td>
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={() => toggleOrderDetails(order.id)}
+                        >
+                          {expandedOrder === order.id ? 'Hide' : 'View'}
+                        </Button>
+                      </td>
+                    </tr>
+                    {expandedOrder === order.id && (
+                      <tr className="order-details">
+                        <td colSpan="5">
+                          <div className="details-content">
+                            <h6>Order Items:</h6>
+                            {order.items?.map((item) => (
+                              <div key={item.id} className="order-item">
+                                <span>{item.name}</span>
+                                <span>{item.quantity} × {item.price} TND</span>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </Table>
           </div>
         )}
-      </div>
+      </Container>
     </>
   );
 };
