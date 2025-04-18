@@ -97,4 +97,22 @@ class ProductController extends Controller
         
         return response()->json(["data"=>$products,"status"=>200],200);
     }
+    public function subcategory($cat, $sub)
+    {
+        $products = Product::with(['details.category', 'details.subcategory', 'productStock'])
+        ->whereHas('details', function ($query) use ($cat, $sub) {
+            $query->whereHas('category', function ($q) use ($cat) {
+                $q->where('category', $cat);
+            })->whereHas('subcategory', function ($q) use ($sub) {
+                $q->where('subcategories', $sub);
+            });
+        })
+        ->latest('created_at')
+        ->get();
+    
+
+        return response()->json(["data"=>$products,"status"=>200],200);
+    
+    }
+    
 }

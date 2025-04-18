@@ -4,67 +4,77 @@ import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHouseChimney, FaPen } from "react-icons/fa6";
+import { FaHouseChimney, FaPen, FaPlus } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
+import { Card, Button, Container, Spinner, Alert } from 'react-bootstrap';
 import Swal from 'sweetalert2';
-
+import './SavedAddresses.css'; // New CSS file for custom styles
 
 const SavedAddresses = () => {
   const [addresses, setAddresses] = useState([]);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`${APIURL}/address`, {
-        headers: {
-          Accept: "application/json",
-          "x-api-key": ApiKey,
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await axios.get(`${APIURL}/address`, {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": ApiKey,
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setAddresses(response.data.data);
-      })
-      .catch(() => setError(true));
+      } catch (err) {
+        setError("Failed to load addresses. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAddresses();
   }, [token]);
 
-  // Function to delete an address
   const handleDelete = async (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+    const result = await Swal.fire({
+      title: "Delete Address?",
+      text: "This action cannot be undone",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          axios.delete(`${APIURL}/address/delete/${id}`, {
-            headers: {
-              Accept: "application/json",
-              "x-api-key": ApiKey,
-              Authorization: `Bearer ${token}`,
-            },
-          });
-        } catch (error) {
-          console.error("Error deleting address:", error);
-        }
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success"
-        }).then(()=>window.location.reload());
-      }
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+      reverseButtons: true
     });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${APIURL}/address/delete/${id}`, {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": ApiKey,
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAddresses(addresses.filter(address => address.id !== id));
+        Swal.fire("Deleted!", "Your address has been removed.", "success");
+      } catch (err) {
+        Swal.fire("Error", "Failed to delete address.", "error");
+      }
+    }
   };
 
   const handleModify = (id) => {
-    navigate(`${id}`);
+    navigate(`/setting/address/${id}`);
+  };
+
+  const handleAddNew = () => {
+    navigate('/setting/address');
   };
 
   return (
@@ -72,51 +82,81 @@ const SavedAddresses = () => {
       <Helmet>
         <title>Saved Addresses | Nalouti Store</title>
       </Helmet>
-      <section className="w-50 mx-auto">
-        <h3>Saved Addresses</h3>
-        <div className="d-flex flex-column align-items-center mt-3">
-          {error || addresses.length === 0 ? (
-            <div>
-              <span>There are no saved addresses.</span>
-              <div className="mt-4 d-flex justify-content-center">
-                <Link
-                  to="/setting/address"
-                  role="button"
-                  className="p-3 bg-black text-white rounded-3 text-center"
-                >
-                  <span>Add Address</span>
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <ul className="list-group w-100">
-              {addresses.map((address, index) => (
-                <li key={address.id} className="list-group-item d-flex flex-column">
-                  <h5 className="mb-2"><FaHouseChimney className="mb-0" /> Address {index + 1}</h5>
-                  <p className="mb-1"><strong>Street:</strong> {address.street}</p>
-                  <p className="mb-1"><strong>State:</strong> {address.state}</p>
-                  <p className="mb-1"><strong>ZIP Code:</strong> {address.zip}</p>
-                  
-                  <div className="d-flex justify-content-between mt-2">
-                    <button 
-                      className="btn btn-warning me-2" 
-                      onClick={() => handleModify(address.id)}
-                    >
-                      <FaPen /> Modify
-                    </button>
-                    <button 
-                      className="btn btn-danger" 
-                      onClick={() => handleDelete(address.id)}
-                    >
-                      <MdDelete /> Delete
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+      
+      <Container className="addresses-container">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h3 className="mb-0">Saved Addresses</h3>
+          <Button 
+            variant="dark" 
+            onClick={handleAddNew}
+            className="add-address-btn"
+          >
+            <FaPlus className="me-2" /> Add New Address
+          </Button>
         </div>
-      </section>
+
+        {loading ? (
+          <div className="text-center py-5">
+            <Spinner animation="border" />
+            <p className="mt-3">Loading your addresses...</p>
+          </div>
+        ) : error ? (
+          <Alert variant="danger" className="text-center">
+            {error}
+          </Alert>
+        ) : addresses.length === 0 ? (
+          <Card className="empty-state text-center py-5">
+            <Card.Body>
+              <p className="mb-4">You haven't saved any addresses yet.</p>
+              <Button 
+                variant="dark" 
+                onClick={handleAddNew}
+                size="lg"
+              >
+                <FaPlus className="me-2" /> Add Your First Address
+              </Button>
+            </Card.Body>
+          </Card>
+        ) : (
+          <div className="address-grid">
+            {addresses.map((address, index) => (
+              <Card key={address.id} className="address-card">
+                <Card.Body>
+                  <div className="d-flex align-items-center mb-3">
+                    <FaHouseChimney className="address-icon me-2" />
+                    <h5 className="mb-0">Address {index + 1}</h5>
+                  </div>
+                  
+                  <div className="address-details">
+                    <p><strong>Street:</strong> {address.street}</p>
+                    <p><strong>City:</strong> {address.city || 'N/A'}</p>
+                    <p><strong>State:</strong> {address.state}</p>
+                    <p><strong>ZIP Code:</strong> {address.zip}</p>
+                    {address.country && <p><strong>Country:</strong> {address.country}</p>}
+                  </div>
+
+                  <div className="d-flex justify-content-between mt-4">
+                    <Button 
+                      variant="outline-primary" 
+                      onClick={() => handleModify(address.id)}
+                      className="action-btn"
+                    >
+                      <FaPen className="me-1" /> Edit
+                    </Button>
+                    <Button 
+                      variant="outline-danger" 
+                      onClick={() => handleDelete(address.id)}
+                      className="action-btn"
+                    >
+                      <MdDelete className="me-1" /> Delete
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
+        )}
+      </Container>
     </>
   );
 };

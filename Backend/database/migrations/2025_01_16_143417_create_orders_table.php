@@ -21,7 +21,9 @@ return new class extends Migration
             $table->string("method_payment");
             $table->string("delivery_company")->nullable();
             $table->boolean("delivery_pay")->default(true);
+            $table->boolean("dot_notify")->default(false);
             $table->timestamp("order_date")->useCurrent();
+            $table->timestamp("order_update")->useCurrent();
         });
     }
 

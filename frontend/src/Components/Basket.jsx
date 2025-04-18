@@ -132,9 +132,9 @@ const Basket = (props) => {
 
 
                             <button 
-                            disabled={user?.email_verify}
+                            disabled={user && user.email_verify ? false : true}
                                 className="checkout-btn"
-                                onClick={() => props.token ? user.email_verify ? navigate("/checkout") : null : navigate("/login")}
+                                onClick={() => user ? user.email_verify && navigate("/checkout")  : navigate("/login")}
                             >
                                 Process order
                             </button>

@@ -3,25 +3,25 @@ import { useEffect, useState } from "react";
 import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import Header from "../../../Components/Header";
 import "./products.css";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet-async";
-import { FaHeart } from "react-icons/fa";
+import { AiFillHeart } from "react-icons/ai";
 import useUser from "../../../Hooks/useUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
-
+import { Container, Row, Col, Card } from "react-bootstrap";
 
 const Products = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [wishlist,setWishlist] = useState([]);
-  const [wishlistError,setWishlisttError] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
+  const [wishlistError, setWishlisttError] = useState(false);
   const [filterProduct, setFilterProduct] = useState([]);
   const [change, setChange] = useState(false);
   const { cat } = useParams();
@@ -29,6 +29,7 @@ const Products = () => {
   const { detail } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const navigate = useNavigate();
 
   const user = useUser();
   useEffect(() => {
@@ -39,7 +40,10 @@ const Products = () => {
           "x-api-key": ApiKey,
         },
       })
-      .then((response) => {setData(response.data.data);setFilterProduct(response.data.data)})
+      .then((response) => {
+        setData(response.data.data);
+        setFilterProduct(response.data.data);
+      })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
@@ -53,91 +57,114 @@ const Products = () => {
           "x-api-key": ApiKey,
         },
       })
-      .then((response) => setWishlist(response.data.data),setWishlisttError(true)
-    ).catch(()=>setWishlisttError(false))
+      .then((response) => {
+        setWishlist(response.data.data);
+        setWishlisttError(true);
+      })
+      .catch(() => setWishlisttError(false));
   }, [change]);
 
   const handleAddWishlist = async (id) => {
-    try{
-    await axios.post(`${APIURL}/wishlist/add/${id}`,
-      {},
-      {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-        "x-api-key": ApiKey,
-      },
-    });
-  }
-  catch(err){
-    console.log(err)
-  }
-  setChange(prev=>!prev)
-  }
+    try {
+      await axios.post(
+        `${APIURL}/wishlist/add/${id}`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "x-api-key": ApiKey,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    setChange((prev) => !prev);
+  };
 
   return (
     <>
-    <Helmet>
-      <title>{cat}'s {sub}|Nalouti Store</title>
-    </Helmet>
-    <Filter setIsOpen={setIsOpen} isOpen={isOpen} setFilterProduct={setFilterProduct} products ={data} />
+      <Helmet>
+        <title>
+          {cat}'s {sub}|Nalouti Store
+        </title>
+      </Helmet>
+      <Filter
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        setFilterProduct={setFilterProduct}
+        products={data}
+      />
       <Header />
-      <main className="mt-3 px-3">
+      <Container className="py-5">
+        <div className="w-100 d-flex justify-content-end mb-4">
+          <div
+            onClick={() => setIsOpen(true)}
+            role="button"
+            className="rounded-pill border p-2"
+          >
+            <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
+            <span>Filter</span>
+          </div>
+        </div>
+
         {error ? (
           <p>Products are empty</p>
         ) : loading ? (
-          <div className="skeleton">
+          <Row>
             {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} height={300} width={250} />
+              <Col md={3} sm={6} xs={12} key={i} className="mb-4">
+                <Skeleton height={400} />
+              </Col>
             ))}
-          </div>
+          </Row>
         ) : filterProduct && filterProduct.length > 0 ? (
-          <section className="w-100">
-            <div className="w-100 d-flex justify-content-end">
-              <div onClick={()=>setIsOpen(true)} role="button" className="rounded-pill border p-2">
-              <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
-                <span>Filter</span>
-              </div>
-            </div>
-            <section className="products-container">
-          {filterProduct.map((e, key) => (
-           <Link className="text-decoration-none" to={`/product/${e.id}`} key={key}>
-           <div className="product-box position-relative">
-             <div className="img-container overflow-hidden">
-               <img
-                 width={200}
-                 src={`${IMAGEURL}/products/${e.product_stock[0].product_picture}`}
-                 alt="product"
-               />
-             </div>
-             <div className="d-flex w-100 justify-content-between text-dark position-absolute bottom-0 px-3">
-               <div className="d-flex flex-column">
-                 <span>{e.title}</span>
-                 <span>{e.price} TND</span>
-               </div>
-               <div className="d-flex align-items-center">
-                 {wishlistError && (
-                   <FaHeart
-                     onClick={(event) => {
-                      event.stopPropagation(); 
-                      event.preventDefault(); 
-                       handleAddWishlist(e.id);
-                     }}
-                     className={`h5 mb-0 ${wishlist.some(item => item.product_id === e.id) ? "text-danger" : ""}`}
-                   />
-                 )}
-               </div>
-             </div>
-           </div>
-         </Link>
-         
-          ))}
-            </section>
-            </section>
+          <Row>
+            {filterProduct.map((product) => {
+              const firstStock = product?.product_stock?.[0];
+              return (
+                <Col md={3} sm={6} xs={12} key={product.id} className="mb-4">
+                  <Card
+                    className="product-card shadow-sm position-relative"
+                    role="button"
+                    onClick={() => navigate(`/product/${product.id}`)}
+                  >
+                    <Card.Img
+                      variant="top"
+                      src={`${IMAGEURL}/products/${firstStock?.product_picture}`}
+                      style={{ height: "400px", objectFit: "cover" }}
+                    />
+                    <Card.Body>
+                      <Card.Title className="text-muted fs-6">
+                        {product.title}
+                      </Card.Title>
+                      <Card.Text className="fw-semibold">
+                        {product.price}.00 TND
+                      </Card.Text>
+                    </Card.Body>
+                    {wishlistError && (
+                      <AiFillHeart
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddWishlist(product.id);
+                        }}
+                        className={`product-heart-icon ${
+                          wishlist.some((item) => item.product_id === product.id)
+                            ? "text-danger"
+                            : ""
+                        }`}
+                      />
+                    )}
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
         ) : (
           <p>No products available</p>
         )}
-      </main>
+      </Container>
     </>
   );
 };

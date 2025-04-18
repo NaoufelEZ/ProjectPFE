@@ -1,0 +1,23 @@
+.settings-container {
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .settings-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  @media (min-width: 992px) {
+    .settings-wrapper {
+      flex-direction: row;
+    }
+    .settings-sidebar {
+      width: 250px;
+      flex-shrink: 0;
+    }
+    .settings-content {
+      flex-grow: 1;
+    }
+  }

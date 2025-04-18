@@ -1,0 +1,52 @@
+.profile-container {
+    max-width: 800px;
+    padding: 2rem 1rem;
+  }
+  
+  .profile-section {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .section-title {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  .account-card {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.2s;
+  }
+  
+  .account-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+  }
+  
+  .account-icon {
+    font-size: 1.25rem;
+    color: #6c757d;
+  }
+  
+  .form-control-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .save-button {
+    background-color: #000;
+    border-color: #000;
+    padding: 0.5rem 1.5rem;
+  }
+  
+  .save-button:hover {
+    background-color: #333;
+    border-color: #333;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 1rem 0.5rem;
+    }
+  }

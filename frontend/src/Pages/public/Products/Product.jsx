@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Loading from "../../../Components/Loading";
 import Err404 from "../Errors/Err404";
+import {colornames} from "color-name-list";
 
 const Product = () => {
     const { id } = useParams();
@@ -30,6 +31,53 @@ const Product = () => {
     });
 
     const MySwal = withReactContent(Swal);
+
+    // Color to hex mapping function
+    const getHexColor = (colorName) => {
+        if (!colorName) return '#cccccc';
+        
+        // Common color mappings
+        const colorMap = {
+            'white': '#ffffff',
+            'black': '#000000',
+            'red': '#ff0000',
+            'blue': '#0000ff',
+            'green': '#008000',
+            'yellow': '#ffff00',
+            'pink': '#ffc0cb',
+            'purple': '#800080',
+            'orange': '#ffa500',
+            'brown': '#a52a2a',
+            'gray': '#808080',
+            'grey': '#808080',
+            'espresso': '#4a3123',
+            'beige': '#f5f5dc',
+            'navy': '#000080',
+            'maroon': '#800000',
+            'teal': '#008080',
+            'olive': '#808000',
+            'nocturnal blue': '#324b55',
+        };
+
+        // Check if we have an exact match in our map
+        const lowerColor = colorName.toLowerCase();
+        if (colorMap[lowerColor]) {
+            return colorMap[lowerColor];
+        }
+
+        // Try to find the nearest color from the library
+        try {
+            const colornames = colornames(lowerColor)[0];
+            if (colornames) {
+                return colornames.hex;
+            }
+        } catch (e) {
+            console.warn(`Couldn't find color for: ${colorName}`);
+        }
+
+        // Default fallback
+        return '#cccccc';
+    };
 
     const updateSizeOptions = (selectedColor, stockData) => {
         const sizeOptions = stockData
@@ -200,10 +248,11 @@ const Product = () => {
                                 key={index} 
                                 onClick={() => handleColorSelect(e)} 
                                 className={`color-option-container ${color === e ? 'selected' : ''}`}
+                                title={e}
                             >
                                 <div 
                                     className="color-option" 
-                                    style={{ backgroundColor: e }}
+                                    style={{ backgroundColor: getHexColor(e) }}
                                     aria-label={`Select color ${e}`}
                                 />
                             </div>
