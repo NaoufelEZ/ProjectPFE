@@ -68,6 +68,19 @@ const navigate = useNavigate();
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire("Saved!", "", "success");
+        axios.put(`${APIURL}/admin/user/update/${id}`,{
+          role:role
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "x-api-key": ApiKey
+          }
+        }).then(() => {
+          Swal.fire("Saved!", "", "success").then(() => {
+            window.location.reload();
+          });
+        });
       } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
       }
@@ -117,7 +130,7 @@ const navigate = useNavigate();
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
                 <td>
-                  <Form.Select disabled={item.id === user?.id} onChange={(e)=>handleChangeRole(item.id,e.target.value,item.first_name)}>
+                  <Form.Select disabled={item.id === user?.id} value={item.role} onChange={(e)=>handleChangeRole(item.id,e.target.value,item.first_name)}>
                     {role.map(element=>(
                       <option selected={item.role === element} value={element}>{element}</option>
                     ))}
