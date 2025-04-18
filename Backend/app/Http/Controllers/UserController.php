@@ -152,4 +152,18 @@ class UserController extends Controller
         return response()->json(["message"=>"User Are Delete","status"=>200],200);
 
     }
+    public function update(Request $request,$id){
+        try{
+            $RoleValidation = $request->validate([
+                "role"=> "required|in:Admin,Product Manager,Client",
+            ]);
+            $user = User::find($id);
+            $user->update([
+                "role" => $RoleValidation["role"]
+            ]);
+
+        }catch(ValidationException $e){
+            return response()->json(["message"=>$e->errors(),"status"=>422],422);
+        }
+    }
 }
