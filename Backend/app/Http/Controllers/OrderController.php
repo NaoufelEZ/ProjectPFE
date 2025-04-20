@@ -109,10 +109,28 @@ class OrderController extends Controller
     }
     public function userOrder(Request $request){
         $user = $request->user();
-        $orders = Order::where("user_id",$user->id)->get();
+        $orders = Order::where("user_id",$user->id)->with("orderItems")->get();
         if($orders->isEmpty()){
             return response()->json(["message"=>"Order Not Found","status"=>404],404);
         }
         return response()->json(["message"=>"Order Found","data"=>$orders,"status"=>200],200);
+    }
+    public function check($id){
+        $order = Order::find($id);
+        if($order->order_date != $order->order_update && $order->dot_notify == true){
+            return response()->json(["data"=>true],200);
+        }
+        return response()->json(["data"=>false],200);
+    }
+    public function anyChecked(Request $request){
+        $user = $request->user();
+        $orders = Order::where("user_id",$user->id)->get();
+        $numberOfModify = 0;
+        foreach($orders as $order){
+            if($order->order_date != $order->order_update && $order->dot_notify == true){
+                $numberOfModify++;
+            }
+        }
+        return response()->json(["data"=>$numberOfModify],200);
     }
 }

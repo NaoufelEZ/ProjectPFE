@@ -8,6 +8,7 @@ use App\Http\Controllers\optController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\otpController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -24,9 +25,13 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 |
 */
 // Route::get("/test/{id}",[otpController::class,"test"]);
-
 Route::middleware('authenticateApiKey')->group(function(){
+    
+    Route::get('/auth/google/info/{token}', [socialAuthController::class, 'clientFromGoogleToken']);
+    Route::put('/auth/google/update', [socialAuthController::class, 'updateClientFromGoogleToken']);
+
     // auth Controller
+    
     Route::controller(authController::class)->group(function(){
         // register user
         Route::post("/register","store");
@@ -80,7 +85,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         // public
         Route::get("/products/{cat}/{subcat}/{detail}","index");
         Route::get("/products/{cat}/new","new");
-        Route::get("/products/{cat}/{sub}","subcategory");
+        Route::get("/products/subcategory/{cat}/{sub}","subcategory");
         Route::get("products/product/{id}","product");
         Route::get("/products","roleIndex");
         // private
@@ -114,8 +119,10 @@ Route::middleware('authenticateApiKey')->group(function(){
     Route::controller(OrderController::class)->group(function(){
         // users 
         Route::middleware("auth:sanctum")->group(function(){
-            Route::post("/order/add","store");
+            Route::post("order/add","store");
             Route::get("user/order","userOrder");
+            Route::get("order/all/check","anyChecked");
+            Route::get("order/check/{id}","check");
         });
         // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){

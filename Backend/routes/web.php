@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SocialAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,5 @@ Route::get('/test', function () {
 Route::get('/mail', function () {
     return view('Mail.Order');
 });
+Route::get('/login-google', [SocialAuthController::class, 'redirectToProvider']);
+Route::get('/auth/google/callback', [socialAuthController::class, 'handleCallback']);
