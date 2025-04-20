@@ -18,6 +18,7 @@ const Header = ({change}) => {
   const [user, setUser] = useState(null);
   const [basket, setBasket] = useState(false);
   const [click, setClick] = useState({ action: false });
+  const [notify,setNotify] = useState(0);
   const [choseMenu, setChoseMenu] = useState({
     cat: cat,
     sub: "Clothes",
@@ -121,6 +122,16 @@ const Header = ({change}) => {
   const isFeaturedCategory = (category) => {
     return ['Clothes', 'Shoes'].includes(category);
   };
+  useEffect(()=>{
+    axios.get(`${APIURL}/order/all/check`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "x-api-key": ApiKey,
+      }
+    }).then((response)=>setNotify(response.data.data))
+    .catch(()=>null)
+  },[token])
 
   return (
     <>
@@ -188,8 +199,12 @@ const Header = ({change}) => {
           <div className="d-flex align-items-center justify-content-end flex-grow-1 gap-4">
             <SearchBar />
             {user ? (
-              <Link className="text-decoration-none text-black" to="/setting/purchases">
+              <Link className="text-decoration-none text-black position-relative" to="/setting/purchases">
                 <FiUser className="m-0 h3 pe-2" role="button" />
+                {
+                  notify > 0 &&
+                <span className="notify"></span>
+                }
                 <span>{user.first_name}</span>
               </Link>
             ) : (

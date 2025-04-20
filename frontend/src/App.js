@@ -57,18 +57,21 @@ import VisaPayment from "./Pages/public/Products/VisaPayment.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
 import Wishlist from "./Pages/public/Products/Wishlist.jsx";
 import SubcategoryPage from "./Pages/public/Products/SubcategoryPage.jsx";
+import Test from "./Pages/Auth/Test.jsx";
+import ConnectWithGoogle from "./Pages/Auth/ConnectWithGoogle.jsx";
+import CreateAccountWithGoogle from "./Pages/Auth/CreateAccountWithGoogle.jsx";
 
 
 function App() {
   return (
     <Routes>
-      
     <Route element={<UseRule />}>
      <Route path="/" element={<Navigate to="/Men" replace />} />
      <Route path="/:cat" element={<Home/>} />
-      <Route path="/addressbox" element={<AddressBox />} />
+    <Route path="/addressbox" element={<AddressBox />} />
+      <Route path="/google/account/:token" element={<ConnectWithGoogle />}/>
+      <Route path="/google/new/account/:token" element={<CreateAccountWithGoogle />}/>
       
-      <Route path="/Test" element={<Header2 />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
       <Route path="/password/change/:token" element={<ChangePassword />} />

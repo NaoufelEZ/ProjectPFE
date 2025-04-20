@@ -17,6 +17,8 @@ const Purchases = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [seenOrders, setSeenOrders] = useState({}); // <-- new state
+  console.log(seenOrders)
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -31,7 +33,28 @@ const Purchases = () => {
             "x-api-key": ApiKey,
           }
         });
-        setOrders(response.data.data);
+        const ordersData = response.data.data;
+        setOrders(ordersData);
+
+        // Check for seen status for each order
+        const seenStatus = {};
+        await Promise.all(
+          ordersData.map(async (order) => {
+            try {
+              const check = await axios.get(`${APIURL}/order/check/${order.id}`, {
+                headers: {
+                  Accept: "application/json",
+                  Authorization: `Bearer ${token}`,
+                  "x-api-key": ApiKey,
+                }
+              });
+              seenStatus[order.id] = check.data.data === true;
+            } catch (err) {
+              seenStatus[order.id] = false;
+            }
+          })
+        );
+        setSeenOrders(seenStatus);
       } catch (err) {
         setError("Failed to load orders. Please try again.");
       } finally {
@@ -88,6 +111,7 @@ const Purchases = () => {
                   <th>Total</th>
                   <th>Status</th>
                   <th>Actions</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -95,7 +119,7 @@ const Purchases = () => {
                   <React.Fragment key={order.id}>
                     <tr>
                       <td>#{order.id}</td>
-                      <td>{new Date(order.created_at).toLocaleDateString()}</td>
+                      <td>{new Date(order.order_date).toLocaleDateString()}</td>
                       <td>{order.total_price} TND</td>
                       <td>
                         <Badge 
@@ -115,10 +139,18 @@ const Purchases = () => {
                           {expandedOrder === order.id ? 'Hide' : 'View'}
                         </Button>
                       </td>
+                      <td className="align-middle">
+                        {seenOrders[order.id] && (
+                          <div
+                            style={{ width: "10px", height: "10px" }}
+                            className="bg-danger rounded-circle"
+                          ></div>
+                        )}
+                      </td>
                     </tr>
                     {expandedOrder === order.id && (
                       <tr className="order-details">
-                        <td colSpan="5">
+                        <td colSpan="6">
                           <div className="details-content">
                             <h6>Order Items:</h6>
                             {order.items?.map((item) => (

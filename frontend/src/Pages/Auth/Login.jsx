@@ -84,6 +84,9 @@ const Login = () => {
                   {error && <div className="mt-3 p-2 bg-danger text-white rounded">Email or Password are Wrong</div>}
 
                   <div className="text-center mt-3">
+                  <Link to={"http://127.0.0.1:8000/login-google"} className="fw-bold text-primary text-decoration-none">
+                      Google
+                    </Link>
                     <span>Don't have an account? </span>
                     <Link to={"/register"} className="fw-bold text-primary text-decoration-none">
                       Sign Up

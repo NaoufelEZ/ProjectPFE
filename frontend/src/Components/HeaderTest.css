@@ -191,3 +191,13 @@ header {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }
+.notify{
+  background: red;
+    height: 10px;
+    width: 10px;
+    display: block;
+    position: absolute;
+    top: 16px;
+    left: 10px;
+    border-radius: 50%;
+}

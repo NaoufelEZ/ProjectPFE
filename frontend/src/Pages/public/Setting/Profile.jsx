@@ -106,6 +106,7 @@ const Profile = () => {
                       name="first_name"
                       value={formik.values.first_name}
                       isInvalid={formik.touched.first_name && !!formik.errors.first_name}
+                      onChange={formik.handleChange}
                       className="form-control-lg"
                     />
                     <Form.Control.Feedback type="invalid">
@@ -120,6 +121,7 @@ const Profile = () => {
                       name="last_name"
                       value={formik.values.last_name}
                       isInvalid={formik.touched.last_name && !!formik.errors.last_name}
+                      onChange={formik.handleChange}
                       className="form-control-lg"
                     />
                     <Form.Control.Feedback type="invalid">
@@ -137,6 +139,7 @@ const Profile = () => {
                       name="phone"
                       value={formik.values.phone}
                       isInvalid={formik.touched.phone && !!formik.errors.phone}
+                      onChange={formik.handleChange}
                       className="form-control-lg"
                     />
                     <Form.Control.Feedback type="invalid">
@@ -158,14 +161,14 @@ const Profile = () => {
           <Card.Body>
             <h4 className="section-title mb-4">Account Information</h4>
             
-            <Card className="account-card mb-3">
+            <Card  className="account-card mb-3" role='button'>
               <Card.Body className="d-flex align-items-center">
                 <FontAwesomeIcon icon={faEnvelope} className="account-icon me-3" />
                 <div className="flex-grow-1">
                   <h6 className="mb-0">Email Address</h6>
                   <p className="mb-0 text-muted">{user.email}</p>
                 </div>
-                <Button 
+                <Button disabled={user?.google_id !== null }
                   variant="outline-secondary" 
                   onClick={() => navigate("/setting/change-email")}
                 >
