@@ -14,6 +14,7 @@ import useUser from '../../Hooks/useUser';
 import { Helmet } from 'react-helmet-async';
 
 const Overview = () => {
+  const [error, setError] = useState(false); 
   const [stats, setStats] = useState({
     totalSales: 0,
     totalOrders: 0,
@@ -77,7 +78,8 @@ const Overview = () => {
   
 
   useEffect(() => {
-    axios.get(`${APIURL}/orders`, {
+   
+      axios.get(`${APIURL}/orders`, {
       headers: {
         Accept: "Application/json",
         Authorization: `Bearer ${token}`,
@@ -139,7 +141,8 @@ const Overview = () => {
         pendingOrders,
         topProducts,
       }));
-    });
+    }).catch(() => setError(true));
+  
   }, [user]);
 
   return (

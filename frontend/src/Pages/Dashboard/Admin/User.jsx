@@ -7,7 +7,7 @@ import { ApiKey, APIURL } from "../../../Api/Api";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import "./user.css";
+import "./User.css";
 
 const AddUserSchema = Yup.object().shape({
   first_name: Yup.string()
