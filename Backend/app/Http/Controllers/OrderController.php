@@ -47,9 +47,7 @@ class OrderController extends Controller
     }
     public function index(){
         $orders = Order::with(["user","address","orderItems.product_stock.product"])->get();
-        if($orders->isEmpty()){
-            return response()->json(["message"=>"Orders are Empty","status"=>404],404);
-        }
+      
         return response()->json(["message"=>"Succeed","data"=>$orders,"status"=>200],200);
     }
     public function getOrder($id){
