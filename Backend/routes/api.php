@@ -119,6 +119,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     Route::controller(OrderController::class)->group(function(){
         // users 
         Route::middleware("auth:sanctum")->group(function(){
+            Route::post("payment","payment");
             Route::post("order/add","store");
             Route::get("user/order","userOrder");
             Route::get("order/all/check","anyChecked");

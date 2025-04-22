@@ -8,6 +8,7 @@ use App\Models\OrderItems;
 use App\Models\ProductStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
@@ -132,5 +133,21 @@ class OrderController extends Controller
             }
         }
         return response()->json(["data"=>$numberOfModify],200);
+    }
+    public function payment(Request $request){
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post('https://developers.flouci.com/api/generate_payment', [
+            'app_token' => env('FLOUCI_APP_TOKEN'),
+            'app_secret' => env('FLOUCI_APP_SECRET'),
+            'amount' => $request->amount,
+            'accept_card' => true,
+            'session_timeout_secs' => 1200,
+            'success_link' => 'http://localhost:3000/checkout/visa-payment/order-confirmation',
+            'fail_link' => 'https://example.com/fail',
+            'developer_tracking_id' => env('FLOUCI_APP_DEVELOPER_ID'),
+        ]);
+    
+        return $response->json();
     }
 }
