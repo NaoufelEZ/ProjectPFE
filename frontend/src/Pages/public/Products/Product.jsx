@@ -36,49 +36,18 @@ const Product = () => {
     const getHexColor = (colorName) => {
         if (!colorName) return '#cccccc';
         
-        // Common color mappings
-        const colorMap = {
-            'white': '#ffffff',
-            'black': '#000000',
-            'red': '#ff0000',
-            'blue': '#0000ff',
-            'green': '#008000',
-            'yellow': '#ffff00',
-            'pink': '#ffc0cb',
-            'purple': '#800080',
-            'orange': '#ffa500',
-            'brown': '#a52a2a',
-            'gray': '#808080',
-            'grey': '#808080',
-            'espresso': '#4a3123',
-            'beige': '#f5f5dc',
-            'navy': '#000080',
-            'maroon': '#800000',
-            'teal': '#008080',
-            'olive': '#808000',
-            'nocturnal blue': '#324b55',
-        };
-
-        // Check if we have an exact match in our map
-        const lowerColor = colorName.toLowerCase();
-        if (colorMap[lowerColor]) {
-            return colorMap[lowerColor];
-        }
-
-        // Try to find the nearest color from the library
-        try {
-            const colornames = colornames(lowerColor)[0];
-            if (colornames) {
-                return colornames.hex;
-            }
-        } catch (e) {
-            console.warn(`Couldn't find color for: ${colorName}`);
-        }
-
-        // Default fallback
-        return '#cccccc';
+        const colors = [...new Map(colornames.map(color => [color.name, color])).values()]
+        .sort((a, b) => a.name.localeCompare(b.name));
+      
+        // Filter colors based on search input
+        const filteredColors = colors.filter(color =>
+          color.name.toLowerCase().includes(colorName.toLowerCase())
+        );
+        return filteredColors.length > 0 ? filteredColors[0].hex : '#cccccc'; // Default to gray if no match found
+       
     };
 
+    
     const updateSizeOptions = (selectedColor, stockData) => {
         const sizeOptions = stockData
             .filter(product => product.color === selectedColor)

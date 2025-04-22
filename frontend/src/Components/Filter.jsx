@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect } from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 import './filter.css';
+import { colornames } from 'color-name-list';
 
 const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
   const [sortBy, setSortBy] = useState('');
@@ -11,6 +12,20 @@ const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 0]);
+
+  const getHexColor = (colorName) => {
+    if (!colorName) return '#cccccc';
+    
+    const colors = [...new Map(colornames.map(color => [color.name, color])).values()]
+    .sort((a, b) => a.name.localeCompare(b.name));
+  
+    // Filter colors based on search input
+    const filteredColors = colors.filter(color =>
+      color.name.toLowerCase().includes(colorName.toLowerCase())
+    );
+    return filteredColors.length > 0 ? filteredColors[0].hex : '#cccccc'; // Default to gray if no match found
+   
+};
 
   useEffect(() => {
     if (Array.isArray(products) && products.length > 0) {
@@ -97,7 +112,7 @@ const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
             <div className="color-options">
               {productColors.map(color => (
                 <button key={color} className={`color-btn ${selectedColors.includes(color) ? 'selected' : ''}`} 
-                        onClick={() => handleColorSelect(color)} style={{ backgroundColor: color, border: '2px solid black' }}>
+                        onClick={() => handleColorSelect(color)} style={{ backgroundColor: getHexColor(color), border: '2px solid black' }}>
                 </button>
               ))}
             </div>

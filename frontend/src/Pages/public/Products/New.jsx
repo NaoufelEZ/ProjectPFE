@@ -8,7 +8,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet-async";
 import { AiFillHeart } from "react-icons/ai";
-import useUser from "../../../Hooks/useUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Filter from "../../../Components/Filter";
@@ -126,8 +125,14 @@ const New = () => {
                     onClick={() => navigate(`/product/${product.id}`)}
                   >
                     <Card.Img
+                     onMouseEnter={(e) => {
+                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
+                    }}
                       variant="top"
-                      src={`${IMAGEURL}/products/${firstStock?.product_picture}`}
+                      src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
                       style={{ height: "400px", objectFit: "cover" }}
                     />
                     <Card.Body>

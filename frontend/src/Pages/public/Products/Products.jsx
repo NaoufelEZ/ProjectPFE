@@ -131,8 +131,14 @@ const Products = () => {
                     onClick={() => navigate(`/product/${product.id}`)}
                   >
                     <Card.Img
+                    onMouseEnter={(e) => {
+                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
+                    }}
                       variant="top"
-                      src={`${IMAGEURL}/products/${firstStock?.product_picture}`}
+                      src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
                       style={{ height: "400px", objectFit: "cover" }}
                     />
                     <Card.Body>
