@@ -37,7 +37,7 @@ const CreateAccountWithGoogle = () => {
       phone: "",
     },
     validationSchema: googleSchema,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       try {
         await axios.put(`${APIURL}/auth/google/update`, {
           ...values,
@@ -48,7 +48,6 @@ const CreateAccountWithGoogle = () => {
           }
         });
 
-        alert("Account completed successfully!");
         navigate("/");
       } catch (err) {
         alert("Something went wrong. Please try again.");

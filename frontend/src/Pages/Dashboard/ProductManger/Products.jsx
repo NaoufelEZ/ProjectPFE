@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet-async";
 import { IoMdEye } from "react-icons/io";
 import StatusBox from './StatusBox';
 import useDeleteItem from '../../../Hooks/useDeleteItem';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -24,6 +25,8 @@ const Products = () => {
   const [search,setSearch] = useState("");
   const [productsFilter,setProductsFilter] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const navigate = useNavigate();
+
 
   const deleteItem = useDeleteItem();
 
@@ -75,7 +78,7 @@ const Products = () => {
         <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Inventory"/>
         {
           user && user.role === "Product Manager" &&
-          <Button className="w-75">Add New Item</Button>
+          <Button onClick={()=>navigate("add")} className="w-75">Add New Item</Button>
         }
       </div>
     </div>
@@ -101,7 +104,7 @@ const Products = () => {
                 <td>
                 {item.description.split(" ").slice(0, 5).join(" ")}{item.description.split(" ").length > 5 ? "..." : ""}
                 </td>
-                <td></td>
+                <td>{item.details.categoryDetails}</td>
                 <td>{item.price.toFixed(2)} TND</td>
                 <td><IoMdEye onClick={()=>handleStatusClick(item.product_stock)} color='green' role="button" size={25} /></td>
                 {user && user.role === 'Product Manager' && (
