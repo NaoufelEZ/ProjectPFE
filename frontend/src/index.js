@@ -5,13 +5,19 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import { HelmetProvider } from 'react-helmet-async';
+import BasketProvider from './Context/BasketContext';
+import WishlistProvider from './Context/WishlistContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>  
   <React.StrictMode>
   <HelmetProvider>
+  <BasketProvider>
+  <WishlistProvider>
     <App />
+  </WishlistProvider>
+  </BasketProvider>
   </HelmetProvider>
   </React.StrictMode>
   </BrowserRouter>

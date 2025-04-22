@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AddressForm from '../../../Components/AddressForm';
-import sampleProductImg from '../../../Assets/images/sample-product.svg';
 import visaIcon from '../../../Assets/images/visa.svg';
 import deliveryIcon from '../../../Assets/images/delivery-van.svg';
 import axios from 'axios';
@@ -10,6 +9,7 @@ import { ApiKey, APIURL,IMAGEURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
 import './checkout.css'
 import useUser from '../../../Hooks/useUser';
+import flouci from "../../../Assets/images/flouci.png"
 
 const Checkout = () => {
   // State management
@@ -29,7 +29,7 @@ const Checkout = () => {
   // Payment methods
   const paymentMethods = [
     { id: 'cash', name: 'Cash payment on delivery', icon: deliveryIcon },
-    { id: 'credit card', name: 'Credit Card', icon: visaIcon }
+    { id: 'credit card', name: 'Credit Card', icon: flouci }
   ];
 
   // Load data (mock data for demo)
@@ -50,7 +50,6 @@ const Checkout = () => {
         },
     }).then((response)=>{
         const addresses = response.data.data;
-        console.log("addresses")
         setAddresses(addresses)
         const defaultAddress = addresses.find(addr => addr.is_default);
         if (defaultAddress) {
@@ -122,9 +121,19 @@ const Checkout = () => {
         }
 
     } else {
-        navigate('/checkout/visa-payment');
+       const response = await axios.post(`${APIURL}/payment`,{
+          "amount": "30500"
+        },
+        {
+        headers:{
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "x-api-key":ApiKey,        
+        },
+      });
+      const link = response.data.result.link;
+      window.location.href = link;
     }
-    localStorage.removeItem('card')
   };
 
   return (

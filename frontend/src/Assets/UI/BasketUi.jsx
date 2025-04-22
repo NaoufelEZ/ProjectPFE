@@ -1,12 +1,16 @@
 import axios from 'axios';
-import {useState,useEffect} from 'react'
+import {useState,useEffect, useContext} from 'react'
 import { ApiKey, APIURL } from '../../Api/Api';
 import Cookies from 'universal-cookie';
+import { BasketContext } from '../../Context/BasketContext';
+import { WishlistContext } from '../../Context/WishlistContext';
 
-const BasketUi = ({change}) => {
+const BasketUi = () => {
   const [basket,setBasket] = useState([]);
   const [wishlist,setWishlist] = useState(0);
   const [error,setError] = useState(true);
+  const {basketChange} = useContext(BasketContext) ;
+  const {wishlistChange} = useContext(WishlistContext);
   const cookie = new Cookies();
   const token = cookie.get("auth");
   useEffect(()=>{
@@ -14,7 +18,7 @@ const BasketUi = ({change}) => {
     if (item) {
       setBasket(JSON.parse(item));
     }
-  },[change]);
+  },[basketChange]);
   useEffect(()=>{
     axios.get(`${APIURL}/wishlist`,{
       headers:{
@@ -24,7 +28,7 @@ const BasketUi = ({change}) => {
       }
     }).then((response)=>{setWishlist(response.data.data.length);setError(false)})
     .catch(()=>setError(true))
-  },[])
+  },[wishlistChange])
   return (
     <div role="button" className="position-relative">
       {(!wishlist || wishlist === 0 || error) ?

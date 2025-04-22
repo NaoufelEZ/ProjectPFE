@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import Header from "../../../Components/Header";
 import "./products.css";
@@ -14,6 +14,7 @@ import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
+import { WishlistContext } from "../../../Context/WishlistContext";
 
 const Products = () => {
   const [data, setData] = useState(null);
@@ -29,6 +30,7 @@ const Products = () => {
   const { detail } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const {setWishlistChange} = useContext(WishlistContext)
   const navigate = useNavigate();
 
   const user = useUser();
@@ -65,6 +67,7 @@ const Products = () => {
   }, [change]);
 
   const handleAddWishlist = async (id) => {
+    setWishlistChange(prev => prev + 1);
     try {
       await axios.post(
         `${APIURL}/wishlist/add/${id}`,
@@ -132,7 +135,7 @@ const Products = () => {
                   >
                     <Card.Img
                       variant="top"
-                      src={`${IMAGEURL}/products/${firstStock?.product_picture}`}
+                      src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
                       style={{ height: "400px", objectFit: "cover" }}
                     />
                     <Card.Body>

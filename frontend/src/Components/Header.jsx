@@ -13,7 +13,7 @@ import { Col, Row } from "react-bootstrap";
 import BasketUi from "../Assets/UI/BasketUi";
 import SearchBar from "../Assets/UI/SearchBar";
 
-const Header = ({change}) => {
+const Header = () => {
   const { cat } = useParams();
   const [user, setUser] = useState(null);
   const [basket, setBasket] = useState(false);
@@ -214,7 +214,7 @@ const Header = ({change}) => {
               </Link>
             )}
             <div onClick={() => setBasket((prev) => !prev)}>
-              <BasketUi change={change} />
+              <BasketUi />
             </div>
           </div>
         </nav>

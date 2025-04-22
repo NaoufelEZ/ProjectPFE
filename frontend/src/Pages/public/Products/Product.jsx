@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +9,7 @@ import withReactContent from "sweetalert2-react-content";
 import Loading from "../../../Components/Loading";
 import Err404 from "../Errors/Err404";
 import {colornames} from "color-name-list";
+import {BasketContext} from "../../../Context/BasketContext";
 
 const Product = () => {
     const { id } = useParams();
@@ -23,13 +24,12 @@ const Product = () => {
     const [count, setCount] = useState(1);
     const [discount, setDiscount] = useState(0);
     const [sizeVerify, setSizeVerify] = useState(false);
-    const [change, setChange] = useState(0);
     const [sizeWithQuantity, setSizeWithQuantity] = useState([]);
+    const {setBasketChange} = useContext(BasketContext);
     const [select, setSelect] = useState(() => {
         const data = localStorage.getItem("card");
         return data ? JSON.parse(data) : [];
     });
-
     const MySwal = withReactContent(Swal);
 
     // Color to hex mapping function
@@ -140,7 +140,7 @@ const Product = () => {
     };
 
     const handleClick = () => {
-        setChange(prev => prev + 1);
+        setBasketChange(prev => prev + 1)
         if (!selectedSize) {
             setSizeVerify(true);
             return;
@@ -319,7 +319,7 @@ const Product = () => {
 
     return (
         <div className="product-page">
-            <Header change={change} />
+            <Header />
             {loading ? <Loading /> : (error ? <Err404 /> : dataFetch)}
         </div>
     );
