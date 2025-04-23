@@ -900,9 +900,9 @@ class ProductsStockSeeder extends Seeder
                         
             
                         // Product 116 - Sock-style platform ankle boots
-                        ["product_id" => 116, "color" => "Black", "holder_product_picture" => "12100560040-a3o.jpg", "product_picture" => "12100560040-a4o.jpg", "size" => "36", "quantity" => 20],
-                        ["product_id" => 116, "color" => "Black", "holder_product_picture" => "12100560040-a3o.jpg", "product_picture" => "12100560040-a4o.jpg", "size" => "37", "quantity" => 20],
-                        ["product_id" => 116, "color" => "Black", "holder_product_picture" => "12100560040-a3o.jpg", "product_picture" => "12100560040-a4o.jpg", "size" => "38", "quantity" => 20],
+                        ["product_id" => 116, "color" => "Black", "holder_product_picture" => "1745339651_6807c50384d23.webp", "product_picture" => "12100560040-a4o.jpg", "size" => "36", "quantity" => 20],
+                        ["product_id" => 116, "color" => "Black", "holder_product_picture" => "1745339651_6807c50384d23.webp", "product_picture" => "12100560040-a4o.jpg", "size" => "37", "quantity" => 20],
+                        ["product_id" => 116, "color" => "Black", "holder_product_picture" => "1745339651_6807c50384d23.webp", "product_picture" => "12100560040-a4o.jpg", "size" => "38", "quantity" => 20],
                         ["product_id" => 116, "color" => "Gray", "holder_product_picture" => "12100560011-a3o.jpg", "product_picture" => "12100560011-a4o.jpg", "size" => "36", "quantity" => 20],
                         ["product_id" => 116, "color" => "Gray", "holder_product_picture" => "12100560011-a3o.jpg", "product_picture" => "12100560011-a4o.jpg", "size" => "37", "quantity" => 20],
                         ["product_id" => 116, "color" => "Gray", "holder_product_picture" => "12100560011-a3o.jpg", "product_picture" => "12100560011-a4o.jpg", "size" => "38", "quantity" => 20],
