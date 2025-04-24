@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException as ValidationException;
 class ProductController extends Controller
 {
     public function index($cat,$subcat,$detail){
-        $wordDetail = str_replace("-"," ",$detail);
+        $wordDetail =strtolower($detail) == "t-shirts" ? "T-SHIRTS" :  str_replace("-"," ",$detail);
         $categoryId = Categories::where("category",$cat)->first();
         $subcategoryId = Subcategories::where("subcategories",$subcat)->where("category_id",$categoryId->id)->first();
         $detailId = CategoryDetails::where("categoryDetails", $wordDetail)->where("category_id",$categoryId->id)->where("subcategory_id",$subcategoryId->id)->first();
