@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet-async";
 import { AiFillHeart } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
+import { BsGrid3X3, BsWindow } from "react-icons/bs"; // View toggle icons
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
@@ -23,6 +24,7 @@ const New = () => {
   const [wishlistError, setWishlisttError] = useState(false);
   const [filterProduct, setFilterProduct] = useState([]);
   const [change, setChange] = useState(false);
+  const [viewMode, setViewMode] = useState("big"); // viewMode: "big" or "grid"
   const { cat } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -92,14 +94,35 @@ const New = () => {
       />
       <Header />
       <Container className="py-5">
-        <div className="w-100 d-flex justify-content-end mb-4">
-          <div
-            onClick={() => setIsOpen(true)}
-            role="button"
-            className="rounded-pill border p-2"
-          >
-            <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
-            <span>Filter</span>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="fw-bold">New Items</h2>
+          <div className="d-flex gap-3">
+            <div
+              onClick={() => setIsOpen(true)}
+              role="button"
+              className="rounded-pill border p-2"
+            >
+              <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
+              <span>Filter</span>
+            </div>
+            <div className="d-flex gap-2">
+              <BsWindow
+                size={24}
+                role="button"
+                onClick={() => setViewMode("big")}
+                className={`toggle-icon ${
+                  viewMode === "big" ? "text-dark" : "text-muted"
+                }`}
+              />
+              <BsGrid3X3
+                size={24}
+                role="button"
+                onClick={() => setViewMode("grid")}
+                className={`toggle-icon ${
+                  viewMode === "grid" ? "text-dark" : "text-muted"
+                }`}
+              />
+            </div>
           </div>
         </div>
 
@@ -114,53 +137,99 @@ const New = () => {
             ))}
           </Row>
         ) : filterProduct && filterProduct.length > 0 ? (
-          <Row>
-            {filterProduct.map((product) => {
-              const firstStock = product?.product_stock?.[0];
-              return (
-                <Col md={3} sm={6} xs={12} key={product.id} className="mb-4">
-                  <Card
-                    className="product-card shadow-sm position-relative"
-                    role="button"
-                    onClick={() => navigate(`/product/${product.id}`)}
-                  >
-                    <Card.Img
-                     onMouseEnter={(e) => {
-                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
-                    }}
-                      variant="top"
-                      src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
-                      style={{ height: "400px", objectFit: "cover" }}
-                    />
-                    <Card.Body>
-                      <Card.Title className="text-muted fs-6">
-                        {product.title}
-                      </Card.Title>
-                      <Card.Text className="fw-semibold">
-                        {product.price}.00 TND
-                      </Card.Text>
-                    </Card.Body>
-                    {wishlistError && (
-                      <AiFillHeart
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddWishlist(product.id);
-                        }}
-                        className={`product-heart-icon ${
-                          wishlist.some((item) => item.product_id === product.id)
-                            ? "text-danger"
-                            : ""
-                        }`}
+          viewMode === "big" ? (
+            <Row>
+              {filterProduct.map((product) => {
+                const firstStock = product?.product_stock?.[0];
+                return (
+                  <Col xs={12} key={product.id} className="mb-4">
+                    <Card
+                      className="product-card shadow-sm position-relative big-product-card"
+                      role="button"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      <Card.Img
+                        variant="top"
+                        src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
+                        className="big-product-img"
                       />
-                    )}
-                  </Card>
-                </Col>
-              );
-            })}
-          </Row>
+                      <Card.Body>
+                        <Card.Title className="text-muted fs-6">
+                          {product.title}
+                        </Card.Title>
+                        <Card.Text className="fw-semibold">
+                          {product.price}.00 TND
+                        </Card.Text>
+                      </Card.Body>
+                      {wishlistError && (
+                        <AiFillHeart
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddWishlist(product.id);
+                          }}
+                          className={`product-heart-icon ${
+                            wishlist.some((item) => item.product_id === product.id)
+                              ? "text-danger"
+                              : ""
+                          }`}
+                        />
+                      )}
+                    </Card>
+                  </Col>
+                );
+              })}
+            </Row>
+          ) : (
+            <Row>
+              {filterProduct.map((product) => {
+                const firstStock = product?.product_stock?.[0];
+                return (
+                  <Col md={3} sm={6} xs={12} key={product.id} className="mb-4">
+                    <Card
+                      className="product-card shadow-sm position-relative"
+                      role="button"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      <Card.Img
+                      onMouseEnter={(e) => {
+                        e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
+                        e.currentTarget.style.transform = "scale(1.01)";}
+                      }
+                      onMouseLeave={(e) => {
+                        e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
+                        e.currentTarget.style.transform = "scale(1)";}
+                      }
+                        variant="top"
+                        src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
+                        style={{ height: "400px", objectFit: "cover" }}
+                      />
+                      <Card.Body>
+                        <Card.Title className="text-muted fs-6">
+                          {product.title}
+                        </Card.Title>
+                        <Card.Text className="fw-semibold">
+                          {product.price}.00 TND
+                        </Card.Text>
+                      </Card.Body>
+                      {wishlistError && (
+                        <AiFillHeart
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddWishlist(product.id);
+                          }}
+                          className={`product-heart-icon ${
+                            wishlist.some((item) => item.product_id === product.id)
+                              ? "text-danger"
+                              : ""
+                          }`}
+                        />
+                      )}
+                    </Card>
+                  </Col>
+                );
+              })}
+            </Row>
+          )
         ) : (
           <p>No products available</p>
         )}

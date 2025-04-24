@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaHouseChimney, FaPen, FaPlus } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import { Card, Button, Container, Spinner, Alert } from 'react-bootstrap';
@@ -70,7 +70,7 @@ const SavedAddresses = () => {
   };
 
   const handleModify = (id) => {
-    navigate(`/setting/address/${id}`);
+    navigate(`/setting/saved-addresses/address/${id}`);
   };
 
   const handleAddNew = () => {

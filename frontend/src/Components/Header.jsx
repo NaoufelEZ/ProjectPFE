@@ -12,11 +12,13 @@ import Basket from "./Basket";
 import { Col, Row } from "react-bootstrap";
 import BasketUi from "../Assets/UI/BasketUi";
 import SearchBar from "../Assets/UI/SearchBar";
+import Login2 from "../Pages/Auth/Login2";
 
 const Header = () => {
   const { cat } = useParams();
   const [user, setUser] = useState(null);
   const [basket, setBasket] = useState(false);
+  const [login, setLogin] = useState(false);
   const [click, setClick] = useState({ action: false });
   const [notify,setNotify] = useState(0);
   const [choseMenu, setChoseMenu] = useState({
@@ -123,6 +125,7 @@ const Header = () => {
     return ['Clothes', 'Shoes'].includes(category);
   };
   useEffect(()=>{
+    if (!token) return;
     axios.get(`${APIURL}/order/all/check`, {
       headers: {
         Accept: "application/json",
@@ -208,7 +211,7 @@ const Header = () => {
                 <span>{user.first_name}</span>
               </Link>
             ) : (
-              <Link className="text-decoration-none text-black" to="/login">
+              <Link onClick={()=>setLogin(true)} className="text-decoration-none text-black">
                 <FiUser className="m-0 h3 pe-2" role="button" />
                 <span>Login</span>
               </Link>
@@ -299,6 +302,11 @@ const Header = () => {
         {basket && (
           <div className="basket-container">
             <Basket token={token} open={basket} setBasket={setBasket} />
+          </div>
+        )}
+        {login && (
+          <div className="basket-container">
+            <Login2 open={basket} setBasket={setBasket} />
           </div>
         )}
       </header>

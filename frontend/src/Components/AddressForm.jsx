@@ -43,6 +43,31 @@ const AddressForm = ({ onClose }) => {
     ).catch((err)=>console.log(err))
     },
   });
+  const getLocation = () => {
+    window.navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+        const apiKey = '82c330a163bc47bbadcedf2dd82ad069'; 
+        const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+    
+        try {
+          const response = await axios(url);
+          const country = response.data.results[0].components;
+          console.log(response.data.results);
+          formik.setFieldValue("state", country.state);
+          formik.setFieldValue("street", country.road);
+          formik.setFieldValue("zip", country.postcode);
+        } catch (error) {
+          console.error("Error during reverse geocoding:", error);
+        }
+      },
+      (error) => {
+        console.error("Error getting location:", error.message);
+      }
+    );
+    }
 
   return (
     <Card className="p-4">
@@ -123,6 +148,9 @@ const AddressForm = ({ onClose }) => {
           </Button>
         </div>
       </Form>
+        <Button onClick={getLocation} type="submit" variant="dark">
+            where i am
+          </Button>
     </Card>
   );
 };

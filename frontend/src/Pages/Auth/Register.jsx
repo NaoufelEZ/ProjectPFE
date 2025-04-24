@@ -231,6 +231,8 @@ const Register = () => {
                       <Button 
                         variant="outline-danger" 
                         className="d-flex align-items-center justify-content-center gap-2"
+                          as="a" 
+                          href="http://127.0.0.1:8000/login-google"
                       >
                         <FaGoogle /> Sign up with Google
                       </Button>
