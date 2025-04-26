@@ -262,13 +262,12 @@ const Header = () => {
                   <div className="details-columns">
                     <div className="details-column">
                       {categoryDetails.slice(0, Math.ceil(categoryDetails.length / 2)).map((element, index) => (
-                        <Link
+                        <span role="button" onClick={()=>navigate(`/${choseMenu.cat}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`)}
                           className="detail-item"
-                          to={`/${choseMenu.cat}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`}
                           key={index}
                         >
                           {element.categoryDetails}
-                        </Link>
+                        </span>
                       ))}
                     </div>
                     <div className="details-column">
@@ -306,7 +305,7 @@ const Header = () => {
         )}
         {login && (
           <div className="basket-container">
-            <Login2 open={basket} setBasket={setBasket} />
+            <Login2 open={login} setLogin={setLogin} />
           </div>
         )}
       </header>

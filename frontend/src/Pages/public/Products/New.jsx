@@ -47,6 +47,7 @@ const New = () => {
   }, []);
 
   useEffect(() => {
+    if(!token) return;
     axios
       .get(`${APIURL}/wishlist`, {
         headers: {

@@ -1,55 +1,90 @@
-import * as Yup from "yup";
-import { Container, Card, Spinner } from "react-bootstrap";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { Form, useNavigate } from "react-router-dom";
+import { faArrowLeft , faClose } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { useEffect, useRef, useState } from 'react'
+import googleLogo from '../../Assets/images/icons8-google-48.svg';
+import { Link, useNavigate } from 'react-router-dom';
+import "./Login2.css";
+import useCloseOut from '../../Hooks/useClose';
+import { Button, Form } from 'react-bootstrap';
+function Login2({setLogin}) {
+  const [currentUse,setCurrentUse] = useState("login");
+    const loginRef = useRef(null);
 
-function Login() {
-  const navigate = useNavigate();
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, []);
 
-  const initialValues = {
-    email: "",
-    password: "",
-  };
+    useCloseOut(loginRef, setLogin);
 
-  const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().min(6, "At least 6 characters").required("Password is required"),
-  });
+    return (
+        <div ref={loginRef} className="login-content">
+            <div className="login-header">
+                <h3 className="login-title">{currentUse}</h3>
+                <div className="login-close-btn">
+                  {
+                    currentUse === "login" ?
+                    <FontAwesomeIcon
+                     className="mb-0"
+                        icon={faClose} 
+                        onClick={() => setLogin(false)}
+                    />
+                    :
+                    <FontAwesomeIcon
+                    className="mb-0"
+                        icon={faArrowLeft} 
+                        onClick={() => setCurrentUse("login")}
+                    />
+                  }
+                </div>
+            </div>
+            {currentUse === "login" ?
+            <div className="login-items-container overflow-auto mt-3">
+              <div className="d-flex align-items-center flex-column">
+                <span className="h5">Log in or create an account</span>
+                <div role='button' className="d-flex rounded-2 justify-content-center py-1 align-items-center border border-1 w-100 mt-4">
+                  <img  className="me-4" src={googleLogo} width={35} height={35} alt='google-logo'/>
+                  <span className="font-weight-bold">CONTINUE WITH GOOGLE</span>
+                </div>
+                <span style={{fontSize:"12px"}} className="text-secondary text-center mt-3">By logging/signing in with my social login, I agree to connect my account in accordance</span>
+              </div>
+              <div className="d-flex mt-5 align-items-center">
+                <span style={{height:".5px"}} className="w-100 bg-light"></span>
+                <span className="px-2 mb-1 text-secondary">or</span>
+                <span style={{height:".5px"}} className="w-100 bg-light"></span>
+              </div>
+              <div>
+                <Form>
+                  <Form.Group>
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control className="rounded-2"/>
+                  </Form.Group>
 
-  const handleLogin = async (values, { setSubmitting }) => {
-    try {
-      const response = await axios.post("http://localhost:8000/api/login", values);
-      const { token, user } = response.data;
+                  <Form.Group className="mt-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" className="rounded-2"/>
+                  </Form.Group >
+                  <Form.Group className="mt-3 d-flex justify-content-end">
+                    <span role='button' onClick={()=>setCurrentUse("Forgotten")}>Forgotten your password?</span>
+                  </Form.Group>
+                  <Form.Group className="mt-3 w-100">
+                    <Button className='w-100 rounded-2'>Login</Button>
+                  </Form.Group>
+                  <Form.Group  role='button' className="text-center mt-3">
+                    <span onClick={()=>setCurrentUse("Create account")}>Don’t have an account? <b>Register</b></span>
+                  </Form.Group>
+                </Form>
+              </div>
+            </div>
+            :
+            <div>
+              
+            </div>
+            }
+            </div>
+    );
+};
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      toast.success("Welcome back, handsome 🖤", { autoClose: 2000 });
-      navigate("/dashboard");
-    } catch (err) {
-      toast.error("Wrong email or password ❌", { autoClose: 3000 });
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <Container className="d-flex align-items-center justify-content-center" style={{ height: "100vh" }}>
-      <Card className="p-4 shadow" style={{ width: "400px", borderRadius: "1rem" }}>
-        <h3 className="text-center mb-4 fw-bold">Log In</h3>
-        <Form initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
-            <Form.Control name="email" type="email" label="Email" placeholder="Enter your email" />
-            <Form.Control name="password" type="password" label="Password" placeholder="Enter your password" />
-
-              <button type="submit" className="btn btn-dark w-100 mt-3">
-
-              </button>
-            </Form>
-
-      </Card>
-    </Container>
-  );
-}
-
-export default Login;
+export default Login2;

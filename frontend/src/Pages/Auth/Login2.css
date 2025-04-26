@@ -1,5 +1,5 @@
 /* Basket Container */
-.basket-content {
+.login-content {
   width: 100%;
   max-width: 400px;
   height: 100vh;
@@ -16,18 +16,21 @@
 }
 
 /* Header Section */
-.basket-header {
+.login-header {
   padding: 1.5rem;
   border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.close-btn {
+.login-close-btn {
   text-align: right;
-  margin-bottom: 1rem;
   cursor: pointer;
 }
 
-.close-btn svg {
+.login-close-btn svg {
   font-size: 1.2rem;
   color: #666;
   transition: color 0.2s;
@@ -37,43 +40,26 @@
   color: #333;
 }
 
-.basket-title-container {
+.login-title-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.basket-title {
+.login-title {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
 }
 
-.wishlist-btn {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.wishlist-btn:hover {
-  background-color: #f9f9f9;
-}
-
-.heart-icon {
-  color: #ff3e6c;
-  margin-right: 0.5rem;
-}
-
 /* Items Section */
-.basket-items-container {
+.login-items-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 1.5rem;
+
 }
 
 .items-scrollable {
@@ -211,12 +197,6 @@
   text-align: center;
 }
 
-.empty-basket p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  color: #666;
-}
-
 .continue-shopping-btn {
   padding: 0.75rem 1.5rem;
   background: #f8f9fa;
@@ -263,5 +243,13 @@
   }
   to {
       transform: translateX(0);
+  }
+}
+@keyframes slideOut {
+  from {
+      transform: translateX(0);
+  }
+  to {
+      transform: translateX(100%);
   }
 }

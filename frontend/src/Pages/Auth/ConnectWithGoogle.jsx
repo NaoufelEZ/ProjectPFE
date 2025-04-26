@@ -10,6 +10,7 @@ const ConnectWithGoogle = () => {
         cookie.set("auth", token, { path: "/" });
         navigate("/");
     },[token]);
+    console.log(token)
     
   return (
     <div>ConnectWithGoogle</div>
