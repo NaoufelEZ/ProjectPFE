@@ -63,9 +63,9 @@ class ProductsStockSeeder extends Seeder
             ["product_id" => 7, "color" => "Geyser", "holder_product_picture" =>"00368335433-p.jpg",  "product_picture" => "00368335433-a4o.jpg", "size" => "L", "quantity" => 20],
 
             // Product 8 - Baggy printed jeans
-            ["product_id" => 8, "color" => "Wild Blue Yonder", "holder_product_picture" =>"00355179433-p.jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 8, "color" => "Wild Blue Yonder", "holder_product_picture" =>"00355179433-p.jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 8, "color" => "Wild Blue Yonder", "holder_product_picture" =>"00355179433-p.jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 8, "color" => "Wild Blue Yonder", "holder_product_picture" =>"00355179433-p.jpg",  "product_picture" => "1745696040_680d352816c3d.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 8, "color" => "Wild Blue Yonder", "holder_product_picture" =>"00355179433-p.jpg",  "product_picture" => "1745696040_680d352816c3d.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 8, "color" => "Wild Blue Yonder", "holder_product_picture" =>"00355179433-p.jpg",  "product_picture" => "1745696040_680d352816c3d.jpg", "size" => "L", "quantity" => 20],
             ["product_id" => 8, "color" => "black", "holder_product_picture" =>"00337335809-p.jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "S", "quantity" => 20],
             ["product_id" => 8, "color" => "black", "holder_product_picture" =>"00337335809-p.jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "M", "quantity" => 20],
             ["product_id" => 8, "color" => "black", "holder_product_picture" =>"00337335809-p.jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "L", "quantity" => 20],
@@ -73,20 +73,20 @@ class ProductsStockSeeder extends Seeder
             ["product_id" => 8, "color" => "Soft Amber", "holder_product_picture" =>"00343074500-p.jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "M", "quantity" => 20],
             ["product_id" => 8, "color" => "Soft Amber", "holder_product_picture" =>"00343074500-p.jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "L", "quantity" => 20],            
             // Product 9 - Balloon fit baggy jeans
-            ["product_id" => 9, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 9, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 9, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "L", "quantity" => 20],
-            ["product_id" => 9, "color" => "White", "holder_product_picture" =>".jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 9, "color" => "White", "holder_product_picture" =>".jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 9, "color" => "White", "holder_product_picture" =>".jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 9, "color" => "Black", "holder_product_picture" =>"1745694769_680d30313ad27.webp",  "product_picture" => "00337335809-a4o.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 9, "color" => "Black", "holder_product_picture" =>"1745694769_680d30313ad27.webp",  "product_picture" => "00337335809-a4o.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 9, "color" => "Black", "holder_product_picture" =>"1745694769_680d30313ad27.webp",  "product_picture" => "00337335809-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 9, "color" => "White", "holder_product_picture" =>"1745694413_680d2ecd6ecc6.webp",  "product_picture" => "00343074500-a4o.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 9, "color" => "White", "holder_product_picture" =>"1745694413_680d2ecd6ecc6.webp",  "product_picture" => "00343074500-a4o.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 9, "color" => "White", "holder_product_picture" =>"1745694413_680d2ecd6ecc6.webp",  "product_picture" => "00343074500-a4o.jpg", "size" => "L", "quantity" => 20],
 
             // Product 10 - Faded-effect skater fit jeans
-            ["product_id" => 10, "color" => "black", "holder_product_picture" =>".jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 10, "color" => "black", "holder_product_picture" =>".jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 10, "color" => "black", "holder_product_picture" =>".jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "L", "quantity" => 20],
-            ["product_id" => 10, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 10, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 10, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 10, "color" => "Light Blue Cloud", "holder_product_picture" =>"1745695202_680d31e20d2a7.jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 10, "color" => "Light Blue Cloud", "holder_product_picture" =>"1745695202_680d31e20d2a7.jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 10, "color" => "Light Blue Cloud", "holder_product_picture" =>"1745695202_680d31e20d2a7.jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 10, "color" => "Light Blue Cloud", "holder_product_picture" =>"1745695202_680d31e20d2a7.jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 10, "color" => "Light Blue Cloud", "holder_product_picture" =>"1745695202_680d31e20d2a7.jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 10, "color" => "Light Blue Cloud", "holder_product_picture" =>"1745695202_680d31e20d2a7.jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "L", "quantity" => 20],
 
             // Product 11 - Flared jeans
             ["product_id" => 11, "color" => "Blue", "holder_product_picture" =>"00372352428-21-a9o.jpg",  "product_picture" => "00372352428-a4o.jpg", "size" => "S", "quantity" => 20],
