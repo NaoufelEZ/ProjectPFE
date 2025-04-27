@@ -306,7 +306,7 @@ const Header = () => {
         )}
         {login && (
           <div className="basket-container">
-            <Login2 open={basket} setBasket={setBasket} />
+            <Login2 setLogin={setLogin} />
           </div>
         )}
       </header>

@@ -42,7 +42,7 @@ const Home = () => {
       <Carousel  className="w-100 position-sticky top-0 z-0" data-bs-theme="dark">
       {subcategory && subcategory.filter((item) => item.subcategories !== "New").map((e,index)=>(
         <Carousel.Item style={{height:"calc(100vh - 70px)"}} key={index}>
-          <img height="100%" className="d-block w-100" src={`${IMAGEURL}/categories/${e.subcategories_image}`} alt=""/>
+          <img height="100%" className="d-block w-100" src={`${IMAGEURL}/categories/${e.subcategories_image}`} loading="lazy" alt=""/>
           <Carousel.Caption>
             <h1 className="text-white fw-bold text-uppercase ">{e.subcategories}</h1>
           </Carousel.Caption>
@@ -53,7 +53,7 @@ const Home = () => {
         <section className="sub">
         {categoryDetails && categoryDetails.map((e,index)=>(
           <div key={index} className="box">
-            <img src={`${IMAGEURL}/categories/${e.category_details_image}`} alt={e.categoryDetails}/>
+            <img src={`${IMAGEURL}/categories/${e.category_details_image}`} loading="lazy" alt={e.categoryDetails}/>
             <span>{e.categoryDetails}</span>
           </div>
         ))}
@@ -63,7 +63,7 @@ const Home = () => {
         .filter((e) => e.subcategories === "New")
         .map((findNew, index) => (
           <div key={index}>
-          <img height={760} width="100%" src={`${IMAGEURL}/categories/${findNew.subcategories_image}`} alt="New" />
+          <img height={760} width="100%" src={`${IMAGEURL}/categories/${findNew.subcategories_image}`} loading="lazy" alt="New" />
           </div>
         ))}
         <div className=" position-absolute bottom-0 mb-5 d-flex align-items-center w-100 flex-column">
