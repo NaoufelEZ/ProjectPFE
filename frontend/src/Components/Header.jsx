@@ -307,7 +307,6 @@ const Header = () => {
           <div className="basket-container">
 
             <Login2 setLogin={setLogin} />
-            <Login2 open={login} setLogin={setLogin} />
           </div>
         )}
       </header>

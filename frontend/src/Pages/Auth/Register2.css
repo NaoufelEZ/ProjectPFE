@@ -1,0 +1,35 @@
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.custom-input {
+  height: 45px;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: 0.3s;
+}
+
+.custom-input:focus {
+  border-color: #86b7fe;
+  box-shadow: none;
+}
+
+.border-danger {
+  border-color: #dc3545 !important;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d;
+}
