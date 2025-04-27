@@ -10,7 +10,7 @@ use Illuminate\Validation\ValidationException as ValidationException;
 
 class authController extends Controller
 {
-    public function store(request $request){
+    public function store(Request $request){
         try{
         $validUser = $request->validate([
             "first_name"=>"required|string|min:3",

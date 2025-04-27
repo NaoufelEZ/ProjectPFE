@@ -8,13 +8,14 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Helmet } from "react-helmet-async";
 import { AiFillHeart } from "react-icons/ai";
-import useUser from "../../../Hooks/useUser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { WishlistContext } from "../../../Context/WishlistContext";
+import { TbLayoutColumns } from "react-icons/tb";
+
 
 const Products = () => {
   const [data, setData] = useState(null);
@@ -33,7 +34,6 @@ const Products = () => {
   const {setWishlistChange} = useContext(WishlistContext)
   const navigate = useNavigate();
 
-  const user = useUser();
   useEffect(() => {
     axios
       .get(`${APIURL}/products/${cat}/${sub}/${detail}`, {
@@ -48,9 +48,10 @@ const Products = () => {
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
-  }, []);
+  }, [cat, sub, detail]);
 
   useEffect(() => {
+    if(!token) return;
     axios
       .get(`${APIURL}/wishlist`, {
         headers: {
@@ -101,11 +102,14 @@ const Products = () => {
       />
       <Header />
       <Container className="py-5">
-        <div className="w-100 d-flex justify-content-end mb-4">
+        <div className="w-100 d-flex align-items-center justify-content-end mb-4">
+          <div className="me-3">
+            <TbLayoutColumns role="button" size={30} /> 
+          </div>
           <div
             onClick={() => setIsOpen(true)}
             role="button"
-            className="rounded-pill border p-2"
+            className="rounded-3 border px-4 py-2"
           >
             <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
             <span>Filter</span>

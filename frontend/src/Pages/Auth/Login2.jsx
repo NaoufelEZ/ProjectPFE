@@ -1,79 +1,55 @@
-import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Form } from "react-bootstrap";
-import { FcGoogle } from "react-icons/fc";
+import * as Yup from "yup";
+import { Container, Card, Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { Form, useNavigate } from "react-router-dom";
 
-const Login2 = ({ setLogin }) => {
+function Login() {
+  const navigate = useNavigate();
+
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string().min(6, "At least 6 characters").required("Password is required"),
+  });
+
+  const handleLogin = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post("http://localhost:8000/api/login", values);
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      toast.success("Welcome back, handsome 🖤", { autoClose: 2000 });
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error("Wrong email or password ❌", { autoClose: 3000 });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div className="basket-content">
-      <div className="basket-header px-4 pt-4 pb-3">
-        {/* Close Button */}
-        <div className="text-end">
-          <FontAwesomeIcon
-            icon={faClose}
-            onClick={() => setLogin(false)}
-            className="text-secondary fs-5 cursor-pointer"
-          />
-        </div>
+    <Container className="d-flex align-items-center justify-content-center" style={{ height: "100vh" }}>
+      <Card className="p-4 shadow" style={{ width: "400px", borderRadius: "1rem" }}>
+        <h3 className="text-center mb-4 fw-bold">Log In</h3>
+        <Form initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
+            <Form.Control name="email" type="email" label="Email" placeholder="Enter your email" />
+            <Form.Control name="password" type="password" label="Password" placeholder="Enter your password" />
 
-        {/* Title */}
-        <h4 className="text-center fw-bold mb-4">
-          Log in or create an account
-        </h4>
+              <button type="submit" className="btn btn-dark w-100 mt-3">
 
-        {/* Google Button */}
-        <button className="btn btn-light w-100 border border-secondary-subtle shadow-sm d-flex align-items-center justify-content-center gap-2 py-2 mb-3 rounded-3 google-hover">
-          <FcGoogle size={20} />
-          <span className="fw-medium text-dark">Continue with Google</span>
-        </button>
+              </button>
+            </Form>
 
-        <div className="text-center text-muted small mb-3">or</div>
-
-        {/* Login Form */}
-        <Form>
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="email"
-              placeholder="Email address"
-              className="py-2"
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-2">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              className="py-2"
-            />
-          </Form.Group>
-
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <Form.Check type="checkbox" label="Continue session" />
-            <a
-              href="#"
-              className="small text-decoration-none text-muted"
-            >
-              Forgot your password?
-            </a>
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-dark w-100 py-2 rounded-3 fw-semibold"
-          >
-            LOG IN
-          </button>
-        </Form>
-
-        <div className="text-center mt-3 small">
-          Don’t have an account?{" "}
-          <a href="#" className="fw-bold text-decoration-none">
-            Register
-          </a>
-        </div>
-      </div>
-    </div>
+      </Card>
+    </Container>
   );
-};
+}
 
 export default Login2;

@@ -1,5 +1,5 @@
 /* Basket Container */
-.basket-content {
+.login-content {
   width: 100%;
   max-width: 400px;
   height: 100vh;
@@ -16,31 +16,249 @@
 }
 
 /* Header Section */
-.basket-header {
+.login-header {
   padding: 1.5rem;
   border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Close Button */
-.cursor-pointer {
+.close-btn {
+  text-align: right;
+  margin-bottom: 1rem;
   cursor: pointer;
 }
 
-.cursor-pointer:hover {
-  color: #000 !important;
+.close-btn svg {
+  font-size: 1.2rem;
+  color: #666;
+  transition: color 0.2s;
 }
 
-/* Smooth Google Hover */
-.google-hover {
-  transition: all 0.25s ease-in-out;
+.close-btn svg:hover {
+  color: #333;
 }
 
-.google-hover:hover {
-  background-color: #f8f9fa !important;
-  border-color: #bbb !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+.basket-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.basket-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.wishlist-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wishlist-btn:hover {
+  background-color: #f9f9f9;
+}
+
+.heart-icon {
+  color: #ff3e6c;
+  margin-right: 0.5rem;
+}
+
+/* Items Section */
+.basket-items-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.items-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.basket-item {
+  display: flex;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.item-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 1rem;
+}
+
+.item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.item-price {
+  font-weight: 600;
+  margin: 0;
+}
+
+.delete-icon {
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.delete-icon:hover {
+  color: #ff3e6c;
+}
+
+.item-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.item-meta {
+  display: flex;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.item-size {
+  margin-right: 1rem;
+}
+
+/* Delivery Notice */
+.delivery-notice {
+  background: #f8f9fa;
+  padding: 0.75rem 1rem;
+  margin: 0 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #666;
+}
+
+/* Checkout Section */
+.checkout-section {
+  padding: 1.5rem;
+  border-top: 1px solid #f0f0f0;
+  background: white;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.price {
+  font-weight: 500;
+}
+
+.free-delivery {
+  color: #28a745;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.total-price {
+  font-weight: 700;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 1rem;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.checkout-btn:hover {
+  background: #333;
+}
+
+/* Empty Basket */
+.empty-basket {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-basket p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+.continue-shopping-btn {
+  padding: 0.75rem 1.5rem;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.continue-shopping-btn:hover {
+  background: #e9ecef;
+}
+
+.email-warning-box {
+  background-color: #ffe5e5;
+  color: #c00;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  margin-bottom: 10px;
+  font-size: 14px;
+  box-shadow: 0px 0px 8px rgba(255, 0, 0, 0.1);
+}
+
+.email-warning-box .triangle {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #ffe5e5;
+}
+
 
 /* Animation */
 @keyframes slideIn {

@@ -14,13 +14,15 @@ function useUser() {
         if (token) {
             axios.get(`${APIURL}/user`, {
                 headers: {
+                    Accept:"application/json",
                     Authorization: `Bearer ${token}`,
                     "x-api-key": ApiKey,
                 },
             })
             .then((response) => setUser(response.data.data))
-            .catch(() => {
+            .catch((err) => {
                 cookie.remove("auth", { path: "/" });
+                 console.log(err)
                 navigate("/");
             });
         }

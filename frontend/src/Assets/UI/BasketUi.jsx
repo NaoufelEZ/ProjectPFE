@@ -13,6 +13,7 @@ const BasketUi = () => {
   const {wishlistChange} = useContext(WishlistContext);
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  console.log(wishlistChange)
   useEffect(()=>{
     const item = window.localStorage.getItem("card");
     if (item) {
@@ -29,7 +30,7 @@ const BasketUi = () => {
       }
     }).then((response)=>{setWishlist(response.data.data.length);setError(false)})
     .catch(()=>setError(true))
-  },[wishlistChange])
+  },[wishlistChange,token])
   return (
     <div role="button" className="position-relative">
       {(!wishlist || wishlist === 0 || error) ?

@@ -1,11 +1,12 @@
 import { faClose, faHeart, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
 import "./basket.css";
 import useCloseOut from '../Hooks/useClose';
 import useUser from '../Hooks/useUser';
+import { BasketContext } from '../Context/BasketContext';
 
 const Basket = (props) => {
     const [storage, setStorage] = useState([]);
@@ -13,6 +14,7 @@ const Basket = (props) => {
     const navigate = useNavigate();
     const basketRef = useRef(null);
     const user = useUser();
+    const {basketChange} = useContext(BasketContext)
 
     useEffect(() => {
         const storedData = window.localStorage.getItem("card");
@@ -30,6 +32,7 @@ const Basket = (props) => {
     const freeDeliveryThreshold = 150;
 
     const handleDelete = (product) => {
+        basketChange(prev => prev + 1)
         const newStorage = storage.filter((e, key) => key !== product);
         setStorage(newStorage);
         window.localStorage.setItem("card", JSON.stringify(newStorage));
