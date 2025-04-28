@@ -2,7 +2,7 @@ import Header from "../Components/Header";
 import Footer from "../Components/Footer";
 import "./home.css";
 import { Carousel } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ApiKey, APIURL,IMAGEURL } from "../Api/Api";
@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet-async";
 const Home = () => {
   const [subcategory,setSubcategory] = useState([]);
   const [categoryDetails,setCategoryDetails] = useState([]);
+  const navigate = useNavigate();
   // const navigate = useNavigate();
   const {cat} = useParams();
   useEffect(()=>{
@@ -54,7 +55,7 @@ const Home = () => {
         {categoryDetails && categoryDetails.map((e,index)=>(
           <div key={index} className="box">
             <img src={`${IMAGEURL}/categories/${e.category_details_image}`} loading="lazy" alt={e.categoryDetails}/>
-            <span>{e.categoryDetails}</span>
+            <span onClick={()=>`/${cat}/`}>{e.categoryDetails}</span>
           </div>
         ))}
         </section>

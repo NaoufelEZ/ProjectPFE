@@ -153,7 +153,13 @@ const Products = () => {
                         {product.title}
                       </Card.Title>
                       <Card.Text className="fw-semibold">
-                        {product.price}.00 TND
+                        {product.discount === 0 ? product.price + ".00 TND" : 
+                        <>
+                        <span className="current-price">{(product.price - product.discount).toFixed(2)} TND</span><br/>
+                        <span className="original-price me-3">{product.price.toFixed(2)} TND</span>
+                        <span className="discount-badge">-{product.discount}%</span>
+                        </>
+                        }
                       </Card.Text>
                     </Card.Body>
                     {wishlistError && (

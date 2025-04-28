@@ -14,7 +14,7 @@ const Basket = (props) => {
     const navigate = useNavigate();
     const basketRef = useRef(null);
     const user = useUser();
-    const {basketChange} = useContext(BasketContext)
+    const {setBasketChange} = useContext(BasketContext)
 
     useEffect(() => {
         const storedData = window.localStorage.getItem("card");
@@ -32,7 +32,7 @@ const Basket = (props) => {
     const freeDeliveryThreshold = 150;
 
     const handleDelete = (product) => {
-        basketChange(prev => prev + 1)
+        setBasketChange(prev => prev + 1)
         const newStorage = storage.filter((e, key) => key !== product);
         setStorage(newStorage);
         window.localStorage.setItem("card", JSON.stringify(newStorage));

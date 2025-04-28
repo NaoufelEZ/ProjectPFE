@@ -49,7 +49,7 @@ function Login2({ setLogin }) {
           }
         );
         cookie.set('auth', res.data.token);
-        if (res.data.data.role === 'admin' || res.data.data.role === 'Product Manager') {
+        if (res.data.data.role === 'Admin' || res.data.data.role === 'Product Manager') {
           nav('/dashboard');
         } else {
           nav('/');
@@ -86,7 +86,7 @@ function Login2({ setLogin }) {
         <div className="login-items-container overflow-auto mt-3">
           <div className="d-flex align-items-center flex-column">
             <span className="h5">Log in or create an account</span>
-            <div
+            <div onClick={()=>window.location.href = "http://127.0.0.1:8000/login-google"}
               role="button"
               className="d-flex rounded-2 justify-content-center py-1 align-items-center border border-1 w-100 mt-4"
             >

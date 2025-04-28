@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import useDeleteItem from '../../../Hooks/useDeleteItem';
 import Swal from 'sweetalert2';
 import { motion } from 'framer-motion';
+import { use } from 'react';
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -337,9 +338,7 @@ const Users = () => {
                                   style={{ cursor: 'pointer' }}
                                   onClick={() => handleViewProfile(item)}
                                 >
-                                  <div className="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3">
-                                    {item.first_name.charAt(0)}{item.last_name.charAt(0)}
-                                  </div>
+                                 
                                   <div>
                                     <h6 className="mb-0">{item.first_name} {item.last_name}</h6>
                                     <small className="text-muted">ID: {item.id}</small>
@@ -362,27 +361,10 @@ const Users = () => {
                               </td>
                               <td>{getStatus(item.email_verify)}</td>
                               <td className="text-end pe-4">
-                                <Dropdown>
-                                  <Dropdown.Toggle variant="light" id="dropdown-actions" className="btn-sm">
-                                    <BsThreeDotsVertical />
-                                  </Dropdown.Toggle>
-                                  <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => handleViewProfile(item)}>
-                                      <FaEye className="me-2" /> View Profile
-                                    </Dropdown.Item>
-                                    <Dropdown.Item onClick={() => navigate(`/dashboard/users/edit/${item.id}`)}>
-                                      <FaEdit className="me-2" /> Edit
-                                    </Dropdown.Item>
-                                    {user && item.id !== user.id && (
-                                      <Dropdown.Item 
-                                        onClick={() => handleUserDelete(item.id, `${item.first_name} ${item.last_name}`)}
-                                        className="text-danger"
-                                      >
-                                        <FaTrash className="me-2" /> Delete
-                                      </Dropdown.Item>
-                                    )}
-                                  </Dropdown.Menu>
-                                </Dropdown>
+                                {
+                                  user && user.id !== item.id &&
+                                  <FaTrash className="me-2 text-danger"   onClick={() => handleUserDelete(item.id, `${item.first_name} ${item.last_name}`)}/> 
+                              }
                               </td>
                             </motion.tr>
                           ))
