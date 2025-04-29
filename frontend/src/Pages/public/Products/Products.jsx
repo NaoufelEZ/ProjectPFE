@@ -102,7 +102,9 @@ const Products = () => {
       />
       <Header />
       <Container className="py-5">
-        <div className="w-100 d-flex align-items-center justify-content-end mb-4">
+        <div className="w-100 d-flex align-items-center mb-4">
+          <span className="w-100 h2 text-capitalize">{detail.replaceAll("-"," ").toLocaleLowerCase()}</span>
+          <div className="w-100 d-flex justify-content-end align-items-center">
           <div className="me-3">
             <TbLayoutColumns role="button" size={30} /> 
           </div>
@@ -113,6 +115,7 @@ const Products = () => {
           >
             <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
             <span>Filter</span>
+          </div>
           </div>
         </div>
 

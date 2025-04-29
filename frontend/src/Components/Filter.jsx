@@ -1,17 +1,24 @@
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState, useEffect } from 'react';
-import { Accordion, Button } from 'react-bootstrap';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import './filter.css';
 import { colornames } from 'color-name-list';
 
 const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
+  // Check if props are valid
+  const validProducts = Array.isArray(products) ? products : [];
+  const validSetFilterProduct = typeof setFilterProduct === 'function' ? setFilterProduct : () => {};
+  const validSetIsOpen = typeof setIsOpen === 'function' ? setIsOpen : () => {};
+  
   const [sortBy, setSortBy] = useState('');
   const [selectedColors, setSelectedColors] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [priceRange, setPriceRange] = useState([0, 0]);
+  const [expandedSection, setExpandedSection] = useState(null);
 
   const getHexColor = (colorName) => {
     if (!colorName) return '#cccccc';
@@ -24,41 +31,42 @@ const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
       color.name.toLowerCase().includes(colorName.toLowerCase())
     );
     return filteredColors.length > 0 ? filteredColors[0].hex : '#cccccc'; // Default to gray if no match found
-   
-};
+  };
 
   useEffect(() => {
-    if (Array.isArray(products) && products.length > 0) {
-      const prices = products.map(product => product.price);
-      const minP = Math.min(...prices);
-      const maxP = Math.max(...prices);
-      setMinPrice(minP);
-      setMaxPrice(maxP);
-      setPriceRange([minP, maxP]);
+    if (validProducts.length > 0) {
+      const prices = validProducts.map(product => product.price).filter(p => !isNaN(p));
+      if (prices.length > 0) {
+        const minP = Math.min(...prices);
+        const maxP = Math.max(...prices);
+        setMinPrice(minP);
+        setMaxPrice(maxP);
+        setPriceRange([minP, maxP]);
+      }
     }
-  }, [products]);
+  }, [validProducts]);
 
-  const productColors = Array.isArray(products)
-    ? [...new Set(products.flatMap(p => (p.product_stock ? p.product_stock.map(s => s.color) : [])))]
+  const productColors = validProducts.length > 0
+    ? [...new Set(validProducts.flatMap(p => (p.product_stock ? p.product_stock.map(s => s.color) : [])))]
     : [];
 
-  const productSizes = Array.isArray(products)
-    ? [...new Set(products.flatMap(p => (p.product_stock ? p.product_stock.map(s => s.size) : [])))]
+  const productSizes = validProducts.length > 0
+    ? [...new Set(validProducts.flatMap(p => (p.product_stock ? p.product_stock.map(s => s.size) : [])))]
     : [];
 
   const handleSort = (order) => {
     setSortBy(order);
-    let sortedProducts = [...products];
+    let sortedProducts = [...validProducts];
 
     if (order === 'newIn') {
-      sortedProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      sortedProducts.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
     } else if (order === 'lowToHigh') {
-      sortedProducts.sort((a, b) => a.price - b.price);
+      sortedProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
     } else if (order === 'highToLow') {
-      sortedProducts.sort((a, b) => b.price - a.price);
+      sortedProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
     }
 
-    setFilterProduct(sortedProducts);
+    validSetFilterProduct(sortedProducts);
   };
 
   const handleColorSelect = (color) => {
@@ -70,12 +78,13 @@ const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
   };
 
   const handleFilter = () => {
-    const filteredProducts = products.filter(product =>
-      product.price >= priceRange[0] && product.price <= priceRange[1] &&
-      (selectedColors.length === 0 || product.product_stock?.some(s => selectedColors.includes(s.color))) &&
-      (selectedSizes.length === 0 || product.product_stock?.some(s => selectedSizes.includes(s.size)))
+    const filteredProducts = validProducts.filter(product =>
+      (product.price >= priceRange[0] && product.price <= priceRange[1]) &&
+      (selectedColors.length === 0 || (product.product_stock && product.product_stock.some(s => selectedColors.includes(s.color)))) &&
+      (selectedSizes.length === 0 || (product.product_stock && product.product_stock.some(s => selectedSizes.includes(s.size))))
     );
-    setFilterProduct(filteredProducts);
+    validSetFilterProduct(filteredProducts);
+    setIsOpen(false);
   };
 
   const handleClear = () => {
@@ -83,79 +92,160 @@ const Filter = ({ isOpen, setIsOpen, products = [], setFilterProduct }) => {
     setSelectedColors([]);
     setSelectedSizes([]);
     setPriceRange([minPrice, maxPrice]);
-    setFilterProduct(products);
+    validSetFilterProduct(validProducts);
   };
+
+  const toggleSection = (section) => {
+    if (expandedSection === section) {
+      setExpandedSection(null);
+    } else {
+      setExpandedSection(section);
+    }
+  };
+
+  const handlePriceChange = (value) => {
+    setPriceRange(value);
+  };
+
+  const filteredCount = validProducts.filter(product =>
+    (product.price >= priceRange[0] && product.price <= priceRange[1]) &&
+    (selectedColors.length === 0 || (product.product_stock && product.product_stock.some(s => selectedColors.includes(s.color)))) &&
+    (selectedSizes.length === 0 || (product.product_stock && product.product_stock.some(s => selectedSizes.includes(s.size))))
+  ).length;
 
   return (
     <section className={`filter ${isOpen ? 'show' : ''}`}>
       <div className="filter-content">
         <div className="filter-header">
           <span className="filter-title">Filter</span>
-          <FontAwesomeIcon onClick={() => setIsOpen(false)} role="button" className="close-btn" icon={faClose} />
+          <FontAwesomeIcon onClick={() => validSetIsOpen(false)} role="button" className="close-btn" icon={faClose} />
         </div>
-        <hr />
 
-        {/* Sort By Section - Now Vertical */}
-        <div className="sort-by-section">
-          <span className="sort-title">Sort By:</span>
-          <div className="sort-options d-flex">
-            <Button className={`sort-btn ${sortBy === 'newIn' ? 'active' : ''}`} onClick={() => handleSort('newIn')}>New In</Button>
-            <Button className={`sort-btn ${sortBy === 'lowToHigh' ? 'active' : ''}`} onClick={() => handleSort('lowToHigh')}>Low to High</Button>
-            <Button className={`sort-btn ${sortBy === 'highToLow' ? 'active' : ''}`} onClick={() => handleSort('highToLow')}>High to Low</Button>
+        {/* Sort By Section */}
+        <div className="filter-section">
+          <div className="section-header">
+            <span className="section-title">Sort by</span>
+          </div>
+          <div className="sort-options">
+            <button 
+              className={`sort-pill ${sortBy === 'newIn' ? 'active' : ''}`} 
+              onClick={() => handleSort('newIn')}
+            >
+              New In
+            </button>
+            <button 
+              className={`sort-pill ${sortBy === 'lowToHigh' ? 'active' : ''}`}
+              onClick={() => handleSort('lowToHigh')}
+            >
+              Price low to high
+            </button>
+            <button 
+              className={`sort-pill ${sortBy === 'highToLow' ? 'active' : ''}`}
+              onClick={() => handleSort('highToLow')}
+            >
+              Price high to low
+            </button>
           </div>
         </div>
 
-        {/* Color Filter */}
-        <Accordion>
-          <Accordion.Button className="accordion-button">Colors</Accordion.Button>
-          <Accordion.Body>
-            <div className="color-options">
-              {productColors.map(color => (
-                <button key={color} className={`color-btn ${selectedColors.includes(color) ? 'selected' : ''}`} 
-                        onClick={() => handleColorSelect(color)} style={{ backgroundColor: getHexColor(color), border: '2px solid black' }}>
-                </button>
-              ))}
-            </div>
-          </Accordion.Body>
-        </Accordion>
-
-        {/* Size Filter */}
-        <Accordion>
-          <Accordion.Button className="accordion-button">Sizes</Accordion.Button>
-          <Accordion.Body>
-            <div className="size-options">
-              {productSizes.map(size => (
-                <button key={size} className={`size-btn ${selectedSizes.includes(size) ? 'selected' : ''}`} 
-                        onClick={() => handleSizeSelect(size)}>
-                  {size}
-                </button>
-              ))}
-            </div>
-          </Accordion.Body>
-        </Accordion>
-
-        {/* Price Filter */}
-        <Accordion>
-          <Accordion.Button className="accordion-button">Price</Accordion.Button>
-          <Accordion.Body>
-            <div className="price-range">
-              <div className="price-values mb-3">
-                <span>{priceRange[0]} TND</span> - <span>{priceRange[1]} TND</span>
-              </div>
-              <div className="range-slider">
-                <input type="range" min={minPrice} max={maxPrice} value={priceRange[0]} 
-                       onChange={(e) => setPriceRange([Math.min(Number(e.target.value), priceRange[1] - 1), priceRange[1]])} />
-                <input type="range" min={minPrice} max={maxPrice} value={priceRange[1]} 
-                       onChange={(e) => setPriceRange([priceRange[0], Math.max(Number(e.target.value), priceRange[0] + 1)])} />
+        {/* Collapsible Sections */}
+        <div className="collapsible-section">
+          <div className="section-header" onClick={() => toggleSection('color')}>
+            <span className="section-title">Colour</span>
+            <FontAwesomeIcon 
+              icon={expandedSection === 'color' ? faMinus : faPlus} 
+              className="section-icon" 
+            />
+          </div>
+          {expandedSection === 'color' && (
+            <div className="section-content">
+              <div className="color-options">
+                {productColors.slice(0,8).map(color => (
+                  <button 
+                    key={color} 
+                    className={`color-btn ${selectedColors.includes(color) ? 'selected' : ''}`} 
+                    onClick={() => handleColorSelect(color)} 
+                    style={{ backgroundColor: getHexColor(color) }}
+                  >
+                  </button>
+                ))}
               </div>
             </div>
-          </Accordion.Body>
-        </Accordion>
+          )}
+        </div>
 
-        {/* Apply & Clear Filter Buttons */}
-        <div className="filter-actions d-flex gap-3">
-          <Button onClick={handleClear} className="clear-btn">Clear</Button>
-          <Button onClick={handleFilter} className="apply-btn">Apply Filters</Button>
+        <div className="collapsible-section">
+          <div className="section-header" onClick={() => toggleSection('size')}>
+            <span className="section-title">Size</span>
+            <FontAwesomeIcon 
+              icon={expandedSection === 'size' ? faMinus : faPlus} 
+              className="section-icon" 
+            />
+          </div>
+          {expandedSection === 'size' && (
+            <div className="section-content">
+              <div className="size-options">
+                {productSizes.map(size => (
+                  <button 
+                    key={size} 
+                    className={`size-btn ${selectedSizes.includes(size) ? 'selected' : ''}`} 
+                    onClick={() => handleSizeSelect(size)}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="collapsible-section">
+          <div className="section-header" onClick={() => toggleSection('price')}>
+            <span className="section-title">Price</span>
+            <FontAwesomeIcon 
+              icon={expandedSection === 'price' ? faMinus : faPlus} 
+              className="section-icon" 
+            />
+          </div>
+          {expandedSection === 'price' && (
+            <div className="section-content">
+              <div className="price-range">
+                <div className="price-values">
+                  <span>{priceRange[0]} TND</span> - <span>{priceRange[1]} TND</span>
+                </div>
+                <div className="rc-slider-container">
+                  <Slider
+                    range
+                    min={minPrice}
+                    max={maxPrice}
+                    value={priceRange}
+                    onChange={handlePriceChange}
+                    className="price-range-slider"
+                    handleStyle={[
+                      { 
+                        borderColor: '#212529',
+                        backgroundColor: '#212529'
+                      }, 
+                      { 
+                        borderColor: '#212529',
+                        backgroundColor: '#212529'
+                      }
+                    ]}
+                    trackStyle={{ backgroundColor: '#212529' }}
+                    railStyle={{ backgroundColor: '#e5e5e5' }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="filter-actions">
+          <button onClick={handleClear} className="clear-btn">CLEAR</button>
+          <button  onClick={handleFilter} className="results-btn">
+            SEE RESULTS ({filteredCount})
+          </button>
         </div>
       </div>
     </section>

@@ -59,7 +59,7 @@ const AddSubcategory = () => {
                     "x-api-key":ApiKey,
                 }
             });
-            navigate("/dashboard/subcategory")
+            navigate("/dashboard/subcategories")
             }catch(err){
                 console.log(err)
             }

@@ -33,7 +33,8 @@ const Home = () => {
     }).then((response)=>setCategoryDetails(response.data.data)
   ).catch((err)=>console.log(err))
   },[cat]);
-  return (
+  
+ return (
     <>
     <Helmet>
       <title>{cat}'s Clothing|Nalouti Store</title>
@@ -55,7 +56,7 @@ const Home = () => {
         {categoryDetails && categoryDetails.map((e,index)=>(
           <div key={index} className="box">
             <img src={`${IMAGEURL}/categories/${e.category_details_image}`} loading="lazy" alt={e.categoryDetails}/>
-            <span onClick={()=>`/${cat}/`}>{e.categoryDetails}</span>
+            <span onClick={()=>navigate(`${e.subcategory.subcategories}/${e.categoryDetails.replaceAll(" ","-")}`)}>{e.categoryDetails}</span>
           </div>
         ))}
         </section>

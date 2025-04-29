@@ -17,8 +17,7 @@ const Purchases = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedOrder, setExpandedOrder] = useState(null);
-  const [seenOrders, setSeenOrders] = useState({}); // <-- new state
-  console.log(seenOrders)
+  const [seenOrders, setSeenOrders] = useState({});
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -64,6 +63,15 @@ const Purchases = () => {
 
     fetchOrders();
   }, [token]);
+  useEffect(() => {
+    axios.put(`${APIURL}/order/update/check`, {}, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "x-api-key": ApiKey,
+      }
+    })
+  }, [token]);
 
   const getStatusColor = (status) => {
     const statusColors = {
@@ -79,6 +87,11 @@ const Purchases = () => {
   const toggleOrderDetails = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
+  const calculateTotalPrice = (items) => {
+  if (!items) return 0;
+  return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+};
+console.log(orders)
 
   return (
     <>
@@ -94,12 +107,9 @@ const Purchases = () => {
             <Spinner animation="border" />
             <p className="mt-2">Loading your orders...</p>
           </div>
-        ) : error ? (
-          <div className="alert alert-danger">{error}</div>
         ) : orders.length === 0 ? (
           <div className="empty-state">
             <p>No orders found</p>
-            <Button href="/products">Start Shopping</Button>
           </div>
         ) : (
           <div className="table-responsive">
@@ -120,7 +130,7 @@ const Purchases = () => {
                     <tr>
                       <td>#{order.id}</td>
                       <td>{new Date(order.order_date).toLocaleDateString()}</td>
-                      <td>{order.total_price} TND</td>
+                      <td>{calculateTotalPrice(order.order_items)} TND</td>
                       <td>
                         <Badge 
                           pill 
@@ -153,7 +163,7 @@ const Purchases = () => {
                         <td colSpan="6">
                           <div className="details-content">
                             <h6>Order Items:</h6>
-                            {order.items?.map((item) => (
+                            {order.order_items?.map((item) => (
                               <div key={item.id} className="order-item">
                                 <span>{item.name}</span>
                                 <span>{item.quantity} × {item.price} TND</span>

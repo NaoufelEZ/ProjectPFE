@@ -94,7 +94,7 @@ const Subcategories = () => {
             ))
             :
             <tr>
-              <td className="text-center" colspan="6">Not Found</td>
+              <td className="text-center" colSpan="6">Not Found</td>
             </tr>
             }
           </tbody>

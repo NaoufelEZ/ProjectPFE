@@ -124,6 +124,16 @@
   color: #ff3e6c;
 }
 
+.edit-icon {
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.edit-icon:hover {
+  color: #21eb6e;
+}
+
 .item-title {
   margin: 0 0 0.5rem 0;
   font-size: 0.95rem;

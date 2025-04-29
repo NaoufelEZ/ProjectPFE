@@ -133,34 +133,83 @@ const Products = () => {
           Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, productsFilter.length)} of {productsFilter.length} items
         </div>
         <Pagination>
-          <Pagination.First
-            onClick={() => paginate(1)}
-            disabled={currentPage === 1}
-          />
-          <Pagination.Prev
-            onClick={() => paginate(Math.max(1, currentPage - 1))}
-            disabled={currentPage === 1}
-          />
+  <Pagination.First onClick={() => paginate(1)} disabled={currentPage === 1} />
+  <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
 
-          {[...Array(totalPages).keys()].map(number => (
-            <Pagination.Item
-              key={number + 1}
-              active={number + 1 === currentPage}
-              onClick={() => paginate(number + 1)}
-            >
-              {number + 1}
-            </Pagination.Item>
-          ))}
+  {totalPages <= 7 ? (
+    // Small number of pages, show all
+    [...Array(totalPages).keys()].map((_, i) => (
+      <Pagination.Item
+        key={i + 1}
+        active={i + 1 === currentPage}
+        onClick={() => paginate(i + 1)}
+      >
+        {i + 1}
+      </Pagination.Item>
+    ))
+  ) : currentPage <= 4 ? (
+    // Near start
+    <>
+      {[1, 2, 3, 4, 5].map((page) => (
+        <Pagination.Item
+          key={page}
+          active={page === currentPage}
+          onClick={() => paginate(page)}
+        >
+          {page}
+        </Pagination.Item>
+      ))}
+      <Pagination.Ellipsis disabled />
+      <Pagination.Item onClick={() => paginate(totalPages)}>
+        {totalPages}
+      </Pagination.Item>
+    </>
+  ) : currentPage >= totalPages - 3 ? (
+    // Near end
+    <>
+      <Pagination.Item onClick={() => paginate(1)}>1</Pagination.Item>
+      <Pagination.Ellipsis disabled />
+      {[totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages].map((page) => (
+        <Pagination.Item
+          key={page}
+          active={page === currentPage}
+          onClick={() => paginate(page)}
+        >
+          {page}
+        </Pagination.Item>
+      ))}
+    </>
+  ) : (
+    // Middle range
+    <>
+      <Pagination.Item onClick={() => paginate(1)}>1</Pagination.Item>
+      <Pagination.Ellipsis disabled />
+      {[currentPage - 1, currentPage, currentPage + 1].map((page) => (
+        <Pagination.Item
+          key={page}
+          active={page === currentPage}
+          onClick={() => paginate(page)}
+        >
+          {page}
+        </Pagination.Item>
+      ))}
+      <Pagination.Ellipsis disabled />
+      <Pagination.Item onClick={() => paginate(totalPages)}>
+        {totalPages}
+      </Pagination.Item>
+    </>
+  )}
 
-          <Pagination.Next
-            onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-            disabled={currentPage === totalPages}
-          />
-          <Pagination.Last
-            onClick={() => paginate(totalPages)}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
+  <Pagination.Next
+    onClick={() => paginate(currentPage + 1)}
+    disabled={currentPage === totalPages}
+  />
+  <Pagination.Last
+    onClick={() => paginate(totalPages)}
+    disabled={currentPage === totalPages}
+  />
+</Pagination>
+
       </div>
     </div>
     </>

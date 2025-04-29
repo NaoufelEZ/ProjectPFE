@@ -262,7 +262,7 @@ const Header = () => {
                   <div className="details-columns">
                     <div className="details-column">
                       {categoryDetails.slice(0, Math.ceil(categoryDetails.length / 2)).map((element, index) => (
-                        <span role="button" onClick={()=>navigate(`/${choseMenu.cat}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`)}
+                        <span role="button" onClick={()=>navigate(`/${ !lastNav ? choseMenu.cat : lastNav}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`)}
                           className="detail-item"
                           key={index}
                         >

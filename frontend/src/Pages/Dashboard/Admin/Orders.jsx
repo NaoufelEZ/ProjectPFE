@@ -191,6 +191,7 @@ const Orders = () => {
             <Form.Select
               onChange={(e) => setOrderSelected(e.target.value)}
               className="fancy-filter"
+              value={orderSelected}
             >
               <option value="">All Orders</option>
               <option value="Pending">Pending</option>

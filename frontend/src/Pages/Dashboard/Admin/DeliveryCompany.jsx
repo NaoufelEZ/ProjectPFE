@@ -7,11 +7,16 @@ import axios from 'axios';
 import useUser from '../../../Hooks/useUser';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import useDeleteItem from '../../../Hooks/useDeleteItem';
+
 
 const DeliveryCompany = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState([]);
   const [filterUsers,setFilterUsers] = useState([]);
+  const deleteItem = useDeleteItem();
+
 
   const user = useUser();
 
@@ -33,7 +38,29 @@ const navigate = useNavigate();
     )
   }, []);
   const handleCompanyDelete = (id) => {
-    return id;
+    Swal.fire({
+          title: `Are Sure Delete ?`,
+          text: "This action cannot be undone!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#dc3545",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "Cancel",
+          reverseButtons: true,
+          backdrop: `
+            rgba(220,53,69,0.1)
+            url("/images/nyan-cat.gif")
+            left top
+            no-repeat
+          `
+        }).then((result) => {
+          if (result.isConfirmed) {
+            deleteItem(id, "delivery-company/delete", token, () => {
+              window.location.reload();
+            });
+          }
+        });
   }
 
   const itemsPerPage = 6;

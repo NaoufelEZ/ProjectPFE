@@ -20,7 +20,6 @@ import ChangePassword from "./Pages/public/Otp/ChangePassword.jsx";
 import DashboardProducts from "./Pages/Dashboard/ProductManger/Products.jsx";
 import AddUsers from "./Pages/Dashboard/Admin/AddUsers.jsx";
 import AddProduct from "./Pages/Dashboard/ProductManger/AddProduct.jsx";
-import Header2 from "./Components/Header2.jsx";
 import Checkout from "./Pages/public/Products/Checkout.jsx";
 import AddressBox from "./Pages/public/Products/AddressBox.jsx";
 import New from "./Pages/public/Products/New.jsx";
@@ -28,7 +27,6 @@ import Purchases from "./Pages/public/Setting/Purchases.jsx";
 import SavedAddresses from "./Pages/public/Setting/SavedAddresses.jsx";
 import AccountChangePassword from "./Pages/public/Setting/AccountChangePassword.jsx";
 import AccountChangeEmail from "./Pages/public/Setting/AccountChangeEmail.jsx";
-import Message from "./Pages/Dashboard/Admin/Message.jsx";
 import AddAddress from "./Pages/public/Setting/AddAddress.jsx";
 import Home from "./Pages/Home.jsx";
 import Orders from "./Pages/Dashboard/Admin/Orders.jsx";
@@ -53,13 +51,12 @@ import User from "./Pages/Dashboard/Admin/User.jsx";
 import ProductDashboard from "./Pages/Dashboard/ProductManger/ProductDashboard.jsx";
 import CashOrderConfirmation from "./Pages/public/Products/CashOrderConfirmation.jsx";
 import VisaOrderConfirmation from "./Pages/public/Products/VisaOrderConfirmation.jsx";
-import VisaPayment from "./Pages/public/Products/VisaPayment.jsx";
 import Address from "./Pages/public/Setting/Address.jsx";
 import Wishlist from "./Pages/public/Products/Wishlist.jsx";
 import SubcategoryPage from "./Pages/public/Products/SubcategoryPage.jsx";
-import Test from "./Pages/Auth/Test.jsx";
 import ConnectWithGoogle from "./Pages/Auth/ConnectWithGoogle.jsx";
 import CreateAccountWithGoogle from "./Pages/Auth/CreateAccountWithGoogle.jsx";
+import Delivery from "./Pages/Dashboard/Admin/Delivery.jsx";
 
 
 function App() {
@@ -91,7 +88,6 @@ function App() {
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/auth/verify" element={<AuthOtp/>} />
       <Route path="/checkout" element={<Checkout />} />
-      <Route path="/checkout/visa-payment" element={<VisaPayment />} />
       <Route path="/checkout/order-confirmation/cash" element={<CashOrderConfirmation />} />
       <Route path="/checkout/visa-payment/order-confirmation" element={<VisaOrderConfirmation />} />
       <Route path="/setting"  element={<Setting />}>
@@ -123,19 +119,20 @@ function App() {
               <Route path="orders/:ordId" element={<Order />} />
               <Route path="delivery-company" element={<DeliveryCompany />} />
               <Route path="delivery-company/add" element={<AddDeliveryCompany />} />
+              <Route path="delivery-company/:id" element={<Delivery />} />
             </Route>
           {/* Product Manger */}
           <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
               <Route path="inventory/:idProd" element={<ProductDashboard />} />
               <Route path="inventory/add" element={<AddProduct />} />
               <Route path="Categories" element={<Categories />} />
+              <Route path="subcategories/add" element={<AddSubcategory />} />
               <Route path="Categories/:catId" element={<Category />} />
               <Route path="subcategories" element={<Subcategories />} />
               <Route path="subcategories/:subId" element={<Subcategory />} />
               <Route path="category-details" element={<CategoryDetails />} />
               <Route path="category-details/:delId" element={<Detail />} />
               <Route path="category/add" element={<AddCategory />} />
-              <Route path="subcategory/add" element={<AddSubcategory />} />
               <Route path="category-details/add" element={<AddCategoryDetails />} />
           </Route>
         </Route>

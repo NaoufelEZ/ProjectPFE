@@ -4,6 +4,7 @@ import { Form, Button, Card } from 'react-bootstrap';
 import * as Yup from "yup";
 import { ApiKey, APIURL } from '../Api/Api';
 import Cookies from 'universal-cookie';
+import { GrMapLocation } from "react-icons/gr";
 
 const addressSchema = Yup.object().shape({
   address: Yup.string().required("Address is required"),
@@ -17,6 +18,7 @@ const addressSchema = Yup.object().shape({
 const AddressForm = ({ onClose }) => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
+
   const formik = useFormik({
     initialValues: {
       address: "",
@@ -27,35 +29,40 @@ const AddressForm = ({ onClose }) => {
     },
     validationSchema: addressSchema,
     onSubmit: async (values) => {
-      axios.post(`${APIURL}/address/add`,{
-        address:values.address,
-        state:values.state,
-        street:values.street,
-        zip:values.zip,
-      },
-      {
-        headers:{
-          Accept:"application/json",
-          Authorization: `Bearer ${token}`,
-          "x-api-key":ApiKey,
-        }
-      }).then(()=>{window.location.reload()}
-    ).catch((err)=>console.log(err))
+      try {
+        await axios.post(
+          `${APIURL}/address/add`,
+          {
+            address: values.address,
+            state: values.state,
+            street: values.street,
+            zip: values.zip,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+              "x-api-key": ApiKey,
+            },
+          }
+        );
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
+
   const getLocation = () => {
     window.navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        console.log("Latitude:", latitude);
-        console.log("Longitude:", longitude);
-        const apiKey = '82c330a163bc47bbadcedf2dd82ad069'; 
+        const apiKey = '82c330a163bc47bbadcedf2dd82ad069';
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
-    
+
         try {
           const response = await axios(url);
           const country = response.data.results[0].components;
-          console.log(response.data.results);
           formik.setFieldValue("state", country.state);
           formik.setFieldValue("street", country.road);
           formik.setFieldValue("zip", country.postcode);
@@ -67,11 +74,14 @@ const AddressForm = ({ onClose }) => {
         console.error("Error getting location:", error.message);
       }
     );
-    }
+  };
 
   return (
-    <Card className="p-4">
-      <Card.Header as="h5" className="border-bottom mb-3 pb-2">Add New Address</Card.Header>
+    <Card className="p-4 shadow-sm rounded-4">
+      <Card.Header as="h5" className="border-bottom mb-4 text-center">
+        Add New Address
+      </Card.Header>
+
       <Form onSubmit={formik.handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Address</Form.Label>
@@ -129,7 +139,7 @@ const AddressForm = ({ onClose }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <Form.Group className="mb-4">
           <Form.Check
             type="checkbox"
             label="Set as default address"
@@ -139,18 +149,39 @@ const AddressForm = ({ onClose }) => {
           />
         </Form.Group>
 
-        <div className="d-flex justify-content-end mt-4">
-          <Button variant="outline-secondary" className="me-2" onClick={onClose}>
+        {/* Buttons */}
+        <div className="d-flex justify-content-center gap-3">
+        <Button
+            variant="outline-dark"
+            className="d-flex align-items-center gap-2 px-3 rounded-pill"
+            onClick={getLocation}
+            type="button"
+          >
+            <GrMapLocation size={20} />
+            Locate me
+          </Button>
+          <Button
+            variant="outline-secondary"
+            className="rounded-2 d-flex align-items-center justify-content-center"
+            style={{ width: "85px",height: "50px" }}
+            onClick={onClose}
+            type="button"
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="dark">
-            Save Address
+
+          <Button
+            variant="dark"
+            className="rounded-2 d-flex align-items-center justify-content-center"
+            style={{ width: "85px",height: "50px" }}
+            type="submit"
+          >
+            Save
           </Button>
+
+         
         </div>
       </Form>
-        <Button onClick={getLocation} type="submit" variant="dark">
-            where i am
-          </Button>
     </Card>
   );
 };

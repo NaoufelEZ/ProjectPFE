@@ -379,10 +379,11 @@ const ProductForm = () => {
                               </Dropdown>
                             </Form.Group>
                         </Col>
-
-                        <Col md={6}>
+                      </Row>
+                      <Row className="mb-3">
+                      <Col md={6}>
                           <Form.Group className="mb-3">
-                            <Form.Label>Image <span className="text-danger">*</span></Form.Label>
+                            <Form.Label>Holder Product Picture <span className="text-danger">*</span></Form.Label>
                             <Form.Control
                               type="file"
                               accept="image/*"
@@ -391,7 +392,19 @@ const ProductForm = () => {
                             />
                           </Form.Group>
                         </Col>
-                      </Row>
+
+                      <Col md={6}>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Product Picture <span className="text-danger">*</span></Form.Label>
+                            <Form.Control
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handleImageChange(colorIndex, e.target.files[0])}
+                              required={!colorItem.image}
+                            />
+                          </Form.Group>
+                        </Col>
+                        </Row>
 
                       <div className="mb-3">
                         <div className="d-flex justify-content-between align-items-center mb-2">
