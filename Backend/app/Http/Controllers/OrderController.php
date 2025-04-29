@@ -102,13 +102,14 @@ class OrderController extends Controller
             return response()->json(["message"=>"Order Not Found","status"=>404],404);
         }
         $order->status = "Processing";
+        $order->dot_notify = true;
         $order->save();
        
         return response()->json(["message"=>"Order Are Checked","status"=>200],200);
     }
     public function userOrder(Request $request){
         $user = $request->user();
-        $orders = Order::where("user_id",$user->id)->with("orderItems")->get();
+        $orders = Order::where("user_id",$user->id)->with("orderItems.product_stock")->get();
         if($orders->isEmpty()){
             return response()->json(["message"=>"Order Not Found","status"=>404],404);
         }
@@ -120,6 +121,14 @@ class OrderController extends Controller
             return response()->json(["data"=>true],200);
         }
         return response()->json(["data"=>false],200);
+    }
+    public function allChecked(Request $request){
+        $user = $request->user();
+        $orders = Order::where("user_id",$user->id);
+        $orders->update([
+            "dot_notify"=>false,
+        ]);
+        return response()->json(["message"=>"checkd updated"],200);
     }
     public function anyChecked(Request $request){
         $user = $request->user();

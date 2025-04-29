@@ -13,6 +13,7 @@ class ProductStock extends Model
         "product_id",
         "color",
         "product_picture",
+        "holder_product_picture",
         "size",
         "quantity",
     ];

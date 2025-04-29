@@ -74,7 +74,7 @@ class CategoryController extends Controller
         if(!$category){
             return response()->json(["message"=>"category not found","status"=>404],404);
         }
-        $categoryDetails = CategoryDetails::where('category_id', $category->id)->orderBy('created_at', 'desc')->take(5)->get();
+        $categoryDetails = CategoryDetails::with("subcategory")->where('category_id', $category->id)->orderBy('created_at', 'desc')->take(5)->get();
         if($categoryDetails->isEmpty()){
             return response()->json(["message"=>"the category details is empty","status"=>404],404);
         }

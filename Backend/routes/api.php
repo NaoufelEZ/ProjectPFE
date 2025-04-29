@@ -124,6 +124,7 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("user/order","userOrder");
             Route::get("order/all/check","anyChecked");
             Route::get("order/check/{id}","check");
+            Route::put("order/update/check","allChecked");
         });
         // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
@@ -172,8 +173,8 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::get("delivery-company","index");
             Route::post("delivery-company/add","store");
             Route::get("delivery-company/{id}","getCompany");
-            Route::delete("delivery-company/delete/{id}","index");
-            Route::put("delivery-company/update/{id}","index");
+            Route::delete("delivery-company/delete/{id}","delete");
+            Route::put("delivery-company/update/{id}","update");
         });
     });
 
