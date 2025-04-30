@@ -14,6 +14,19 @@ use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
+    public function getRandomStr($length = 16)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $str = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $index = rand(0, strlen($characters) - 1);
+        $str .= $characters[$index];
+    }
+
+    return $str;
+}
+
     public function store(Request $request){
         try{
             $orderValidation = $request->validate([
@@ -23,8 +36,10 @@ class OrderController extends Controller
                 "price"=>"required",
                 "paymentChoose"=>"required",
             ]);
+            $ref = $this->getRandomStr();
             $user = $request->user();
             $order = Order::create([
+                "reference"=>$ref,
                 "user_id"=>$user->id,
                 "address_id"=>$orderValidation["address_id"],
                 "method_payment"=>$orderValidation["paymentChoose"],
@@ -74,22 +89,22 @@ class OrderController extends Controller
             ]);
             $orderItems = OrderItems::with("product_stock")->where("order_id",$id)->get();
             if($orderValidate["deliveryStatus"] == "Shipped"){
-                foreach($orderItems as $order){
-                    $currentStock = $order->product_stock->quantity - $order->quantity;
-                    ProductStock::find($order->product_stock->id)->update([
+                foreach($orderItems as $orderItem){
+                    $currentStock = $orderItem->product_stock->quantity - $orderItem->quantity;
+                    ProductStock::find($orderItem->product_stock->id)->update([
                         "quantity"=>$currentStock,
                     ]);
                 }
             }
             elseif($orderValidate["deliveryStatus"] == "Return"){
-                foreach($orderItems as $order){
-                    $currentStock = $order->product_stock->quantity + $order->quantity;
-                    ProductStock::find($order->product_stock->id)->update([
+                foreach($orderItems as $orderItem){
+                    $currentStock = $orderItem->product_stock->quantity + $orderItem->quantity;
+                    ProductStock::find($orderItem->product_stock->id)->update([
                         "quantity"=>$currentStock,
                     ]);
                 }
             }   
-                Mail::to($order->user->email)->send(new OrderMail($orderItems,$orderValidate["deliveryStatus"],$order));
+                Mail::to(users: $order->user->email)->send(new OrderMail($orderItems,$orderValidate["deliveryStatus"],$order));
                 return response()->json(["message"=>"Order Are Updated","status"=>200],200);
         }catch(ValidationException $e){
             return response()->json(["message"=>$e->errors(),"status"=>422],422);

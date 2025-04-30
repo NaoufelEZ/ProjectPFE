@@ -43,15 +43,22 @@ class ProductController extends Controller
             $sizes = $request->sizes;
             $quantity = $request->quantity;
             $product_pictures = $request->file("product_pictures");
+            $holder_product_pictures = $request->file("holder_product_picture");
             foreach($colors as $key => $color){
                 $fileExtension = $product_pictures[$key]->getClientOriginalExtension();
                 $fileName = time() . "_" . uniqid() . "." . $fileExtension;
                 $path = public_path("images/products/");
                 $product_pictures[$key]->move($path,$fileName);
+
+                $fileExtensionHolder = $holder_product_pictures[$key]->getClientOriginalExtension();
+                $fileNameHolder = time() . "_" . uniqid() . "." . $fileExtensionHolder;
+                $path = public_path("images/products/");
+                $holder_product_pictures[$key]->move($path,$fileNameHolder);
                 ProductStock::create([
                     "product_id"=>$product->id,
                     "color"=>$color,
                     "product_picture"=>$fileName,
+                    "holder_product_picture"=>$fileNameHolder,
                     "quantity"=>$quantity[$key],
                     "size"=>$sizes[$key],
                 ]);
