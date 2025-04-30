@@ -15,7 +15,10 @@ const LeftBar = () => {
       }
   })
 .then(()=>cookie.remove("auth",{path:"/"}))
-.finally(()=>{navigate("/")});
+.finally(()=>{
+  navigate("/")
+  window.location.reload(); 
+});
   }
   return (
     <div className='p-0 me-5 '>

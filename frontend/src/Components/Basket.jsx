@@ -55,6 +55,7 @@ const Basket = (props) => {
             document.body.style.overflow = "unset";
         };
     }, []);
+    console.log(user)
 
 
     return (
@@ -154,9 +155,25 @@ const Basket = (props) => {
 
 
                                 <button 
-                                disabled={user && user.email_verify ? false : true}
+                                disabled={user ? user.email_verify === true && false : false}
                                     className="checkout-btn"
-                                    onClick={() => user ? user.email_verify && navigate("/checkout")  : navigate("/login")}
+                                    onClick={() => {
+                                        console.log("first")
+                                        if(user){
+                                            console.log("first")
+                                            if(user.email_verify ){
+                                                navigate("/checkout");
+                                            }
+
+                                        }else{
+                                            console.log("first error")
+                                            props.setBasket(false);
+                                            props.login(true);
+                                            
+                                        }
+                                        }
+                                
+                                }
                                 >
                                     Process order
                                 </button>

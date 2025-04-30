@@ -236,6 +236,28 @@
   border-right: 10px solid transparent;
   border-top: 10px solid #ffe5e5;
 }
+.custom-toast-container{
+  position: absolute !important;
+  top: calc(70px); /* Adjust based on your header's height */
+  z-index: 9999;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none ;
+}
+.sideOtp{
+  height: 100vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.sideOtp input{
+  margin: 3px;
+  height: 50px;
+  width: 45px !important;
+  border-radius: 8px;
+  border: 2px solid;
+}
 
 
 /* Animation */

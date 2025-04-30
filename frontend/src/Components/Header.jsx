@@ -12,13 +12,13 @@ import Basket from "./Basket";
 import { Col, Row } from "react-bootstrap";
 import BasketUi from "../Assets/UI/BasketUi";
 import SearchBar from "../Assets/UI/SearchBar";
-import Login2 from "../Pages/Auth/Login2";
+import Login2 from "../Pages/Auth/SideLog";
 
 const Header = () => {
   const { cat } = useParams();
   const [user, setUser] = useState(null);
   const [basket, setBasket] = useState(false);
-  const [login, setLogin] = useState(false);
+  const [log, setLog] = useState(false);
   const [click, setClick] = useState({ action: false });
   const [notify,setNotify] = useState(0);
   const [choseMenu, setChoseMenu] = useState({
@@ -211,7 +211,7 @@ const Header = () => {
                 <span>{user.first_name}</span>
               </Link>
             ) : (
-              <Link onClick={()=>setLogin(true)} className="text-decoration-none text-black">
+              <Link onClick={()=>setLog(true)} className="text-decoration-none text-black">
                 <FiUser className="m-0 h3 pe-2" role="button" />
                 <span>Login</span>
               </Link>
@@ -300,13 +300,13 @@ const Header = () => {
 
         {basket && (
           <div className="basket-container">
-            <Basket token={token} open={basket} setBasket={setBasket} />
+            <Basket token={token} open={basket} setBasket={setBasket} login={setLog} />
           </div>
         )}
-        {login && (
+        {log && (
           <div className="basket-container">
 
-            <Login2 setLogin={setLogin} />
+            <Login2 setLog={setLog} />
           </div>
         )}
       </header>

@@ -48,8 +48,11 @@ const LeftBar = () => {
           "x-api-key": ApiKey
         }
       })
-      .then(() => cookie.remove("auth", { path: "/dashboard" }))
-      .finally(() => navigate("/"));
+      .then(() => cookie.remove("auth", { path: "/" }))
+      .finally(() => {
+        navigate("/")
+        window.location.reload(); 
+      });
   };
 
   const menuItems = [

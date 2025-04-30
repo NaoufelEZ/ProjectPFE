@@ -130,7 +130,7 @@ console.log(orders)
                     <tr>
                       <td>#{order.id}</td>
                       <td>{new Date(order.order_date).toLocaleDateString()}</td>
-                      <td>{calculateTotalPrice(order.order_items)} TND</td>
+                      <td>{calculateTotalPrice(order.order_items).toFixed(2)} TND</td>
                       <td>
                         <Badge 
                           pill 

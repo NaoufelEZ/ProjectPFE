@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import googleLogo from '../../Assets/images/icons8-google-48.svg';
 import { useNavigate, Link } from 'react-router-dom';
 import './Login2.css';
-import useCloseOut from '../../Hooks/useClose';
 import { Button, Form, Card, Image, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -12,15 +11,12 @@ import * as Yup from 'yup';
 import Cookies from 'universal-cookie';
 import { ApiKey } from '../../Api/Api';
 import Loading from '../../Components/Loading';
-import Register2 from './Register2';
+import { Slide, toast, ToastContainer } from 'react-toastify';
 
-function Login2({ setLogin }) {
-  const [currentUse, setCurrentUse] = useState('login');
+function SideLogin({ currentUse }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const loginRef = useRef(null);
   const cookie = new Cookies();
-  const nav = useNavigate();
 
   // Validation schema with Yup
   const validationSchema = Yup.object().shape({
@@ -57,34 +53,20 @@ function Login2({ setLogin }) {
       } catch (err) {
         setError(true);
         setLoading(false);
+        notify();
       }
     },
   });
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, []);
+  const nav = useNavigate();
 
-  useCloseOut(loginRef, setLogin);
+  const notify = () => toast.error("Incorrect combination of user name and password.");
+
 
   return (
-    <div ref={loginRef} className="login-content">
-      <div className="login-header">
-        <h3 className="login-title">{currentUse}</h3>
-        <div className="login-close-btn">
-          {currentUse === 'login' ? (
-            <FontAwesomeIcon className="mb-0" icon={faClose} onClick={() => setLogin(false)} />
-          ) : (
-            <FontAwesomeIcon className="mb-0" icon={faArrowLeft} onClick={() => setCurrentUse('login')} />
-          )}
-        </div>
-      </div>
-      {currentUse === 'login' ? (
         <div className="login-items-container overflow-auto mt-3">
-          <div className="d-flex align-items-center flex-column">
+          <div className="d-flex align-items-center flex-column position-relative">
+           <ToastContainer  position='top-center' closeButton={false} autoClose={2000} hideProgressBar={true} transition={Slide} />
             <span className="h5">Log in or create an account</span>
             <div onClick={()=>window.location.href = "http://127.0.0.1:8000/login-google"}
               role="button"
@@ -141,9 +123,9 @@ function Login2({ setLogin }) {
 
                     <Form.Group className="d-flex justify-content-between align-items-center mb-3">
                       <Form.Check type="checkbox" label="Remember me" className="small text-muted" />
-                      <Link to={"/forget_password"} className="small text-decoration-none" style={{ color: "#e83e8c" }}>
+                      <span role='button' onClick={()=>currentUse({log:"forgotten"})} className="small text-decoration-none" style={{ color: "#e83e8c" }}>
                         Forgot Password?
-                      </Link>
+                      </span>
                     </Form.Group>
 
                     <Button
@@ -159,12 +141,6 @@ function Login2({ setLogin }) {
                     >
                       {loading ? 'Signing In...' : 'Login'}
                     </Button>
-
-                    {error && (
-                      <div className="mt-3 p-2 bg-danger text-white rounded text-center small">
-                        Email or Password are Wrong
-                      </div>
-                    )}
                   </Form>
                 </Card.Body>
               </Card>
@@ -172,16 +148,12 @@ function Login2({ setLogin }) {
           </div>
           <div className="text-center mt-3 small">
             <span className="text-muted">Don't have an account? </span>
-            <Link to={"/register"} className="text-decoration-none fw-bold" style={{ color: "#e83e8c" }}>
+            <span role='button' onClick={()=>currentUse({log:"register"})} className="text-decoration-none fw-bold" style={{ color: "#e83e8c" }}>
               Sign Up
-            </Link>
+            </span>
           </div>
         </div>
-      ) : (
-        <Register2 />
-      )}
-    </div>
   );
 }
 
-export default Login2;
+export default SideLogin;

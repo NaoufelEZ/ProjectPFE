@@ -125,14 +125,14 @@ function App() {
           <Route element={<ReqRule allowedRule={["Product Manager"]}/>}>
               <Route path="inventory/:idProd" element={<ProductDashboard />} />
               <Route path="inventory/add" element={<AddProduct />} />
-              <Route path="Categories" element={<Categories />} />
+              <Route path="categories" element={<Categories />} />
               <Route path="subcategories/add" element={<AddSubcategory />} />
-              <Route path="Categories/:catId" element={<Category />} />
+              <Route path="categories/add" element={<AddCategory />} />
+              <Route path="categories/:catId" element={<Category />} />
               <Route path="subcategories" element={<Subcategories />} />
               <Route path="subcategories/:subId" element={<Subcategory />} />
               <Route path="category-details" element={<CategoryDetails />} />
               <Route path="category-details/:delId" element={<Detail />} />
-              <Route path="category/add" element={<AddCategory />} />
               <Route path="category-details/add" element={<AddCategoryDetails />} />
           </Route>
         </Route>

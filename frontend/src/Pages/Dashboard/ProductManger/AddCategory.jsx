@@ -37,7 +37,7 @@ const AddCategory = () => {
                 "x-api-key":ApiKey,
             }
         });
-        navigate("/dashboard/category")
+        navigate("/dashboard/categories")
         }catch(err){
             console.log(err)
         }
