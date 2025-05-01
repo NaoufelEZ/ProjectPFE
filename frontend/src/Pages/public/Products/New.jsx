@@ -10,10 +10,10 @@ import { Helmet } from "react-helmet-async";
 import { AiFillHeart } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSliders } from "@fortawesome/free-solid-svg-icons";
-import { BsGrid3X3, BsWindow } from "react-icons/bs"; // View toggle icons
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
+import ViewToggleIcon from "../../../Pages/public/Products/Components/ViewToggleIcon";
 
 const New = () => {
   const [data, setData] = useState(null);
@@ -24,7 +24,7 @@ const New = () => {
   const [wishlistError, setWishlisttError] = useState(false);
   const [filterProduct, setFilterProduct] = useState([]);
   const [change, setChange] = useState(false);
-  const [viewMode, setViewMode] = useState("big"); // viewMode: "big" or "grid"
+  const [viewMode, setViewMode] = useState("grid");
   const { cat } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -47,7 +47,7 @@ const New = () => {
   }, []);
 
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
     axios
       .get(`${APIURL}/wishlist`, {
         headers: {
@@ -97,32 +97,45 @@ const New = () => {
       <Container className="py-5">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 className="fw-bold">New Items</h2>
-          <div className="d-flex gap-3">
+          <div className="d-flex align-items-center gap-2">
+            {/* View Toggle Button */}
+            <ViewToggleIcon
+              active={viewMode === "grid"}
+              onToggle={() =>
+                setViewMode((prev) => (prev === "grid" ? "big" : "grid"))
+              }
+            />
+
+            {/* Filter Button */}
             <div
               onClick={() => setIsOpen(true)}
               role="button"
-              className="rounded-pill border p-2"
+              className="d-flex align-items-center"
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "12px",
+                padding: "8px 16px",
+                height: "40px",
+                backgroundColor: "#fff",
+                cursor: "pointer",
+              }}
             >
-              <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
-              <span>Filter</span>
-            </div>
-            <div className="d-flex gap-2">
-              <BsWindow
-                size={24}
-                role="button"
-                onClick={() => setViewMode("big")}
-                className={`toggle-icon ${
-                  viewMode === "big" ? "text-dark" : "text-muted"
-                }`}
-              />
-              <BsGrid3X3
-                size={24}
-                role="button"
-                onClick={() => setViewMode("grid")}
-                className={`toggle-icon ${
-                  viewMode === "grid" ? "text-dark" : "text-muted"
-                }`}
-              />
+              <div
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  backgroundColor: "#f5f5f5",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "4px",
+                }}
+              >
+                <FontAwesomeIcon icon={faSliders} />
+              </div>
+              <span className="ms-2 fw-medium" style={{ fontSize: "15px" }}>
+                Filter
+              </span>
             </div>
           </div>
         </div>
@@ -192,14 +205,14 @@ const New = () => {
                       onClick={() => navigate(`/product/${product.id}`)}
                     >
                       <Card.Img
-                      onMouseEnter={(e) => {
-                        e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
-                        e.currentTarget.style.transform = "scale(1.01)";}
-                      }
-                      onMouseLeave={(e) => {
-                        e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
-                        e.currentTarget.style.transform = "scale(1)";}
-                      }
+                        onMouseEnter={(e) => {
+                          e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
+                          e.currentTarget.style.transform = "scale(1.01)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
+                          e.currentTarget.style.transform = "scale(1)";
+                        }}
                         variant="top"
                         src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
                         style={{ height: "400px", objectFit: "cover" }}

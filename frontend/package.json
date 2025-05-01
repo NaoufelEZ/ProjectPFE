@@ -41,6 +41,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.5",
     "react-transition-group": "^4.4.5",
+    "react-window": "^1.8.11",
     "reactjs-otp-input": "^2.0.10",
     "scrolltrigger": "^1.0.1",
     "simplebar-react": "^3.3.0",

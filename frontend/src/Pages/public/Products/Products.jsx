@@ -14,8 +14,7 @@ import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { WishlistContext } from "../../../Context/WishlistContext";
-import { TbLayoutColumns } from "react-icons/tb";
-
+import ViewToggleIcon from "./Components/ViewToggleIcon";
 
 const Products = () => {
   const [data, setData] = useState(null);
@@ -26,12 +25,11 @@ const Products = () => {
   const [wishlistError, setWishlisttError] = useState(false);
   const [filterProduct, setFilterProduct] = useState([]);
   const [change, setChange] = useState(false);
-  const { cat } = useParams();
-  const { sub } = useParams();
-  const { detail } = useParams();
+  const [viewMode, setViewMode] = useState("grid");
+  const { cat, sub, detail } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
-  const {setWishlistChange} = useContext(WishlistContext)
+  const { setWishlistChange } = useContext(WishlistContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +49,7 @@ const Products = () => {
   }, [cat, sub, detail]);
 
   useEffect(() => {
-    if(!token) return;
+    if (!token) return;
     axios
       .get(`${APIURL}/wishlist`, {
         headers: {
@@ -68,7 +66,7 @@ const Products = () => {
   }, [change]);
 
   const handleAddWishlist = async (id) => {
-    setWishlistChange(prev => prev + 1);
+    setWishlistChange((prev) => prev + 1);
     try {
       await axios.post(
         `${APIURL}/wishlist/add/${id}`,
@@ -91,7 +89,7 @@ const Products = () => {
     <>
       <Helmet>
         <title>
-          {cat}'s {sub}|Nalouti Store
+          {cat}'s {sub} | Nalouti Store
         </title>
       </Helmet>
       <Filter
@@ -102,22 +100,54 @@ const Products = () => {
       />
       <Header />
       <Container className="py-5">
-        <div className="w-100 d-flex align-items-center mb-4">
-          <span className="w-100 h2 text-capitalize">{detail.replaceAll("-"," ").toLocaleLowerCase()}</span>
-          <div className="w-100 d-flex justify-content-end align-items-center">
-          <div className="me-3">
-            <TbLayoutColumns role="button" size={30} /> 
-          </div>
-          <div
-            onClick={() => setIsOpen(true)}
-            role="button"
-            className="rounded-3 border px-4 py-2"
-          >
-            <FontAwesomeIcon className="mb-0 me-2 h6" icon={faSliders} />
-            <span>Filter</span>
-          </div>
-          </div>
+  <div className="d-flex justify-content-between align-items-center mb-4">
+    <h2 className="fw-bold text-capitalize">
+      {detail.replaceAll("-", " ").toLowerCase()}
+    </h2>
+    <div className="d-flex align-items-center gap-2">
+      {/* View Toggle Button */}
+      <ViewToggleIcon
+        active={viewMode === "grid"}
+        onToggle={() =>
+          setViewMode((prev) => (prev === "grid" ? "big" : "grid"))
+        }
+      />
+
+      {/* Filter Button */}
+      <div
+        onClick={() => setIsOpen(true)}
+        role="button"
+        className="d-flex align-items-center"
+        style={{
+          border: "1px solid #ccc",
+          borderRadius: "12px",
+          padding: "8px 16px",
+          height: "40px",
+          backgroundColor: "#fff",
+          cursor: "pointer",
+        }}
+      >
+        <div
+          style={{
+            width: "24px",
+            height: "24px",
+            backgroundColor: "#f5f5f5",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "4px",
+          }}
+        >
+          <FontAwesomeIcon icon={faSliders} />
         </div>
+        <span className="ms-2 fw-medium" style={{ fontSize: "15px" }}>
+          Filter
+        </span>
+      </div>
+    </div>
+  </div>
+
+
 
         {error ? (
           <p>Products are empty</p>
@@ -130,59 +160,137 @@ const Products = () => {
             ))}
           </Row>
         ) : filterProduct && filterProduct.length > 0 ? (
-          <Row>
-            {filterProduct.map((product) => {
-              const firstStock = product?.product_stock?.[0];
-              return (
-                <Col md={3} sm={6} xs={12} key={product.id} className="mb-4">
-                  <Card
-                    className="product-card shadow-sm position-relative"
-                    role="button"
-                    onClick={() => navigate(`/product/${product.id}`)}
-                  >
-                    <Card.Img
-                    onMouseEnter={(e) => {
-                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
-                    }}
-                      variant="top"
-                      src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
-                      style={{ height: "400px", objectFit: "cover" }}
-                    />
-                    <Card.Body>
-                      <Card.Title className="text-muted fs-6">
-                        {product.title}
-                      </Card.Title>
-                      <Card.Text className="fw-semibold">
-                        {product.discount === 0 ? product.price + ".00 TND" : 
-                        <>
-                        <span className="current-price">{(product.price - product.discount).toFixed(2)} TND</span><br/>
-                        <span className="original-price me-3">{product.price.toFixed(2)} TND</span>
-                        <span className="discount-badge">-{product.discount}%</span>
-                        </>
-                        }
-                      </Card.Text>
-                    </Card.Body>
-                    {wishlistError && (
-                      <AiFillHeart
+          viewMode === "big" ? (
+            <Row>
+              {filterProduct.map((product) => {
+                const firstStock = product?.product_stock?.[0];
+                return (
+                  <Col xs={12} key={product.id} className="mb-4">
+                    <Card
+                      className="product-card shadow-sm position-relative big-product-card"
+                      role="button"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      <Card.Img
+                        variant="top"
+                        src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
+                        className="first-product-image"
+                      />
+                      <Card.Body>
+                        <Card.Title className="text-muted fs-4 fw-bold">
+                          {product.title}
+                        </Card.Title>
+                        <Card.Text className="fw-semibold fs-5">
+                          {product.discount === 0 ? (
+                            `${product.price}.00 TND`
+                          ) : (
+                            <>
+                              <span className="current-price me-2">
+                                {(product.price - product.discount).toFixed(2)}{" "}
+                                TND
+                              </span>
+                              <span className="original-price me-2">
+                                {product.price.toFixed(2)} TND
+                              </span>
+                              <span className="discount-badge">
+                                -{product.discount}%
+                              </span>
+                            </>
+                          )}
+                        </Card.Text>
+                      </Card.Body>
+                      {wishlistError && (
+                        <AiFillHeart
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddWishlist(product.id);
+                          }}
+                          className={`product-heart-icon ${
+                            wishlist.some(
+                              (item) => item.product_id === product.id
+                            )
+                              ? "text-danger"
+                              : ""
+                          }`}
+                        />
+                      )}
+                    </Card>
+                  </Col>
+                );
+              })}
+            </Row>
+          ) : (
+            <Row>
+              {filterProduct.map((product) => {
+                const firstStock = product?.product_stock?.[0];
+                return (
+                  <Col md={3} sm={6} xs={12} key={product.id} className="mb-4">
+                    <Card
+                      className="product-card shadow-sm position-relative"
+                      role="button"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      <Card.Img
+                        onMouseEnter={(e) => {
+                          e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.product_picture}`;
+                          e.currentTarget.style.transform = "scale(1.01)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.src = `${IMAGEURL}/products/${firstStock?.holder_product_picture}`;
+                          e.currentTarget.style.transform = "scale(1)";
+                        }}
+                        variant="top"
+                        src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
+                        style={{ height: "400px", objectFit: "cover" }}
+                      />
+                      <Card.Body>
+                        <Card.Title className="text-muted fs-6">
+                          {product.title}
+                        </Card.Title>
+                        <Card.Text className="fw-semibold">
+                          {product.discount === 0 ? (
+                            `${product.price}.00 TND`
+                          ) : (
+                            <>
+                              <span className="current-price me-2">
+                                {(product.price - product.discount).toFixed(2)}{" "}
+                                TND
+                              </span>
+                              <br />
+                              <span className="original-price me-2">
+                                {product.price.toFixed(2)} TND
+                              </span>
+                              <span className="discount-badge">
+                                -{product.discount}%
+                              </span>
+                            </>
+                          )}
+                        </Card.Text>
+                      </Card.Body>
+                      {wishlistError && (
+                        <div
+                        className="product-heart-container"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAddWishlist(product.id);
                         }}
-                        className={`product-heart-icon ${
-                          wishlist.some((item) => item.product_id === product.id)
-                            ? "text-danger"
-                            : ""
-                        }`}
-                      />
-                    )}
-                  </Card>
-                </Col>
-              );
-            })}
-          </Row>
+                      >
+                        <AiFillHeart
+                          className={`product-heart-icon ${
+                            wishlist.some((item) => item.product_id === product.id)
+                              ? "text-danger"
+                              : ""
+                          }`}
+                        />
+                      </div>
+                      
+                      )}
+                    </Card>
+                  </Col>
+                );
+              })}
+            </Row>
+          )
         ) : (
           <p>No products available</p>
         )}
