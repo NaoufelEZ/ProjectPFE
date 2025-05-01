@@ -3,9 +3,11 @@ import "./leftBarStyle.css"
 import Cookies from 'universal-cookie';
 import { ApiKey,APIURL } from '../Api/Api';
 import axios from 'axios';
+import useUser from '../Hooks/useUser';
 const LeftBar = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth"); 
+  const user = useUser();
   const navigate = useNavigate();
   const handleLogout = () => {
     axios.get(`${APIURL}/logout`,{
@@ -23,6 +25,10 @@ const LeftBar = () => {
   return (
     <div className='p-0 me-5 '>
         <ul>
+          <div>
+          <span className='h5'>Hi {user?.first_name}</span>
+          <p>{user?.email}</p>
+          </div>
             <li className="d-block pt-2 pb-2">
               <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"}  to="/setting/purchases">My purchases</NavLink>
             </li>

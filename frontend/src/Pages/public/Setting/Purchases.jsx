@@ -166,7 +166,7 @@ console.log(orders)
                             {order.order_items?.map((item) => (
                               <div key={item.id} className="order-item">
                                 <span>{item.name}</span>
-                                <span>{item.quantity} × {item.price} TND</span>
+                                <span>{item.quantity} × {item.price.toFixed(2)} TND</span>
                               </div>
                             ))}
                           </div>

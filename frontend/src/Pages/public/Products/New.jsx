@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ApiKey, APIURL, IMAGEURL } from "../../../Api/Api";
 import Header from "../../../Components/Header";
 import "./products.css";
@@ -13,9 +13,10 @@ import { faSliders } from "@fortawesome/free-solid-svg-icons";
 import Filter from "../../../Components/Filter";
 import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import ViewToggleIcon from "../../../Pages/public/Products/Components/ViewToggleIcon";
+import { WishlistContext } from "../../../Context/WishlistContext";
+import ViewToggleIcon from "./Components/ViewToggleIcon";
 
-const New = () => {
+const Products = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -28,6 +29,7 @@ const New = () => {
   const { cat } = useParams();
   const cookie = new Cookies();
   const token = cookie.get("auth");
+  const { setWishlistChange } = useContext(WishlistContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,6 +66,7 @@ const New = () => {
   }, [change]);
 
   const handleAddWishlist = async (id) => {
+    setWishlistChange((prev) => prev + 1);
     try {
       await axios.post(
         `${APIURL}/wishlist/add/${id}`,
@@ -85,7 +88,9 @@ const New = () => {
   return (
     <>
       <Helmet>
-        <title>{cat}'s New | Nalouti Store</title>
+        <title>
+          {cat}'s New | Nalouti Store
+        </title>
       </Helmet>
       <Filter
         setIsOpen={setIsOpen}
@@ -95,50 +100,54 @@ const New = () => {
       />
       <Header />
       <Container className="py-5">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="fw-bold">New Items</h2>
-          <div className="d-flex align-items-center gap-2">
-            {/* View Toggle Button */}
-            <ViewToggleIcon
-              active={viewMode === "grid"}
-              onToggle={() =>
-                setViewMode((prev) => (prev === "grid" ? "big" : "grid"))
-              }
-            />
+  <div className="d-flex justify-content-between align-items-center mb-4">
+    <h2 className="fw-bold text-capitalize">
+      New
+    </h2>
+    <div className="d-flex align-items-center gap-2">
+      {/* View Toggle Button */}
+      <ViewToggleIcon
+        active={viewMode === "grid"}
+        onToggle={() =>
+          setViewMode((prev) => (prev === "grid" ? "big" : "grid"))
+        }
+      />
 
-            {/* Filter Button */}
-            <div
-              onClick={() => setIsOpen(true)}
-              role="button"
-              className="d-flex align-items-center"
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "12px",
-                padding: "8px 16px",
-                height: "40px",
-                backgroundColor: "#fff",
-                cursor: "pointer",
-              }}
-            >
-              <div
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  backgroundColor: "#f5f5f5",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "4px",
-                }}
-              >
-                <FontAwesomeIcon icon={faSliders} />
-              </div>
-              <span className="ms-2 fw-medium" style={{ fontSize: "15px" }}>
-                Filter
-              </span>
-            </div>
-          </div>
+      {/* Filter Button */}
+      <div
+        onClick={() => setIsOpen(true)}
+        role="button"
+        className="d-flex align-items-center"
+        style={{
+          border: "1px solid #ccc",
+          borderRadius: "12px",
+          padding: "8px 16px",
+          height: "40px",
+          backgroundColor: "#fff",
+          cursor: "pointer",
+        }}
+      >
+        <div
+          style={{
+            width: "24px",
+            height: "24px",
+            backgroundColor: "#f5f5f5",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "4px",
+          }}
+        >
+          <FontAwesomeIcon icon={faSliders} />
         </div>
+        <span className="ms-2 fw-medium" style={{ fontSize: "15px" }}>
+          Filter
+        </span>
+      </div>
+    </div>
+  </div>
+
+
 
         {error ? (
           <p>Products are empty</p>
@@ -165,14 +174,29 @@ const New = () => {
                       <Card.Img
                         variant="top"
                         src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
-                        className="big-product-img"
+                        className="first-product-image"
                       />
                       <Card.Body>
-                        <Card.Title className="text-muted fs-6">
+                        <Card.Title className="text-muted fs-4 fw-bold">
                           {product.title}
                         </Card.Title>
-                        <Card.Text className="fw-semibold">
-                          {product.price}.00 TND
+                        <Card.Text className="fw-semibold fs-5">
+                          {product.discount === 0 ? (
+                            `${product.price}.00 TND`
+                          ) : (
+                            <>
+                              <span className="current-price me-2">
+                                {(product.price - product.discount).toFixed(2)}{" "}
+                                TND
+                              </span>
+                              <span className="original-price me-2">
+                                {product.price.toFixed(2)} TND
+                              </span>
+                              <span className="discount-badge">
+                                -{product.discount}%
+                              </span>
+                            </>
+                          )}
                         </Card.Text>
                       </Card.Body>
                       {wishlistError && (
@@ -182,7 +206,9 @@ const New = () => {
                             handleAddWishlist(product.id);
                           }}
                           className={`product-heart-icon ${
-                            wishlist.some((item) => item.product_id === product.id)
+                            wishlist.some(
+                              (item) => item.product_id === product.id
+                            )
                               ? "text-danger"
                               : ""
                           }`}
@@ -222,21 +248,42 @@ const New = () => {
                           {product.title}
                         </Card.Title>
                         <Card.Text className="fw-semibold">
-                          {product.price}.00 TND
+                          {product.discount === 0 ? (
+                            `${product.price}.00 TND`
+                          ) : (
+                            <>
+                              <span className="current-price me-2">
+                                {(product.price - product.discount).toFixed(2)}{" "}
+                                TND
+                              </span>
+                              <br />
+                              <span className="original-price me-2">
+                                {product.price.toFixed(2)} TND
+                              </span>
+                              <span className="discount-badge">
+                                -{product.discount}%
+                              </span>
+                            </>
+                          )}
                         </Card.Text>
                       </Card.Body>
                       {wishlistError && (
+                        <div
+                        className="product-heart-container"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddWishlist(product.id);
+                        }}
+                      >
                         <AiFillHeart
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddWishlist(product.id);
-                          }}
                           className={`product-heart-icon ${
                             wishlist.some((item) => item.product_id === product.id)
                               ? "text-danger"
                               : ""
                           }`}
                         />
+                      </div>
+                      
                       )}
                     </Card>
                   </Col>
@@ -252,4 +299,4 @@ const New = () => {
   );
 };
 
-export default New;
+export default Products;
