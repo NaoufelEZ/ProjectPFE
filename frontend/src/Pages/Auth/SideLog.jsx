@@ -7,6 +7,8 @@ import LeftLogin from './SideLogin';
 import SideRegister from './SideRegister';
 import SideVerify from './SideVerify';
 import SideForgotten from './SideForgotten';
+import SideNewPassword from './SideNewPassword';
+import SideForgottenVerify from './SideForgottenVerify';
 
 function SideLog({ setLog }) {
   const [currentUse, setCurrentUse] = useState({"log":"login"});
@@ -40,8 +42,12 @@ function SideLog({ setLog }) {
       <SideRegister currentUse={setCurrentUse}/>
       ) : currentUse.log === "verify" ? (
         <SideVerify currentUse={currentUse} setCurrentUse={setCurrentUse}  />
-      ) : currentUse.log === "forgotten" &&  (
-        <SideForgotten />
+      ) : currentUse.log === "forgotten" ?  (
+        <SideForgotten setCurrentUse={setCurrentUse} />
+      ) : currentUse.log === "Forgotten Verify" ? (
+        <SideForgottenVerify currentUse={currentUse} setCurrentUse={setCurrentUse} />
+      ) : (
+        <SideNewPassword setCurrentUse={setCurrentUse} />
       )
       }
   </div>

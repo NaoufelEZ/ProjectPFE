@@ -11,7 +11,7 @@ const RegisterSchema = Yup.object().shape({
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/, "Invalid email address")
     .required("Email is required"),
 });
-const SideForgotten = () => {
+const SideForgotten = ({ setCurrentUse }) => {
     const notify = () => toast.error("Email Not Found.");
  
     const [loading,setLoading] = useState(false);
@@ -32,6 +32,7 @@ const SideForgotten = () => {
               }
             }
           )
+          setCurrentUse({log:"Forgotten Verify",hash:response.data.token})
       }catch(err){
         notify();
       }

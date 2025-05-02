@@ -15,7 +15,7 @@ const SideForgottenVerify = ({ currentUse,setCurrentUse }) => {
       e.preventDefault();
       setLoading(true)
       try{
-      await axios.put(`${APIURL}/register_send_verify/${hash}`,{
+      await axios.put(`${APIURL}/password_verify/${hash}`,{
         code:otp
       },
       {
@@ -24,7 +24,7 @@ const SideForgottenVerify = ({ currentUse,setCurrentUse }) => {
         "x-api-key":ApiKey
       }
     })
-    setCurrentUse({log:"login"})
+    setCurrentUse({log:"New Password"})
     }catch(err){
       console.log(err);
       const errCode = err.response.data.status;

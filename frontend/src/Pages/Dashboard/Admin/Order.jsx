@@ -21,6 +21,7 @@ const Order = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [deliveryCompany, setDeliveryCompany] = useState([]);
   const [orderStatus, setOrderStatus] = useState("Pending");
+  const [checkOrderStatus, setCheckOrderStatus] = useState("Pending");
   const [loading, setLoading] = useState(true);
 
   const { ordId } = useParams();
@@ -52,6 +53,7 @@ const Order = () => {
         const orderData = response.data.data;
         setOrder(orderData);
         setOrderStatus(orderData.status);
+        setCheckOrderStatus(orderData.status);
 
         const total = orderData.order_items.reduce((sum, item) => {
           return sum + item.price * item.quantity;
@@ -103,7 +105,7 @@ const Order = () => {
             },
           }
         );
-        navigate("/orders");
+        navigate("/dashboard/orders");
       } catch (error) {
         console.error("Error updating order:", error);
       }
@@ -342,8 +344,8 @@ const Order = () => {
                         !!formik.errors.delivery_company
                       }
                       disabled={
-                        formik.values.order_status !== "Pending" &&
-                        formik.values.order_status !== "Processing"
+                        checkOrderStatus !== "Pending" &&
+                        checkOrderStatus !== "Processing"
                       }
                     >
                       <option value="">Select Delivery Company</option>
