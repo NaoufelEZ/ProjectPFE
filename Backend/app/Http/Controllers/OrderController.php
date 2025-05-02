@@ -86,6 +86,7 @@ class OrderController extends Controller
             $order->update([
                 "status" => $orderValidate["deliveryStatus"],
                 "delivery_company" => $orderValidate["deliveryCompany"],
+                "order_update"=>now(),
             ]);
             $orderItems = OrderItems::with("product_stock")->where("order_id",$id)->get();
             if($orderValidate["deliveryStatus"] == "Shipped"){
@@ -118,6 +119,7 @@ class OrderController extends Controller
         }
         $order->status = "Processing";
         $order->dot_notify = true;
+        $order->order_update = now();
         $order->save();
        
         return response()->json(["message"=>"Order Are Checked","status"=>200],200);
