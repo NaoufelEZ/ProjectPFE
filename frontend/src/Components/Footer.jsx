@@ -2,10 +2,20 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Facebook, Instagram } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FiMail } from "react-icons/fi";
+import { useState } from "react";
+import ContactModal from "./Footer/ContactModal";
+import FooterCompany from "./Footer/FooterCompany";
 
 export default function Footer() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <footer className="footer bg-white text-dark py-4 border-top position-relative z-1">
+      {
+        showModal && (
+          <FooterCompany show={showModal} handleClose={setShowModal} />
+        )
+      }
       <Container>
         <Row className="g-4">
           {/* Navigation Links */}
@@ -20,11 +30,16 @@ export default function Footer() {
           </Col>
           
           <Col md={3} sm={6}>
-            <h5 className="text-uppercase fw-bold mb-3" style={{ letterSpacing: "1px" }}>Company</h5>
-            <ul className="list-unstyled">
-              <li><Link to="/about" className="text-dark text-decoration-none hover-underline">About Us</Link></li>
-            </ul>
-          </Col>
+  <h5 className="text-uppercase fw-bold mb-3" style={{ letterSpacing: "1px" }}>Company</h5>
+  <ul className="list-unstyled">
+    <li>
+      <span role="button" onClick={()=>setShowModal(true)} className="text-dark text-decoration-none hover-underline">
+        <FiMail style={{ marginRight: "8px" }} />
+        Send email
+      </span>
+    </li>
+  </ul>
+</Col>
           
           <Col md={3} sm={6}>
             <h5 className="text-uppercase fw-bold mb-3" style={{ letterSpacing: "1px" }}>Legal</h5>
@@ -59,14 +74,7 @@ export default function Footer() {
               </a>
             </div>
             
-            {/* Newsletter Signup (Optional) */}
-            <div className="mt-4">
-              <p className="small mb-2">Subscribe to our newsletter</p>
-              <div className="input-group">
-                <input type="email" className="form-control form-control-sm" placeholder="Your email" />
-                <button className="btn btn-dark btn-sm" type="button">Subscribe</button>
-              </div>
-            </div>
+            
           </Col>
         </Row>
         

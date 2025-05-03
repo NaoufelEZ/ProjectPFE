@@ -1,90 +1,126 @@
-import { Button, Form } from 'react-bootstrap';
-import { ApiKey,APIURL } from '../../../Api/Api';
+import { Button, Form, Card, Container, Spinner } from 'react-bootstrap';
+import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Helmet } from "react-helmet-async";
 import { useFormik } from 'formik';
-import * as Yup  from 'yup';
+import * as Yup from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { IoArrowBack } from 'react-icons/io5';
 
 const categorySchema = Yup.object().shape({
-    category:Yup.string().matches(/^[a-zA-Z]+$/, "Category should be alphabetic").min(3,"Category should at less be 3 characters").required("Category required")
+  category: Yup.string()
+    .matches(/^[a-zA-Z]+$/, "Category should be alphabetic")
+    .min(3, "Category should at least be 3 characters")
+    .required("Category required"),
 });
 
-
-
 const Category = () => {
+  const [categorySelected, setCategorySelected] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-    const [categorySelected,setCategorySelected] = useState([]);
-
-    const cookie = new Cookies();
-    const token = cookie.get("auth");
-    const { catId } = useParams();
-
-    useEffect(()=>{
-        axios.get(`${APIURL}/admin/category/${catId}`,{
-            headers:{
-                Accept:"Application/json",
-                Authorization:`Bearer ${token}`,
-                "x-api-key":ApiKey,
-            }
-        }).then((response)=>setCategorySelected(response.data.data))
-    },[catId]);
-
+  const cookie = new Cookies();
+  const token = cookie.get("auth");
+  const { catId } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsLoading(true);
+    axios.get(`${APIURL}/admin/category/${catId}`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "x-api-key": ApiKey,
+      }
+    }).then((response) => {
+      setCategorySelected(response.data.data);
+      setIsLoading(false);
+    }).catch(() => setIsLoading(false));
+  }, [catId]);
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues:{
-        category : categorySelected?.category || "",
+    initialValues: {
+      category: categorySelected?.category || "",
     },
-    validationSchema:categorySchema,
-    onSubmit: async (value)=>{
-        try{
-        const res = await axios.put(`${APIURL}/admin/category/update/${catId}`,
-            {
-                category:value.category,
-            },
-            {
-            headers:{
-                Accept: "application/json",
-                Authorization:`Bearer ${token}`,
-                "x-api-key":ApiKey,
+    validationSchema: categorySchema,
+    onSubmit: async (value) => {
+      try {
+        await axios.put(`${APIURL}/admin/category/update/${catId}`,
+          { category: value.category },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+              "x-api-key": ApiKey,
             }
-        });
-        navigate("/dashboard/Categories")
-        }catch(err){
-            console.log(err)
-        }
+          });
+        navigate("/dashboard/Categories");
+      } catch (err) {
+        console.log(err);
+      }
     }
   });
 
-
   return (
     <>
-        <Helmet>
-            <title>Category|Nalouti Dashboard</title>
-        </Helmet>
-        <div className="w-100 p-2">
-            <div className="d-flex justify-content-between align-items-center">
-                <span className="fw-bold h5">Category Management</span>
-            </div>
-            <hr/>
-            <div>
-                <Form onSubmit={formik.handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Category</Form.Label>
-                        <Form.Control name='category' value={formik.values.category} onChange={formik.handleChange}  isInvalid={formik.touched.category && formik.errors.category} isValid={formik.touched.category && !formik.errors.category}   placeholder='Category'/>
-                    <Form.Control.Feedback type='invalid'>{formik.errors.category}</Form.Control.Feedback>
-                    <Form.Control.Feedback type='valid'>Look Good</Form.Control.Feedback>
-                    </Form.Group>
+      <Helmet>
+        <title>Edit Category | Nalouti Dashboard</title>
+      </Helmet>
 
-                    <Button type='submit'>Save</Button>
-                </Form>
-        
-            </div>
-        </div>
+      <Container fluid className="py-4">
+        <Button 
+          variant="outline-secondary" 
+          onClick={() => navigate("/dashboard/Categories")}
+          className="mb-3 d-flex align-items-center"
+        >
+          <IoArrowBack className="me-2" /> Back to List
+        </Button>
+
+        <Card className="shadow-sm">
+          <Card.Header className="bg-white py-3">
+            <h5 className="mb-0 fw-bold">Edit Category</h5>
+          </Card.Header>
+
+          <Card.Body>
+            {isLoading ? (
+              <div className="text-center py-5">
+                <Spinner animation="border" variant="primary" />
+                <p className="mt-2">Loading category...</p>
+              </div>
+            ) : (
+              <Form onSubmit={formik.handleSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Category <span className="text-danger">*</span></Form.Label>
+                  <Form.Control 
+                    name="category" 
+                    value={formik.values.category} 
+                    onChange={formik.handleChange}
+                    isInvalid={formik.touched.category && !!formik.errors.category}
+                    isValid={formik.touched.category && !formik.errors.category}
+                    placeholder="Enter category name"
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {formik.errors.category}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <div className="d-flex justify-content-end mt-3">
+                  <Button type="submit" variant="primary" disabled={isLoading}>
+                    {isLoading ? (
+                      <>
+                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                        Saving...
+                      </>
+                    ) : 'Save Changes'}
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Card.Body>
+        </Card>
+      </Container>
     </>
   );
 };

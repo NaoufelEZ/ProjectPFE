@@ -69,7 +69,7 @@ const CategoryDetails = () => {
           <Card.Header className="bg-white border-bottom-0 py-3">
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h5 className="mb-0 fw-bold">Category Details Management</h5>
+                <h3 className="mb-0 fw-bold">Category Details Management</h3>
                 <small className="text-muted">Manage all category details in your system</small>
               </div>
               <Button 

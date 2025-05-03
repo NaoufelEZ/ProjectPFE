@@ -219,6 +219,7 @@ const Overview = () => {
                   <span
                     role="button"
                     onClick={() => setShowTopProductModal(true)}
+                    style={{fontSize:"15px"}}
                     className="text-primary fw-bold d-flex align-items-center"
                   >
                     <FaFire className="me-2" /> {stats.topProducts[0].title}

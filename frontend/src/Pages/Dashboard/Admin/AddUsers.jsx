@@ -20,7 +20,7 @@ const AddUserSchema = Yup.object().shape({
 });
 const AddUsers = () => {
     const [error,setError] = useState(false);
-    const nav = useNavigate();
+    const navigate = useNavigate();
     const cookie = new Cookies();
     const token = cookie.get("auth");
     const formik = useFormik({
@@ -49,7 +49,7 @@ const AddUsers = () => {
                         Authorization:`Bearer ${token}`,
                     }
                 });
-                nav("/dashboard/users");
+                navigate("/dashboard/users");
                 }catch(error){
                 setError(true);
                 }
@@ -61,7 +61,12 @@ const AddUsers = () => {
         <title>Add User|Nalouti Store</title>
     </Helmet>
     <div className="w-100 p-4">
-        <span className="fw-bold h5">User Management</span>
+    <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0">User Management</h2>
+        <Button variant="outline-secondary" onClick={() => navigate("/dashboard/users")}>
+          Go back
+        </Button>
+      </div>
         <hr/>
         <Form className="w-50" onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3 d-flex gap-2" controlId="formBasicEmail">

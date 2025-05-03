@@ -172,7 +172,7 @@ const Order = () => {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Order Details</h2>
         <Button variant="outline-secondary" onClick={() => navigate("/dashboard/orders")}>
-          Back to Orders
+          Go back
         </Button>
       </div>
 

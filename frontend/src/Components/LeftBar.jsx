@@ -30,13 +30,13 @@ const LeftBar = () => {
           <p>{user?.email}</p>
           </div>
             <li className="d-block pt-2 pb-2">
-              <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"}  to="/setting/purchases">My purchases</NavLink>
+              <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h5" : "text-muted text-decoration-none h6"}  to="/setting/purchases">My purchases</NavLink>
             </li>
             <li className="d-block pt-2 pb-2">
-              <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"} to="/setting/personal-details">Personal details</NavLink>
+              <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h5" : "text-muted text-decoration-none h6"} to="/setting/personal-details">Personal details</NavLink>
             </li>
             <li className="d-block pt-2 pb-2">
-            <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h6" : "text-muted text-decoration-none"} to="/setting/saved-addresses">Saved addresses</NavLink>
+            <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h5" : "text-muted text-decoration-none h6"} to="/setting/saved-addresses">Saved addresses</NavLink>
             </li>
         </ul>
         <span onClick={handleLogout} role="button" className="ms-3 h6">Logout</span>

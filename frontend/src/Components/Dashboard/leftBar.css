@@ -71,6 +71,7 @@
 .nav-icon {
   font-size: 1.2rem;
 }
+
 .nav-icon.active {
   font-size: 1.2rem;
   margin-right: 0;
@@ -81,6 +82,9 @@
 
 .nav-item.active {
   background-color: #007bff;
+}
+.nav-item span {
+  color: #fff;
 }
 
 .logout {

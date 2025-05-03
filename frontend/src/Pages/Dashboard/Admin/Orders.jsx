@@ -9,6 +9,9 @@ import { Helmet } from 'react-helmet-async';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import './Orders.css';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import OrderReceiptPDF from './OrderReceiptPDF'; // adjust the path as needed
+import { IoReceiptSharp } from "react-icons/io5";
 
 const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +26,7 @@ const Orders = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -44,6 +47,7 @@ const Orders = () => {
     };
     fetchOrders();
   }, [token]);
+  console.log(orders)
 
   useEffect(() => {
     setOrdersFilter(
@@ -181,7 +185,13 @@ const Orders = () => {
       </Helmet>
       <Container fluid className="py-4">
         <Row className="align-items-center mb-4">
-          <Col><h2 className="fancy-title">🧾 Order Management</h2></Col>
+          <Col>
+          <div>
+                      <h2 className="fw-bold mb-0">
+                        <IoReceiptSharp className="me-2" /> Order Management
+                      </h2>
+                    </div>
+        </Col>
           <Col className="d-flex justify-content-end gap-2">
             {selectedOrders.length > 0 && (
               <Button variant="outline-danger" onClick={generateBulkPDF}>
@@ -243,9 +253,16 @@ const Orders = () => {
                           <td>
                             <div className="d-flex gap-2">
                               <Button variant="outline-primary" size="sm" onClick={() => handleViewOrder(order.id)}><FaEye /></Button>
-                              <Button variant="outline-secondary" size="sm" onClick={() => generateSinglePDF(order)}><FaFilePdf /></Button>
-                            </div>
-                          </td>
+                              <PDFDownloadLink
+  document={<OrderReceiptPDF order={order} />}
+  fileName={`receipt-ORD-${order.id}.pdf`}
+  className="btn btn-sm btn-outline-success px-3 rounded-pill"
+>
+  <FaFilePdf />
+</PDFDownloadLink>
+
+  </div>
+</td>
                         </tr>
                       ))
                     ) : (
@@ -258,6 +275,7 @@ const Orders = () => {
                         </td>
                       </tr>
                     )}
+                    
                   </tbody>
                 </Table>
               </div>

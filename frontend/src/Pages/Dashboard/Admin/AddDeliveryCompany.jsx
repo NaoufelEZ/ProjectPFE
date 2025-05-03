@@ -66,9 +66,12 @@ const AddDeliveryCompany = () => {
         <title>Add Delivery Company|Nalouti dashboard</title>
     </Helmet>
     <div className="w-100 p-4">
-        <div className="d-flex justify-content-between align-items-center">
-                <span className="fw-bold h5">Delivery Company Management</span>
-        </div>
+    <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0">Delivery Company</h2>
+        <Button variant="outline-secondary" onClick={() => navigate("/dashboard/Delivery-company")}>
+          Go back
+        </Button>
+      </div>
         <hr/>
         <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3">

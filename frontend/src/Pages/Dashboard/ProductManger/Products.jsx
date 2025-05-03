@@ -1,5 +1,5 @@
 import { useState,useEffect } from 'react';
-import { Table, Badge, Button, Form, Pagination } from 'react-bootstrap';
+import { Table, Button, Form, Pagination } from 'react-bootstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import useUser from '../../../Hooks/useUser';
 import { ApiKey,APIURL } from '../../../Api/Api';
@@ -10,6 +10,7 @@ import { IoMdEye } from "react-icons/io";
 import StatusBox from './StatusBox';
 import useDeleteItem from '../../../Hooks/useDeleteItem';
 import { useNavigate } from 'react-router-dom';
+import { AiFillProduct } from "react-icons/ai";
 
 
 
@@ -73,7 +74,7 @@ const Products = () => {
     <StatusBox isStatusOpen={isStatusOpen} setIsStatusOpen={setIsStatusOpen} data={selectedProduct} />
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
-      <span className="fw-bold h5">Inventory Management</span>
+      <span className="fw-bold h3"> <AiFillProduct/> Inventory Management</span>
       <div className="d-flex align-items-center">
         <Form.Control onChange={(e)=>setSearch(e.target.value)} value={search} className="me-3"  placeholder="Search Inventory"/>
         {

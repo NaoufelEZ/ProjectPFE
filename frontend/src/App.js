@@ -62,12 +62,12 @@ import Delivery from "./Pages/Dashboard/Admin/Delivery.jsx";
 function App() {
   return (
     <Routes>
+      <Route path="/google/new/account/:token" element={<CreateAccountWithGoogle />}/>
     <Route element={<UseRule />}>
      <Route path="/" element={<Navigate to="/Men" replace />} />
      <Route path="/:cat" element={<Home/>} />
-    <Route path="/addressbox" element={<AddressBox />} />
+      <Route path="/addressbox" element={<AddressBox />} />
       <Route path="/google/account/:token" element={<ConnectWithGoogle />}/>
-      <Route path="/google/new/account/:token" element={<CreateAccountWithGoogle />}/>
       
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />

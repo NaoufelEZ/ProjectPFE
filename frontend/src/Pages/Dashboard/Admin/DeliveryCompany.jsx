@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import useDeleteItem from '../../../Hooks/useDeleteItem';
-
+import { TbTruckDelivery } from "react-icons/tb";
 
 const DeliveryCompany = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -88,7 +88,7 @@ const navigate = useNavigate();
     </Helmet>
     <div className="w-100 p-2">
     <div className="d-flex justify-content-between align-items-center">
-      <span className="fw-bold h5">Delivery Company Management</span>
+      <span className="fw-bold h3"><TbTruckDelivery /> Delivery Company Management</span>
       <Button onClick={()=>navigate("/dashboard/delivery-company/add")}>Add New Company</Button>
     </div>
     <hr/>

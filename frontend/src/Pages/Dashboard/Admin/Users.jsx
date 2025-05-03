@@ -221,7 +221,6 @@ const Users = () => {
             <h2 className="fw-bold mb-0">
               <FaUserCog className="me-2" /> User Management
             </h2>
-            <p className="text-muted mb-0">Manage all system users and their permissions</p>
           </div>
           
           <Button 
@@ -372,12 +371,7 @@ const Users = () => {
                           <tr>
                             <td colSpan="7" className="text-center py-5">
                               <div className="text-muted">
-                                <img 
-                                  src="/images/no-data.svg" 
-                                  alt="No users found" 
-                                  style={{ width: '120px', opacity: 0.7 }}
-                                  className="mb-3"
-                                />
+                                
                                 <h5>No users found</h5>
                                 <p className="mb-0">Try adjusting your search or filters</p>
                               </div>
