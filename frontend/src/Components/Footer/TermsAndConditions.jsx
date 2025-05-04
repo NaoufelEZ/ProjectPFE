@@ -1,8 +1,12 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import Header from "../Header";
+import Footer from "../Footer";
 
 export default function TermsAndConditions() {
   return (
+    <>
+    <Header />
     <Container className="py-5">
       <h2 className="mb-4">Terms and Conditions</h2>
       <p><strong>Effective Date:</strong> May 2, 2025</p>
@@ -56,5 +60,7 @@ export default function TermsAndConditions() {
         📍 Address: 8FWR+6PP, Medenine, Tunisia
       </p>
     </Container>
+    <Footer />
+    </>
   );
 }

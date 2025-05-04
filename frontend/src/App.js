@@ -57,6 +57,7 @@ import SubcategoryPage from "./Pages/public/Products/SubcategoryPage.jsx";
 import ConnectWithGoogle from "./Pages/Auth/ConnectWithGoogle.jsx";
 import CreateAccountWithGoogle from "./Pages/Auth/CreateAccountWithGoogle.jsx";
 import Delivery from "./Pages/Dashboard/Admin/Delivery.jsx";
+import TermsAndConditions from "./Components/Footer/TermsAndConditions.jsx";
 
 
 function App() {
@@ -68,6 +69,16 @@ function App() {
      <Route path="/:cat" element={<Home/>} />
       <Route path="/addressbox" element={<AddressBox />} />
       <Route path="/google/account/:token" element={<ConnectWithGoogle />}/>
+
+      <Route path="/customer-service" element={<TermsAndConditions />}/>
+      <Route path="/track-order" element={<TermsAndConditions />}/>
+      <Route path="/returns-exchanges" element={<TermsAndConditions />}/>
+      <Route path="/faqs" element={<TermsAndConditions />}/>
+
+      <Route path="/privacy-policy" element={<TermsAndConditions />}/>
+      <Route path="/cookies-policy" element={<TermsAndConditions />}/>    
+      <Route path="/terms" element={<TermsAndConditions />}/>
+
       
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />

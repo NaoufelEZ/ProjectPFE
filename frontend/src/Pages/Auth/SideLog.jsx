@@ -47,7 +47,7 @@ function SideLog({ setLog }) {
       ) : currentUse.log === "Forgotten Verify" ? (
         <SideForgottenVerify currentUse={currentUse} setCurrentUse={setCurrentUse} />
       ) : (
-        <SideNewPassword setCurrentUse={setCurrentUse} />
+        <SideNewPassword currentUse={currentUse} setCurrentUse={setCurrentUse} />
       )
       }
   </div>

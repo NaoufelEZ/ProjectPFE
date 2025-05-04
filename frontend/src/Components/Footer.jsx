@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { FiMail } from "react-icons/fi";
 import { useState } from "react";
 import ContactModal from "./Footer/ContactModal";
-import FooterCompany from "./Footer/FooterCompany";
 
 export default function Footer() {
   const [showModal, setShowModal] = useState(false);
@@ -13,7 +12,7 @@ export default function Footer() {
     <footer className="footer bg-white text-dark py-4 border-top position-relative z-1">
       {
         showModal && (
-          <FooterCompany show={showModal} handleClose={setShowModal} />
+          <ContactModal show={showModal} handleClose={setShowModal} />
         )
       }
       <Container>

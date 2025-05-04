@@ -13,6 +13,7 @@ import { ApiKey, APIURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
 import Swal from 'sweetalert2';
 import './Profile.css';
+import { toast } from 'react-toastify';
 
 const updateProfile = Yup.object().shape({
   first_name: Yup.string()
@@ -34,6 +35,7 @@ const Profile = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (user) setLoading(false);
@@ -47,8 +49,31 @@ const Profile = () => {
       phone: user?.phone || "",
     },
     validationSchema: updateProfile,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.put(`${APIURL}/user/update/profile`, values, {
+          headers: {  
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+            'x-api-key': ApiKey,
+          },
+        }
+            );
+        console.log(response)
+        if (response.status === 200) {
+          toast.success('Your profile has been updated successfully');
+          window.location.reload();
+          // Optionally refresh user data here if needed
+        }
+      } catch (error) {
+        const errorMessage = error.response?.data?.message || 
+            (error.response?.data?.errors ? 
+            Object.values(error.response.data.errors).join(' ') : 
+            'Failed to update profile');
+        toast.error(errorMessage);
+      } finally {
+        setIsSubmitting(false);
+      }
     },
   });
 
@@ -149,9 +174,14 @@ const Profile = () => {
                 </div>
               </div>
               
-              <Button variant="dark" size="lg" type="submit" className="save-button">
-                Save Changes
-              </Button>
+                <Button
+                  variant="dark"
+                  type="submit"
+                  disabled={isSubmitting || !formik.dirty}
+                  className="px-4"
+                            >
+                              {isSubmitting ? 'Saving...' : 'Save'}
+                            </Button>
             </Form>
           </Card.Body>
         </Card>

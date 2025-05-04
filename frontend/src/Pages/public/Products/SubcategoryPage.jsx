@@ -32,7 +32,7 @@ const SubcategoryPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${APIURL}/products/${cat}/${sub}`, {
+      .get(`${APIURL}/subcategory/products/${cat}/${sub}`, {
         headers: {
           Accept: "application/json",
           "x-api-key": ApiKey,

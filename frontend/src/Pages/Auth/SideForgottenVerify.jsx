@@ -24,7 +24,7 @@ const SideForgottenVerify = ({ currentUse,setCurrentUse }) => {
         "x-api-key":ApiKey
       }
     })
-    setCurrentUse({log:"New Password"})
+    setCurrentUse({log:"New Password",hash:hash})
     }catch(err){
       console.log(err);
       const errCode = err.response.data.status;
@@ -60,7 +60,17 @@ const SideForgottenVerify = ({ currentUse,setCurrentUse }) => {
                       renderInput={(props) => <input {...props} />}
                     />
 
-              <Button variant="primary" type="submit">Verify</Button>
+              <Button
+               variant="primary"
+               type="submit"
+               className="w-100 py-2 fw-bold text-uppercase mt-3"
+               style={{
+                 background: 'linear-gradient(45deg, #e83e8c, #6f42c1)',
+                 border: 'none',
+                 letterSpacing: '1px',
+               }}
+               disabled={loading}
+              >Verify</Button>
             </Form>
                 </Card.Body>
               </Card>
