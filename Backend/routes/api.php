@@ -85,7 +85,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         // public
         Route::get("/products/{cat}/{subcat}/{detail}","index");
         Route::get("/products/{cat}/new","new");
-        Route::get("/products/subcategory/{cat}/{sub}","subcategory");
+        Route::get("/subcategory/products/{cat}/{sub}","subcategory");
         Route::get("products/product/{id}","product");
         Route::get("/products","roleIndex");
         // private
