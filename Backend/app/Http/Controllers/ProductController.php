@@ -8,118 +8,265 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\Subcategories;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException as ValidationException;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    public function index($cat,$subcat,$detail){
-        $wordDetail =strtolower($detail) == "t-shirts" ? "T-SHIRTS" :  str_replace("-"," ",$detail);
-        $categoryId = Categories::where("category",$cat)->first();
-        $subcategoryId = Subcategories::where("subcategories",$subcat)->where("category_id",$categoryId->id)->first();
-        $detailId = CategoryDetails::where("categoryDetails", $wordDetail)->where("category_id",$categoryId->id)->where("subcategory_id",$subcategoryId->id)->first();
-        $products = Product::with('productStock')->where("details_id",$detailId->id)->get();
-        if($products->isEmpty()){
-            return response()->json(["data"=>"Products is Empty","status"=>404], 404);
-        }
-        return response()->json(["data"=>$products,"status"=>200], 200);
-    }
-    public function store(request $request){
-        try{
-            $validProduct = $request->validate([
-                "title"=>"required|string|min:3",
-                "description"=>"required|string|min:3",
-                "price"=>"required|numeric",
-                "discount"=>"required|numeric",
-                "details_id"=>"required|numeric",
-            ]);
-            $product = Product::create([
-                "title"=>$validProduct["title"],
-                "description"=>$validProduct["description"],
-                "price"=>$validProduct["price"],
-                "discount"=>$validProduct["discount"],
-                "details_id"=>$validProduct["details_id"],
-            ]);
-            $colors = $request->colors;
-            $sizes = $request->sizes;
-            $quantity = $request->quantity;
-            $product_pictures = $request->file("product_pictures");
-            $holder_product_pictures = $request->file("holder_product_picture");
-            foreach($colors as $key => $color){
-                $fileExtension = $product_pictures[$key]->getClientOriginalExtension();
-                $fileName = time() . "_" . uniqid() . "." . $fileExtension;
-                $path = public_path("images/products/");
-                $product_pictures[$key]->move($path,$fileName);
-
-                $fileExtensionHolder = $holder_product_pictures[$key]->getClientOriginalExtension();
-                $fileNameHolder = time() . "_" . uniqid() . "." . $fileExtensionHolder;
-                $path = public_path("images/products/");
-                $holder_product_pictures[$key]->move($path,$fileNameHolder);
-                ProductStock::create([
-                    "product_id"=>$product->id,
-                    "color"=>$color,
-                    "product_picture"=>$fileName,
-                    "holder_product_picture"=>$fileNameHolder,
-                    "quantity"=>$quantity[$key],
-                    "size"=>$sizes[$key],
-                ]);
-            }
-            return response()->json(["data"=>"Product has been created","status"=>201], 201);
-
-        }
-        catch(ValidationException $e){
-            return response()->json(["data"=>$e->errors(),"status"=>422], 422);
-        }
-    }
-    public function product($id){
-        $product = Product::with("productStock")->find($id);
-        if(!$product){
-            return response()->json(["data"=>"Product Not Found","status"=>404], 404);
-        }
-        return response()->json(["data"=>$product,"status"=>200], 200);
-    }
-    public function roleIndex(){
-        $products = Product::with(["productStock","details"])->get();
-        if($products->isEmpty()){
-            return response()->json(["message"=>"Not Products","status"=>404],404);
-        }
-        return response()->json(["message"=>"succeed","data"=>$products,"status"=>200],200);
-    }
-    
-    public function delete($id) {
-        $product = Product::find($id);
-        if(!$product){
-            return response()->json(["message"=>"Product Not Found","status"=>404],404);
-        }
-        $product->delete();
-        return response()->json(["message"=>"Product deleted successfully","status"=>200],200);
+    // Public routes
+    public function index($cat, $subcat, $detail)
+    {
+        $wordDetail = strtolower($detail) == "t-shirts" ? "T-SHIRTS" : str_replace("-", " ", $detail);
+        $categoryId = Categories::where("category", $cat)->first();
         
+        if(!$categoryId) {
+            return response()->json(["data" => "Category not found", "status" => 404], 404);
+        }
+
+        $subcategoryId = Subcategories::where("subcategories", $subcat)
+            ->where("category_id", $categoryId->id)
+            ->first();
+
+        if(!$subcategoryId) {
+            return response()->json(["data" => "Subcategory not found", "status" => 404], 404);
+        }
+
+        $detailId = CategoryDetails::where("categoryDetails", $wordDetail)
+            ->where("category_id", $categoryId->id)
+            ->where("subcategory_id", $subcategoryId->id)
+            ->first();
+
+        if(!$detailId) {
+            return response()->json(["data" => "Category detail not found", "status" => 404], 404);
+        }
+
+        $products = Product::with('productStock')->where("details_id", $detailId->id)->get();
+        
+        return $products->isEmpty()
+            ? response()->json(["data" => "No products found", "status" => 404], 404)
+            : response()->json(["data" => $products, "status" => 200], 200);
     }
-    public function new($cat){
-        $products = Product::with(["details.category","productStock"])
+
+    public function new($cat)
+    {
+        $products = Product::with(["details.category", "productStock"])
             ->whereHas('details.category', function($query) use ($cat) {
                 $query->where('category', $cat);
             })
             ->latest('created_at')
             ->get();
         
-        return response()->json(["data"=>$products,"status"=>200],200);
+        return response()->json(["data" => $products, "status" => 200], 200);
     }
+
     public function subcategory($cat, $sub)
     {
         $products = Product::with(['details.category', 'details.subcategory', 'productStock'])
-        ->whereHas('details', function ($query) use ($cat, $sub) {
-            $query->whereHas('category', function ($q) use ($cat) {
-                $q->where('category', $cat);
-            })->whereHas('subcategory', function ($q) use ($sub) {
-                $q->where('subcategories', $sub);
-            });
-        })
-        ->latest('created_at')
-        ->get();
-    
+            ->whereHas('details', function ($query) use ($cat, $sub) {
+                $query->whereHas('category', function ($q) use ($cat) {
+                    $q->where('category', $cat);
+                })->whereHas('subcategory', function ($q) use ($sub) {
+                    $q->where('subcategories', $sub);
+                });
+            })
+            ->latest('created_at')
+            ->get();
 
-        return response()->json(["data"=>$products,"status"=>200],200);
-    
+        return response()->json(["data" => $products, "status" => 200], 200);
     }
-    
+
+    public function product($id)
+    {
+        try {
+            $product = Product::with("productStock", "details.category", "details.subcategory")
+                ->findOrFail($id);
+            
+            return response()->json(["data" => $product, "status" => 200], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(["data" => "Product not found", "status" => 404], 404);
+        }
+    }
+
+    public function roleIndex()
+    {
+        $products = Product::with(["productStock","details"])->get();
+        
+        return $products->isEmpty()
+            ? response()->json(["message" => "No products found", "status" => 404], 404)
+            : response()->json(["message" => "Success", "data" => $products, "status" => 200], 200);
+    }
+
+    // Protected admin routes
+    public function store(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                "title" => "required|string|min:3",
+                "description" => "required|string|min:3",
+                "price" => "required|numeric",
+                "discount" => "numeric",
+                "details_id" => "required|numeric",
+                "colors" => "required|array",
+                "sizes" => "required|array",
+                "quantity" => "required|array",
+                "product_pictures" => "required|array",
+                "holder_pictures" => "required|array",
+            ]);
+
+            $product = Product::create([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'discount' => $validated['discount'] ?? 0,
+                'details_id' => $validated['details_id'],
+            ]);
+
+            foreach ($validated['colors'] as $index => $color) {
+                $productFile = $this->uploadImage($validated['product_pictures'][$index]);
+                $holderFile = $this->uploadImage($validated['holder_pictures'][$index]);
+
+                ProductStock::create([
+                    'product_id' => $product->id,
+                    'color' => $color,
+                    'product_picture' => $productFile,
+                    'holder_product_picture' => $holderFile,
+                    'size' => $validated['sizes'][$index],
+                    'quantity' => $validated['quantity'][$index],
+                ]);
+            }
+
+            return response()->json([
+                "data" => "Product created successfully",
+                "status" => 201
+            ], 201);
+
+        } catch (ValidationException $e) {
+            return response()->json(["data" => $e->errors(), "status" => 422], 422);
+        } catch (\Exception $e) {
+            return response()->json(["data" => $e->getMessage(), "status" => 500], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                "title" => "required|string|min:3",
+                "description" => "required|string|min:3",
+                "price" => "required|numeric",
+                "discount" => "numeric",
+                "details_id" => "required|numeric",
+                "colors" => "required|array",
+                "sizes" => "required|array",
+                "quantity" => "required|array",
+                "stock_id" => "sometimes|array",
+                "existing_product_pictures" => "sometimes|array",
+                "existing_holder_pictures" => "sometimes|array",
+            ]);
+
+            $product = Product::findOrFail($id);
+            $product->update($validated);
+
+            $existingStockIds = $product->productStock->pluck('id')->toArray();
+            $updatedStockIds = [];
+
+            foreach ($validated['colors'] as $index => $color) {
+                $stockData = [
+                    'color' => $color,
+                    'size' => $validated['sizes'][$index],
+                    'quantity' => $validated['quantity'][$index],
+                ];
+
+                // Handle product image
+                if ($request->hasFile("product_pictures.{$index}")) {
+                    $stockData['product_picture'] = $this->uploadImage(
+                        $request->file("product_pictures.{$index}")
+                    );
+                } else {
+                    $stockData['product_picture'] = $validated['existing_product_pictures'][$index] ?? null;
+                }
+
+                // Handle holder image
+                if ($request->hasFile("holder_pictures.{$index}")) {
+                    $stockData['holder_product_picture'] = $this->uploadImage(
+                        $request->file("holder_pictures.{$index}")
+                    );
+                } else {
+                    $stockData['holder_product_picture'] = $validated['existing_holder_pictures'][$index] ?? null;
+                }
+
+                // Update or create stock
+                if (!empty($validated['stock_id'][$index])) {
+                    $stock = ProductStock::find($validated['stock_id'][$index]);
+                    if ($stock) {
+                        $stock->update($stockData);
+                        $updatedStockIds[] = $stock->id;
+                    }
+                } else {
+                    $newStock = $product->productStock()->create($stockData);
+                    $updatedStockIds[] = $newStock->id;
+                }
+            }
+
+            // Delete removed stocks
+            $toDelete = array_diff($existingStockIds, $updatedStockIds);
+            if (!empty($toDelete)) {
+                ProductStock::destroy($toDelete);
+            }
+
+            return response()->json([
+                "data" => "Product updated successfully",
+                "status" => 200
+            ], 200);
+
+        } catch (ValidationException $e) {
+            return response()->json(["data" => $e->errors(), "status" => 422], 422);
+        } catch (\Exception $e) {
+            return response()->json(["data" => $e->getMessage(), "status" => 500], 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $product = Product::findOrFail($id);
+
+            // Delete associated images
+            foreach ($product->productStock as $stock) {
+                $this->deleteImage($stock->product_picture);
+                $this->deleteImage($stock->holder_product_picture);
+            }
+
+            $product->delete();
+
+            return response()->json([
+                "message" => "Product deleted successfully",
+                "status" => 200
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                "message" => "Product not found",
+                "status" => 404
+            ], 404);
+        }
+    }
+
+    // Image handling helpers
+    private function uploadImage($file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $fileName = time() . '_' . uniqid() . '.' . $extension;
+        $file->move(public_path('images/products'), $fileName);
+        return $fileName;
+    }
+
+    private function deleteImage($filename)
+    {
+        $path = public_path("images/products/{$filename}");
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
 }

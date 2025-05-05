@@ -38,11 +38,12 @@ class OrderController extends Controller
             ]);
             $ref = $this->getRandomStr();
             $user = $request->user();
-            $order = Order::create([
+            $order = $order = Order::create([
                 "reference"=>$ref,
                 "user_id"=>$user->id,
                 "address_id"=>$orderValidation["address_id"],
                 "method_payment"=>$orderValidation["paymentChoose"],
+                "status"=> $orderValidation["paymentChoose"] == "cash" ? "Pending" : "Rejected",
             ]);
             $productsStock = $orderValidation["product_stock_id"];
             $quantity = $orderValidation["quantity"];
@@ -55,7 +56,7 @@ class OrderController extends Controller
                     "quantity"=>$quantity[$key],
                 ]);
             }
-            return response()->json(["message"=>"order are add","status"=>201],201);
+            return response()->json(["message"=>"order are add","data"=>$order->reference,"status"=>201],201);
         }
         catch(ValidationException $e){
             return response()->json(["message"=>$e->errors(),"status"=>422],422);
@@ -159,19 +160,40 @@ class OrderController extends Controller
         return response()->json(["data"=>$numberOfModify],200);
     }
     public function payment(Request $request){
+        $reference = $request->reference;
+    
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->post('https://developers.flouci.com/api/generate_payment', [
             'app_token' => env('FLOUCI_APP_TOKEN'),
             'app_secret' => env('FLOUCI_APP_SECRET'),
             'amount' => $request->amount,
+            'reference' => $reference,
             'accept_card' => true,
             'session_timeout_secs' => 1200,
-            'success_link' => 'http://localhost:3000/checkout/visa-payment/order-confirmation',
+            'success_link' => "http://localhost:3000/checkout/visa-payment/order-confirmation/{$reference}",
             'fail_link' => 'https://example.com/fail',
             'developer_tracking_id' => env('FLOUCI_APP_DEVELOPER_ID'),
         ]);
     
         return $response->json();
+    }
+    
+    public function orderConfirmation($reference){
+        $order = Order::where("reference",$reference)->first();
+        if(!$order){
+            return response()->json(["message"=>"Order Not Found","status"=>404],404);
+        }
+        $order->update([
+            "status"=>"Shipped",
+            "order_update"=>now(),
+        ]);
+        $orderItems = OrderItems::with("product_stock")->where("order_id",$order->id)->get();
+            foreach($orderItems as $orderItem){
+                $currentStock = $orderItem->product_stock->quantity - $orderItem->quantity;
+                ProductStock::find($orderItem->product_stock->id)->update([
+                    "quantity"=>$currentStock,
+                ]);
+        }
     }
 }
