@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheckCircle, FaCcVisa, FaTruck, FaReceipt } from 'react-icons/fa';
+import { ApiKey, APIURL } from '../../../Api/Api';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 const VisaOrderConfirmation = () => {
+  const cookie = new Cookies();
+  const tokenAuth = cookie.get("auth"); 
+  const { token } = useParams();
+  useEffect(() => {
+  
+    axios.put(`${APIURL}/order/confirmation/${token}`, {}, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${tokenAuth}`,
+        "x-api-key": ApiKey, 
+      }
+    });
+    
+  }, [], [token]);
   const navigate = useNavigate();
   const transactionId = `TXN${Math.floor(1000000000 + Math.random() * 9000000000)}`;
   

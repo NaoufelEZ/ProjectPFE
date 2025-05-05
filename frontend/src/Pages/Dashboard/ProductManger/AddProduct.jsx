@@ -13,7 +13,7 @@ const ProductForm = () => {
   const [detail, setDetail] = useState([]);
   const [colorSearch, setColorSearch] = useState("");
   const [colorSelects, setColorSelects] = useState([
-    { name: "", image: null, sizes: [{ size: "", quantity: "" }] },
+    { name: "", holderProductPicture: null,productPicture :null, sizes: [{ size: "", quantity: "" }] },
   ]);
   const [product, setProduct] = useState({
     title: "",
@@ -72,7 +72,7 @@ const ProductForm = () => {
   }, [product.category, product.subcategory]);
 
   const addColorSelect = () => {
-    setColorSelects([...colorSelects, { name: "", image: null, sizes: [{ size: "", quantity: "" }] }]);
+    setColorSelects([...colorSelects, { name: "", holderProductPicture: null,productPicture :null, sizes: [{ size: "", quantity: "" }] }]);
   };
 
   const removeColorSelect = (index) => {
@@ -103,9 +103,14 @@ const ProductForm = () => {
     );
   };
 
-  const handleImageChange = (colorIndex, file) => {
+  const handleProductPictureChange = (colorIndex, file) => {
     setColorSelects(prev =>
-      prev.map((item, index) => (index === colorIndex ? { ...item, image: file } : item))
+      prev.map((item, index) => (index === colorIndex ? { ...item, productPicture: file } : item))
+    );
+  };
+  const handleHolderProductPictureChange = (colorIndex, file) => {
+    setColorSelects(prev =>
+      prev.map((item, index) => (index === colorIndex ? { ...item, holderProductPicture : file } : item))
     );
   };
 
@@ -133,11 +138,13 @@ const ProductForm = () => {
       )
     );
   };
+  console.log(colorSelects)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData();
+
 
     formData.append("title", product.title);
     formData.append("description", product.description);
@@ -147,14 +154,17 @@ const ProductForm = () => {
 
     colorSelects.forEach((colorItem) => {
       formData.append(`colors[]`, colorItem.name);
-      if (colorItem.image) {
-        formData.append(`product_pictures[]`, colorItem.image);
+      if (colorItem.productPicture && colorItem.holderProductPicture) {
+        formData.append(`product_pictures[]`, colorItem.productPicture);
+        formData.append(`holder_product_picture[]`, colorItem.holderProductPicture);
       }
       colorItem.sizes.forEach((sizeItem) => {
         formData.append(`sizes[]`, sizeItem.size);
         formData.append(`quantity[]`, sizeItem.quantity);
       });
     });
+  console.log(formData.getAll("product_pictures[]"));
+
 
     try {
       const response = await axios.post(`${APIURL}/product/add`, formData, {
@@ -171,6 +181,7 @@ const ProductForm = () => {
         type: "danger",
         text: error.response?.data?.data || "An error occurred"
       });
+      console.log(error)
     } finally {
       setIsLoading(false);
     }
@@ -387,7 +398,7 @@ const ProductForm = () => {
                             <Form.Control
                               type="file"
                               accept="image/*"
-                              onChange={(e) => handleImageChange(colorIndex, e.target.files[0])}
+                              onChange={(e) => handleHolderProductPictureChange(colorIndex, e.target.files[0])}
                               required={!colorItem.image}
                             />
                           </Form.Group>
@@ -399,7 +410,7 @@ const ProductForm = () => {
                             <Form.Control
                               type="file"
                               accept="image/*"
-                              onChange={(e) => handleImageChange(colorIndex, e.target.files[0])}
+                              onChange={(e) => handleProductPictureChange(colorIndex, e.target.files[0])}
                               required={!colorItem.image}
                             />
                           </Form.Group>

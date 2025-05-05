@@ -12,7 +12,7 @@ const ContactModal = ({ show, handleClose }) => {
     e.preventDefault();
 
     emailjs
-      .sendForm("", "", formRef.current, "")
+      .sendForm("service_N1lout1", "template_h9w1vzo", formRef.current, "ywHoL7JI3TJ9Q8CqY")
       .then(() => {
         alert("Email sent successfully!");
         handleClose();

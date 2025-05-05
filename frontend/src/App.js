@@ -100,7 +100,7 @@ function App() {
       <Route path="/auth/verify" element={<AuthOtp/>} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/checkout/order-confirmation/cash" element={<CashOrderConfirmation />} />
-      <Route path="/checkout/visa-payment/order-confirmation" element={<VisaOrderConfirmation />} />
+      <Route path="/checkout/visa-payment/order-confirmation/:token" element={<VisaOrderConfirmation />} />
       <Route path="/setting"  element={<Setting />}>
         <Route path="personal-details" element={<Profile />}/>
         <Route path="saved-addresses" element={<SavedAddresses />}/>

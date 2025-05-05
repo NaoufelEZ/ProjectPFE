@@ -79,6 +79,7 @@ const Checkout = () => {
     setAddresses(prev => [...prev, newAddress]);
     setSelectedAddressId(newAddress.id);
   };
+  console.log(totalPrice)
 
  
   
@@ -121,8 +122,18 @@ const Checkout = () => {
         }
 
     } else {
+      const responseOder = await axios.post(`${APIURL}/order/add`, formData,
+        {
+            headers: {
+                Accept: "application/json",
+                "x-api-key": ApiKey,
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        const reffrence = responseOder.data.data;
        const response = await axios.post(`${APIURL}/payment`,{
-          "amount": "30500"
+          "amount": totalPrice*1000,
+          "reffrence": reffrence
         },
         {
         headers:{
@@ -131,6 +142,7 @@ const Checkout = () => {
           "x-api-key":ApiKey,        
         },
       });
+      console.log(response)
       const link = response.data.result.link;
       window.location.href = link;
     }
