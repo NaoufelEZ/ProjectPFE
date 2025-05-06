@@ -13,9 +13,11 @@ import { Col, Row } from "react-bootstrap";
 import BasketUi from "../Assets/UI/BasketUi";
 import SearchBar from "../Assets/UI/SearchBar";
 import Login2 from "../Pages/Auth/SideLog";
+import SideLog from "../Pages/Auth/SideLog";
 
 const Header = () => {
   const { cat } = useParams();
+  const [currentUse, setCurrentUse] = useState({"log":"login"});
   const [user, setUser] = useState(null);
   const [basket, setBasket] = useState(false);
   const [log, setLog] = useState(false);
@@ -300,13 +302,13 @@ const Header = () => {
 
         {basket && (
           <div className="basket-container">
-            <Basket token={token} open={basket} setBasket={setBasket} login={setLog} />
+            <Basket token={token} open={basket} setBasket={setBasket} setCurrentUse={setCurrentUse} login={setLog} />
           </div>
         )}
         {log && (
           <div className="basket-container">
 
-            <Login2 setLog={setLog} />
+            <SideLog currentUse={currentUse} setCurrentUse={setCurrentUse} setLog={setLog} />
           </div>
         )}
       </header>

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaCcVisa, FaTruck, FaReceipt } from 'react-icons/fa';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
@@ -8,19 +8,45 @@ import Cookies from 'universal-cookie';
 
 const VisaOrderConfirmation = () => {
   const cookie = new Cookies();
+  const [reference,setReference] = useState("")
   const tokenAuth = cookie.get("auth"); 
-  const { token } = useParams();
+  const path = window.location.href;
+  const token = path.split("=")[1];
   useEffect(() => {
+  const referenceY = window.localStorage.getItem("reference");
+  setReference(referenceY);
+
+  }, [token])  
+  useEffect(() => {
+    if (!reference) {
+      console.error("Aucune référence fournie pour la confirmation de commande.");
+      return;
+    }
   
-    axios.put(`${APIURL}/order/confirmation/${token}`, {}, {
+    axios.get(`${APIURL}/check/payment/${token}`, {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${tokenAuth}`,
-        "x-api-key": ApiKey, 
+        "x-api-key": ApiKey,
       }
+    })
+    .then(() => {
+      return axios.put(`${APIURL}/order/confirmation/${reference}`, {}, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${tokenAuth}`,
+          "x-api-key": ApiKey,
+        }
+      });
+    })
+    .catch((err) => {
+      console.error("Erreur lors de la vérification ou confirmation :", err);
+      navigate("/");
+      window.location.reload();
     });
-    
-  }, [], [token]);
+  }, [token]);
+  
+  
   const navigate = useNavigate();
   const transactionId = `TXN${Math.floor(1000000000 + Math.random() * 9000000000)}`;
   
@@ -55,7 +81,10 @@ const VisaOrderConfirmation = () => {
         <Button 
           variant="dark" 
           className="btn-black px-4 py-2"
-          onClick={() => navigate('/')}
+          onClick={() => {
+            navigate('/')
+            window.localStorage.removeItem("reference");
+          }}
         >
           CONTINUE SHOPPING
         </Button>

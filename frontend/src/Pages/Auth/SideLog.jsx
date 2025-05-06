@@ -9,9 +9,9 @@ import SideVerify from './SideVerify';
 import SideForgotten from './SideForgotten';
 import SideNewPassword from './SideNewPassword';
 import SideForgottenVerify from './SideForgottenVerify';
+import SideAccountVerify from './SideAccountVerify';
 
-function SideLog({ setLog }) {
-  const [currentUse, setCurrentUse] = useState({"log":"login"});
+function SideLog({ setLog, currentUse, setCurrentUse }) {
   const loginRef = useRef(null);
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -46,8 +46,11 @@ function SideLog({ setLog }) {
         <SideForgotten setCurrentUse={setCurrentUse} />
       ) : currentUse.log === "Forgotten Verify" ? (
         <SideForgottenVerify currentUse={currentUse} setCurrentUse={setCurrentUse} />
+      ) : currentUse.log === "account Verify" ? (
+          <SideAccountVerify currentUse={currentUse} setCurrentUse={setCurrentUse} />
       ) : (
         <SideNewPassword currentUse={currentUse} setCurrentUse={setCurrentUse} />
+
       )
       }
   </div>

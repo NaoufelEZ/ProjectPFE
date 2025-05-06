@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AddressForm from '../../../Components/AddressForm';
-import visaIcon from '../../../Assets/images/visa.svg';
 import deliveryIcon from '../../../Assets/images/delivery-van.svg';
 import axios from 'axios';
 import { ApiKey, APIURL,IMAGEURL } from '../../../Api/Api';
@@ -130,10 +129,9 @@ const Checkout = () => {
                 Authorization: `Bearer ${token}`,
             }
         });
-        const reffrence = responseOder.data.data;
+        const reference = responseOder.data.data;
        const response = await axios.post(`${APIURL}/payment`,{
-          "amount": totalPrice*1000,
-          "reffrence": reffrence
+          "amount": (totalPrice + deliveryFee) *1000,
         },
         {
         headers:{
@@ -142,7 +140,7 @@ const Checkout = () => {
           "x-api-key":ApiKey,        
         },
       });
-      console.log(response)
+      window.localStorage.setItem("reference",reference);
       const link = response.data.result.link;
       window.location.href = link;
     }

@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
 import "./basket.css";
-import useCloseOut from '../Hooks/useClose';
 import useUser from '../Hooks/useUser';
 import { BasketContext } from '../Context/BasketContext';
 import EditProduct from './EditProduct'; // Import the new component
@@ -55,7 +54,6 @@ const Basket = (props) => {
             document.body.style.overflow = "unset";
         };
     }, []);
-    console.log(user)
 
 
     return (
@@ -154,19 +152,20 @@ const Basket = (props) => {
                                 )}
 
 
-                                <button 
-                                disabled={user ? user.email_verify === true && false : false}
+                                <button
                                     className="checkout-btn"
                                     onClick={() => {
-                                        console.log("first")
                                         if(user){
-                                            console.log("first")
                                             if(user.email_verify ){
                                                 navigate("/checkout");
                                             }
+                                            else{
+                                            props.setBasket(false);
+                                            props.login(true);
+                                            props.setCurrentUse({"log":"account Verify"})
+                                            }
 
                                         }else{
-                                            console.log("first error")
                                             props.setBasket(false);
                                             props.login(true);
                                             
@@ -175,7 +174,7 @@ const Basket = (props) => {
                                 
                                 }
                                 >
-                                    Process order
+                                    {user && !user.email_verify ? "Verify Account" : "Process order"}
                                 </button>
                             </div>
                         </>
