@@ -1,12 +1,14 @@
 import { faClose, faHeart, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { IMAGEURL } from '../Api/Api';
+import { ApiKey, APIURL, IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
 import "./basket.css";
 import useUser from '../Hooks/useUser';
 import { BasketContext } from '../Context/BasketContext';
 import EditProduct from './EditProduct'; // Import the new component
+import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 const Basket = (props) => {
     const [storage, setStorage] = useState([]);
@@ -17,6 +19,8 @@ const Basket = (props) => {
     const navigate = useNavigate();
     const basketRef = useRef(null);
     const user = useUser();
+    const cookie = new Cookies();
+    const token = cookie.get("auth")
     const {setBasketChange} = useContext(BasketContext)
 
     useEffect(() => {
@@ -55,6 +59,25 @@ const Basket = (props) => {
         };
     }, []);
 
+        const handleSend = async () =>{
+            try{
+                const response = await axios.post(`${APIURL}/send`,{},
+                      {
+                      headers :{
+                        Accept:"application/json",
+                        Authorization: `Bearer ${token}`,
+                        'x-api-key':ApiKey
+                      }});
+                        props.setBasket(false);
+                        props.login(true);
+                        props.setCurrentUse({"log":"account Verify"})
+                   
+
+            }catch(err){
+                console.error(err)
+            }
+
+        };
 
     return (
         <>
@@ -160,9 +183,10 @@ const Basket = (props) => {
                                                 navigate("/checkout");
                                             }
                                             else{
-                                            props.setBasket(false);
-                                            props.login(true);
-                                            props.setCurrentUse({"log":"account Verify"})
+                                            // props.setBasket(false);
+                                            // props.login(true);
+                                            // props.setCurrentUse({"log":"account Verify"})
+                                            handleSend()
                                             }
 
                                         }else{

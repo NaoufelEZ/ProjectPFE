@@ -60,7 +60,16 @@ const SideVerify = ({ currentUse,setCurrentUse }) => {
                       renderInput={(props) => <input {...props} />}
                     />
 
-              <Button variant="primary" type="submit">Verify</Button>
+              <Button
+               variant="primary"
+               type="submit"
+               className="w-100 py-2 fw-bold text-uppercase"
+               style={{
+                 background: 'linear-gradient(45deg, #e83e8c, #6f42c1)',
+                 border: 'none',
+                 letterSpacing: '1px',
+               }}
+              >Verify</Button>
             </Form>
                 </Card.Body>
               </Card>

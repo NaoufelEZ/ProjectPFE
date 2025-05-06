@@ -10,9 +10,13 @@ import SideForgotten from './SideForgotten';
 import SideNewPassword from './SideNewPassword';
 import SideForgottenVerify from './SideForgottenVerify';
 import SideAccountVerify from './SideAccountVerify';
+import SideSuccessVerify from './SideSuccessVerify';
+import Cookies from 'universal-cookie';
 
 function SideLog({ setLog, currentUse, setCurrentUse }) {
   const loginRef = useRef(null);
+  const cookie = new Cookies();
+  const token = cookie.get("auth");
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -29,7 +33,7 @@ function SideLog({ setLog, currentUse, setCurrentUse }) {
       <div className="login-header">
         <h3 className="login-title text-capitalize">{currentUse.log}</h3>
         <div className="login-close-btn">
-          {currentUse.log === 'login' ? (
+          {(currentUse.log === 'login' || currentUse.log === 'success verify' || token )  ? (
             <FontAwesomeIcon className="mb-0" icon={faClose} onClick={() => setLog(false)} />
           ) : (
             <FontAwesomeIcon className="mb-0" icon={faArrowLeft} onClick={() => setCurrentUse({log:"login"})} />
@@ -48,9 +52,10 @@ function SideLog({ setLog, currentUse, setCurrentUse }) {
         <SideForgottenVerify currentUse={currentUse} setCurrentUse={setCurrentUse} />
       ) : currentUse.log === "account Verify" ? (
           <SideAccountVerify currentUse={currentUse} setCurrentUse={setCurrentUse} />
+      ) : currentUse.log === "success verify" ? (
+        <SideSuccessVerify />
       ) : (
         <SideNewPassword currentUse={currentUse} setCurrentUse={setCurrentUse} />
-
       )
       }
   </div>

@@ -5,26 +5,29 @@ import Loading from "../../Components/Loading";
 import { ApiKey, APIURL } from "../../Api/Api";
 import axios from "axios";
 import { useState } from "react";
+import Cookies from "universal-cookie";
 
-const SideAccountVerify = ({ currentUse,setCurrentUse }) => {
+const SideAccountVerify = ({ setCurrentUse }) => {
     const [otp,setOtp] = useState();
     const [loading, setLoading] = useState(false);
-    const hash = currentUse.hash;
+    const cookie = new Cookies();
+    const token = cookie.get("auth");
     const notify = () => toast.error("Incorrect combination of user name and password.");
     const handleVerify = async (e)=>{
       e.preventDefault();
       setLoading(true)
       try{
-      await axios.put(`${APIURL}/register_send_verify/${hash}`,{
-        code:otp
+      await axios.put(`${APIURL}/store_otp`,{
+        otp:otp
       },
       {
       headers:{
-        "Accept": "application/json",
+        Accept: "application/json",
+        Authorization:`Bearer ${token}`,
         "x-api-key":ApiKey
       }
     })
-    setCurrentUse({log:"login"})
+    setCurrentUse({log:"success verify"})
     }catch(err){
       console.log(err);
       const errCode = err.response.data.status;
@@ -60,7 +63,16 @@ const SideAccountVerify = ({ currentUse,setCurrentUse }) => {
                       renderInput={(props) => <input {...props} />}
                     />
 
-              <Button variant="primary" type="submit">Verify</Button>
+              <Button
+               variant="primary"
+               type="submit"
+               className="w-100 py-2 fw-bold text-uppercase"
+               style={{
+                 background: 'linear-gradient(45deg, #e83e8c, #6f42c1)',
+                 border: 'none',
+                 letterSpacing: '1px',
+               }}
+              >Verify</Button>
             </Form>
                 </Card.Body>
               </Card>

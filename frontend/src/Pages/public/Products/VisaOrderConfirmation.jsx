@@ -37,7 +37,7 @@ const VisaOrderConfirmation = () => {
           Authorization: `Bearer ${tokenAuth}`,
           "x-api-key": ApiKey,
         }
-      });
+      }).then(()=>window.localStorage.removeItem("card"))
     })
     .catch((err) => {
       console.error("Erreur lors de la vérification ou confirmation :", err);
