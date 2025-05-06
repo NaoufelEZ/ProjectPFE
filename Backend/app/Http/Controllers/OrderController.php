@@ -168,13 +168,22 @@ class OrderController extends Controller
             'app_token' => env('FLOUCI_APP_TOKEN'),
             'app_secret' => env('FLOUCI_APP_SECRET'),
             'amount' => $request->amount,
-            'reference' => $reference,
             'accept_card' => true,
             'session_timeout_secs' => 1200,
-            'success_link' => "http://localhost:3000/checkout/visa-payment/order-confirmation/{$reference}",
+            'success_link' => "http://localhost:3000/checkout/visa-payment/order-confirmation",
             'fail_link' => 'https://example.com/fail',
             'developer_tracking_id' => env('FLOUCI_APP_DEVELOPER_ID'),
         ]);
+    
+        return $response->json();
+    }
+    public function verifyPayment($token){
+    
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'apppublic' => env('FLOUCI_APP_TOKEN'),
+            'appsecret' => env('FLOUCI_APP_SECRET'),
+        ])->get("https://developers.flouci.com/api/verify_payment/$token");
     
         return $response->json();
     }

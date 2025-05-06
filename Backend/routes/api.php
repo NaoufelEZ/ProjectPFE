@@ -121,12 +121,13 @@ Route::middleware('authenticateApiKey')->group(function(){
         // users 
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("payment","payment");
+            Route::get("check/payment/{token}","verifyPayment");
             Route::post("order/add","store");
             Route::get("user/order","userOrder");
             Route::get("order/all/check","anyChecked");
             Route::get("order/check/{id}","check");
             Route::put("order/update/check","allChecked");
-            Route::put("order/confirmation/{reff}","orderConfirmation");
+            Route::put("order/confirmation/{ref}","orderConfirmation");
         });
         // admin
         Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
