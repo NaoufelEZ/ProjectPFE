@@ -70,7 +70,6 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::get("/register_Url_verify/{hash}","verifyUrlRegister");
         Route::middleware("auth:sanctum")->group(function(){
             Route::post("/send","sendOtp");
-            Route::post("/storeotp","storeOtp");
             Route::put("/store_otp","storeOtp");
         });
         // password

@@ -59,9 +59,11 @@ class otpController extends Controller
         $email = $user->email;
         $name = $user->first_name;
         $code = random_int(100000,999999);
+        $hash = uniqid();
         Otp::create([
             "user_id"=>$id,
             "otp_code"=>$code,
+            "hash"=> $hash,
             "expiry_at"=>Carbon::now()->addMinutes(25),
         ]);
         Mail::to($email)->send(new otpEmail($name,$code));
@@ -71,6 +73,7 @@ class otpController extends Controller
         $user = $request->user();
         $id = $user->id;
         $code = $request->otp;
+        // return response()->json($code);
         $otp = Otp::where("user_id",$id)->latest()->first();
         if(!$otp){
             return response()->json(['message' => 'OTP No Fount',"status"=>404], 404);
