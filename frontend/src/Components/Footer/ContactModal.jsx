@@ -21,46 +21,100 @@ const ContactModal = ({ show, handleClose }) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Contact us</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      size="md"
+      dialogClassName="border-0"
+      contentClassName="rounded-3"
+    >
+      <Modal.Body className="p-4">
+        <h5 className="text-center fw-bold mb-3">Contact us</h5>
+        <p className="text-center text-muted" style={{ fontSize: "14px" }}>
+          We answer all your questions about our online sales service
+        </p>
         <Form ref={formRef} onSubmit={sendEmail}>
-          <Form.Group className="mb-2">
-            <Form.Label>Name</Form.Label>
-            <Form.Control name="name" value={name} type="text" onChange={(e) => setName(e.target.value)} required />
+          <Form.Group className="mb-3">
+            <Form.Control
+              name="name"
+              value={name}
+              type="text"
+              placeholder="Name"
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="rounded-1 py-2"
+            />
           </Form.Group>
-          <Form.Group className="mb-2">
-            <Form.Label>Surname</Form.Label>
-            <Form.Control name="surname" type="text" required />
+          <Form.Group className="mb-3">
+            <Form.Control
+              name="surname"
+              type="text"
+              placeholder="Surname"
+              required
+              className="rounded-1 py-2"
+            />
           </Form.Group>
-          <Form.Group className="mb-2">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control name="email" value={email} type="email" required onChange={(e) => setEmail(e.target.value)} />
+          <Form.Group className="mb-3">
+            <Form.Control
+              name="email"
+              value={email}
+              type="email"
+              placeholder="E-mail"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="rounded-1 py-2"
+            />
           </Form.Group>
-          <Form.Group className="mb-2">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control name="phone_number" type="tel" pattern="\+216[0-9]{8}" required />
-            <Form.Text muted>Format: +216XXXXXXXX</Form.Text>
+          <Form.Group className="mb-3">
+            <Form.Control
+              name="phone_number"
+              type="tel"
+              pattern="\+216[0-9]{8}"
+              placeholder="+216 Phone"
+              required
+              className="rounded-1 py-2"
+            />
+            <Form.Text muted className="ms-1">Format: +216XXXXXXXX</Form.Text>
           </Form.Group>
-          <Form.Group className="mb-2">
-            <Form.Label>Topic</Form.Label>
-            <Form.Select name="topic" required>
+          <Form.Group className="mb-3">
+            <Form.Select name="topic" required className="rounded-1 py-2">
               <option value="">Select topic</option>
               <option value="order">Order</option>
               <option value="return">Return</option>
               <option value="technical">Technical Issue</option>
             </Form.Select>
           </Form.Group>
-          <Form.Group className="mb-2">
-            <Form.Label>Comment</Form.Label>
-            <Form.Control as="textarea" value={message} rows={3} name="message" required onChange={(e) => setMessage(e.target.value)} />
+          <Form.Group className="mb-3">
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="message"
+              value={message}
+              placeholder="Comment"
+              onChange={(e) => setMessage(e.target.value)}
+              required
+              className="rounded-1"
+            />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Check required label="I have read and accept the Privacy Policy" />
+            <Form.Check
+              required
+              label={
+                <>
+                  I have read and accept the{" "}
+                  <a href="#" className="text-decoration-underline">
+                    Privacy Policy
+                  </a>
+                </>
+              }
+            />
           </Form.Group>
-          <Button variant="dark" type="submit">SEND</Button>
+          <div className="d-grid">
+            <Button variant="dark" type="submit" className="rounded-1 py-2">
+              SEND
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>
