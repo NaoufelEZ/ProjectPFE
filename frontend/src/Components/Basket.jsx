@@ -1,12 +1,11 @@
 import { faClose, faHeart, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import {useContext, useEffect, useRef, useState } from 'react'
 import { ApiKey, APIURL, IMAGEURL } from '../Api/Api';
 import { useNavigate } from 'react-router-dom';
 import "./basket.css";
-import useUser from '../Hooks/useUser';
 import { BasketContext } from '../Context/BasketContext';
-import EditProduct from './EditProduct'; // Import the new component
+import EditProduct from './EditProduct';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
@@ -16,12 +15,22 @@ const Basket = (props) => {
     const [showEdit, setShowEdit] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
     const [editingIndex, setEditingIndex] = useState(null);
+    const [loading,setLoading] = useState(true);
+    const [user,setUser] = useState(true);
     const navigate = useNavigate();
     const basketRef = useRef(null);
-    const user = useUser();
     const cookie = new Cookies();
     const token = cookie.get("auth")
     const {setBasketChange} = useContext(BasketContext)
+    useEffect(()=>{
+        axios.get(`${APIURL}/user`,{
+            headers:{
+                Accept:"application/json",
+                Authorization:`Bearer ${token}`,
+                "x-api-key":ApiKey,
+            }
+        }).then((response)=>{setUser(response.data.data);setLoading(false)})
+    },[token]);
 
     useEffect(() => {
         const storedData = window.localStorage.getItem("card");
@@ -176,6 +185,7 @@ const Basket = (props) => {
 
 
                                 <button
+                                    disabled={loading}
                                     className="checkout-btn"
                                     onClick={() => {
                                         if(user){

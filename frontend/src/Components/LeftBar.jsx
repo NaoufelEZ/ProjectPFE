@@ -3,11 +3,21 @@ import "./leftBarStyle.css"
 import Cookies from 'universal-cookie';
 import { ApiKey,APIURL } from '../Api/Api';
 import axios from 'axios';
-import useUser from '../Hooks/useUser';
+import { useEffect, useState } from 'react';
 const LeftBar = () => {
+  const [user,setUser] = useState([]);
+  const [loading,setLoading] = useState(true);
   const cookie = new Cookies();
   const token = cookie.get("auth"); 
-  const user = useUser();
+  useEffect(()=>{
+          axios.get(`${APIURL}/user`,{
+              headers:{
+                  Accept:"application/json",
+                  Authorization:`Bearer ${token}`,
+                  "x-api-key":ApiKey,
+              }
+          }).then((response)=>{setUser(response.data.data);setLoading(false)})
+      },[token]);
   const navigate = useNavigate();
   const handleLogout = () => {
     axios.get(`${APIURL}/logout`,{
@@ -39,7 +49,7 @@ const LeftBar = () => {
             <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h5" : "text-muted text-decoration-none h6"} to="/setting/saved-addresses">Saved addresses</NavLink>
             </li>
         </ul>
-        <span onClick={handleLogout} role="button" className="ms-3 h6">Logout</span>
+        <button disabled={loading} onClick={handleLogout} role="button" className="ms-3 h6 btn border border-0 p-0">Logout</button>
     </div>
   )
 }

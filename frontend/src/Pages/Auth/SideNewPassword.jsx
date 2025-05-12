@@ -36,7 +36,7 @@ const SideNewPassword = ({ currentUse,setCurrentUse }) => {
               "x-api-key":ApiKey
             }
           });
-          setCurrentUse("login")
+          setCurrentUse({log:"login"})
         }catch(err){
           if(err.status === 410){
             notify();
@@ -64,11 +64,11 @@ const SideNewPassword = ({ currentUse,setCurrentUse }) => {
                 <Card.Body className="p-4">
                   <Form onSubmit={formik.handleSubmit}>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
-                      <Form.Label className="small text-uppercase text-muted">Email Address</Form.Label>
+                      <Form.Label className="small text-uppercase text-muted">New Password</Form.Label>
                       <Form.Control
                         name="password"
                         type="password"
-                        placeholder="Enter email"
+                        placeholder="New Password"
                         className="py-2"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}

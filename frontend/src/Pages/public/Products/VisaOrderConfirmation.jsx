@@ -44,7 +44,7 @@ const VisaOrderConfirmation = () => {
       navigate("/");
       window.location.reload();
     });
-  }, [token]);
+  }, [token,reference]);
   
   
   const navigate = useNavigate();

@@ -6,14 +6,15 @@ import "./HeaderTest.css";
 import { FiUser } from "react-icons/fi";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { ApiKey, APIURL } from "../Api/Api";
+import { ApiKey, APIURL, IMAGEURL } from "../Api/Api";
 import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import Basket from "./Basket";
 import { Col, Row } from "react-bootstrap";
 import BasketUi from "../Assets/UI/BasketUi";
 import SearchBar from "../Assets/UI/SearchBar";
-import Login2 from "../Pages/Auth/SideLog";
 import SideLog from "../Pages/Auth/SideLog";
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
 
 const Header = () => {
   const { cat } = useParams();
@@ -23,6 +24,7 @@ const Header = () => {
   const [log, setLog] = useState(false);
   const [click, setClick] = useState({ action: false });
   const [notify,setNotify] = useState(0);
+  const [newProduct,setNewProduct] = useState([]);
   const [choseMenu, setChoseMenu] = useState({
     cat: cat,
     sub: "Clothes",
@@ -93,6 +95,20 @@ const Header = () => {
   }, [cat, lastNav]);
 
   useEffect(() => {
+      axios
+        .get(`${APIURL}/products/${cat || lastNav }/new`, {
+          headers: {
+            Accept: "application/json",
+            "x-api-key": ApiKey,
+          },
+        })
+        .then((response) => {
+          setNewProduct(response.data.data);
+        })
+        .catch((err) => console.error(err))
+    }, [cat]);
+
+  useEffect(() => {
     if (cat || lastNav) {
       axios
         .get(`${APIURL}/category/${cat || lastNav}/subcategory/${choseMenu.sub}`, {
@@ -137,6 +153,8 @@ const Header = () => {
     }).then((response)=>setNotify(response.data.data))
     .catch(()=>null)
   },[token])
+  console.log(newProduct)
+
 
   return (
     <>
@@ -284,10 +302,32 @@ const Header = () => {
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <div className="empty-state">
-                    <span>Select a category</span>
+                ) : (newProduct && newProduct.length > 0) ? (
+                  <div className="w-100">
+                     <Splide
+                      options={{
+                        type: 'slide',
+                        rewind: true,
+                        rewindByDrag: true,
+                        perPage: 5,
+                        gap: '0.5rem',
+                      }}
+                      aria-label="React Splide Example"
+                    >
+                     {newProduct.slice(0, 9).map((product, index) => (
+                            <SplideSlide key={index}>
+                              <img
+                                width="100%"
+                                height="100%"
+                                src={`${IMAGEURL}/products/${product?.product_stock?.[0].holder_product_picture}`}
+                                alt={`Product ${index + 1}`}
+                              />
+                            </SplideSlide>
+                          ))}
+                    </Splide>
                   </div>
+                ) : (
+                  <span className="text-center">Noting DO Noting DO</span>
                 )}
 
                 {(imagePreviews[choseMenu.cat]?.[choseMenu.sub]) && (

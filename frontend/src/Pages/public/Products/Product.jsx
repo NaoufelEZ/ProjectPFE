@@ -10,6 +10,7 @@ import Loading from "../../../Components/Loading";
 import Err404 from "../Errors/Err404";
 import {colornames} from "color-name-list";
 import {BasketContext} from "../../../Context/BasketContext";
+import { Helmet } from "react-helmet-async";
 
 const Product = () => {
     const { id } = useParams();
@@ -285,12 +286,18 @@ const Product = () => {
             </div>
         </div>
     ) : null;
+    console.log(data)
 
     return (
+        <>
+        <Helmet>
+            <title>{data?.title || ""} |Nalouati Store</title>
+        </Helmet>
         <div className="product-page">
             <Header />
             {loading ? <Loading /> : (error ? <Err404 /> : dataFetch)}
         </div>
+        </>
     );
 };
 

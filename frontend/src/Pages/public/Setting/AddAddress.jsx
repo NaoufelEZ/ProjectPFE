@@ -7,7 +7,6 @@ import Cookies from "universal-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Helmet } from "react-helmet-async";
 
 const AddAddress = () => {
     const [gov, setGov] = useState([]); 
@@ -70,7 +69,8 @@ const AddAddress = () => {
             "address":address,
             "state":selectedGov,
             "zip":zip[0].zip,
-            "street":selectedCite
+            "street":selectedDeleg,
+            "city":selectedCite,
         },
     {
         headers:{
@@ -86,10 +86,6 @@ const AddAddress = () => {
     }
 
     return (
-        <>
-        <Helmet>
-        <title>Add Address| Nalouti Store</title>
-        </Helmet>
         <section  className="w-50">
             <div className="mb-3">
             <Link className="text-muted" to="/setting/saved-addresses">
@@ -141,7 +137,6 @@ const AddAddress = () => {
                 <Button variant='dark' type="submit">Add Address</Button>
             </Form>
         </section>
-        </>
     );
 };
 

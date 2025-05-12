@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AddressForm from '../../../Components/AddressForm';
-import deliveryIcon from '../../../Assets/images/delivery-van.svg';
 import axios from 'axios';
 import { ApiKey, APIURL,IMAGEURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
 import './checkout.css'
 import useUser from '../../../Hooks/useUser';
+import deliveryIcon from '../../../Assets/images/delivery-van.svg';
 import flouci from "../../../Assets/images/flouci.png"
+import { Helmet } from 'react-helmet';
 
 const Checkout = () => {
   // State management
@@ -19,7 +20,8 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [addressError, setaddressError] = useState(true);
+  const [addressError, setAddressError] = useState(true);
+  const [addAddress,setAddAddress] = useState(0);
   
   const navigate = useNavigate();
   const cookie = new Cookies();
@@ -55,8 +57,8 @@ const Checkout = () => {
         setSelectedAddressId(defaultAddress.id);
         }
     }
-    ).catch(()=>setaddressError(false))
-},[]);
+    ).catch(()=>setAddressError(false))
+},[addAddress]);
 
 
   // Calculate total price
@@ -147,6 +149,10 @@ const Checkout = () => {
   };
 
   return (
+    <>
+    <Helmet>
+        <title>Checkout | Nalouti Store</title>
+      </Helmet>
     <Container className="py-4">
       <h1 className="text-center text-md-start mb-4">CHECKOUT</h1>
       
@@ -331,10 +337,12 @@ const Checkout = () => {
           <AddressForm 
             onClose={() => setShowAddressModal(false)} 
             onAddressAdded={handleAddressAdded} 
+            addressAdd ={setAddAddress}
           />
         </Modal.Body>
       </Modal>
     </Container>
+    </>
   );
 };
 

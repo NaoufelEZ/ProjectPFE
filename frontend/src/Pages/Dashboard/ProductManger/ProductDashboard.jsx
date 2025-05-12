@@ -133,16 +133,15 @@ const ProductForm = () => {
           const data = response.data.data;
           if (!data) {
             throw new Error("No product data received");
-          }
-          
+          }          
           setProduct({
             title: data.title || "",
             description: data.description || "",
             price: data.price || "",
             discount: data.discount || "",
-            category: data.category_id || "",
-            subcategory: data.subcategory_id || "",
-            detail: data.details_id || "",
+            category: data.details.category.id || "",
+            subcategory: data.details.subcategory.id || "",
+            detail: data.details.id || "",
           });
 
           const transformedColorSelects = [];
@@ -345,6 +344,7 @@ const ProductForm = () => {
         formData.append(`existing_holder_picture_colors[]`, colorItem.name);
       }
     });
+    // console.log(formData.holder_pictures[0])
 
     colorNames.forEach(color => formData.append('colors[]', color));
     sizes.forEach(size => formData.append('sizes[]', size));
@@ -352,7 +352,7 @@ const ProductForm = () => {
 
     try {
       const url = isEditMode 
-        ? `${APIURL}/products/update/${idProd}` 
+        ? `${APIURL}/product/update/${idProd}` 
         : `${APIURL}/product/add`;
       
       const response = await axios.post(url, formData, {
@@ -416,7 +416,7 @@ const ProductForm = () => {
   return (
     <>
       <Helmet>
-        <title>{isEditMode ? "Edit Product" : "Add Product"} | Nalouti Dashboard</title>
+        <title>{"Edit Product"} | Nalouti Dashboard</title>
       </Helmet>
       
       <Container fluid className="py-4">

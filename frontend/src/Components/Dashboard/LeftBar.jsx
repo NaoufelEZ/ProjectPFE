@@ -175,7 +175,7 @@ const LeftBar = () => {
               className="nav-item d-flex align-items-center logout"
               onClick={handleLogout}
             >
-              <MdLogout className="nav-icon" />
+              <MdLogout className="nav-icon me-3" />
               {!isCollapsed && <span>Logout</span>}
             </div>
           </Nav>
