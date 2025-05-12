@@ -17,14 +17,30 @@ class AddressController extends Controller
                 "state" => "required|string|max:30",
                 "zip" => "required|digits:4",
                 "street" => "required|string|max:100",
+                "is_default"=> "boolean"
             ]);
-            Address::create([
-                "user_id" => $user,
-                "address" => $userValid["address"],
-                "state" => $userValid["state"],
-                "zip" => $userValid["zip"],
-                "street" => $userValid["street"],
-            ]);
+            if($userValid["is_default"]){
+                Address::where("user_id",$user)->update([
+                    "is_default"=> 0,
+                ]);
+                Address::create([
+                    "user_id" => $user,
+                    "address" => $userValid["address"],
+                    "state" => $userValid["state"],
+                    "zip" => $userValid["zip"],
+                    "street" => $userValid["street"],
+                    "is_default"=> 1,
+                ]);
+            }
+            else{
+                 Address::create([
+                    "user_id" => $user,
+                    "address" => $userValid["address"],
+                    "state" => $userValid["state"],
+                    "zip" => $userValid["zip"],
+                    "street" => $userValid["street"],
+                ]);
+            }
         return response()->json(["data" => "Address added successfully","status"=>200], 200);
     }catch(ValidationException $e){
     return response()->json(["data"=>$e->errors(),"status"=>422], 422);
@@ -49,6 +65,7 @@ class AddressController extends Controller
         $addressValid = $request->validate([
             "address" => "required|string|max:100",
             "state" => "required|string|max:30",
+            "city" => "required|string|max:100",
             "zip" => "required|digits:4",
             "street" => "required|string|max:100",
         ]);
@@ -57,6 +74,7 @@ class AddressController extends Controller
             "state" => $addressValid["state"],
             "zip" => $addressValid["zip"],
             "street" => $addressValid["street"],
+            "city" => $addressValid["city"],
         ]);
         return response()->json(["data"=>"Address updated successfully","status"=>200],200);
     }catch(ValidationException $e){

@@ -16,9 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger("user_id");
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->string("state",30);
+            $table->string("street",100);
+            $table->string("city",200);
             $table->string("address",100);
             $table->string("zip",4);
-            $table->string("street",100);
             $table->boolean("is_default")->default(false);
             $table->timestamps();
         });

@@ -149,83 +149,89 @@ class ProductController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        try {
-            $validated = $request->validate([
-                "title" => "required|string|min:3",
-                "description" => "required|string|min:3",
-                "price" => "required|numeric",
-                "discount" => "numeric",
-                "details_id" => "required|numeric",
-                "colors" => "required|array",
-                "sizes" => "required|array",
-                "quantity" => "required|array",
-                "stock_id" => "sometimes|array",
-                "existing_product_pictures" => "sometimes|array",
-                "existing_holder_pictures" => "sometimes|array",
-            ]);
+{
+    try {
+        $validated = $request->validate([
+            "title" => "required|string|min:3",
+            "description" => "required|string|min:3",
+            "price" => "required|numeric",
+            "discount" => "numeric",
+            "details_id" => "required|numeric",
+            "colors" => "required|array",
+            "sizes" => "required|array",
+            "quantity" => "required|array",
+            "stock_id" => "sometimes|array",
+            "existing_product_pictures" => "required_without:product_pictures|array",
+            "existing_holder_pictures" => "required_without:holder_pictures|array",
+            "product_pictures.*" => "sometimes|image|mimes:jpeg,png,jpg,webp|max:2048",
+            "holder_pictures.*" => "sometimes|image|mimes:jpeg,png,jpg,webp|max:2048",
+        ]);
 
-            $product = Product::findOrFail($id);
-            $product->update($validated);
+        $product = Product::findOrFail($id);
+        $product->update($validated);
 
-            $existingStockIds = $product->productStock->pluck('id')->toArray();
-            $updatedStockIds = [];
+        $existingStockIds = $product->productStock->pluck('id')->toArray();
+        $updatedStockIds = [];
 
-            foreach ($validated['colors'] as $index => $color) {
-                $stockData = [
-                    'color' => $color,
-                    'size' => $validated['sizes'][$index],
-                    'quantity' => $validated['quantity'][$index],
-                ];
+        foreach ($validated['colors'] as $index => $color) {
+            $stockData = [
+                'color' => $color,
+                'size' => $validated['sizes'][$index],
+                'quantity' => $validated['quantity'][$index],
+            ];
 
-                // Handle product image
-                if ($request->hasFile("product_pictures.{$index}")) {
-                    $stockData['product_picture'] = $this->uploadImage(
-                        $request->file("product_pictures.{$index}")
-                    );
-                } else {
-                    $stockData['product_picture'] = $validated['existing_product_pictures'][$index] ?? null;
-                }
-
-                // Handle holder image
-                if ($request->hasFile("holder_pictures.{$index}")) {
-                    $stockData['holder_product_picture'] = $this->uploadImage(
-                        $request->file("holder_pictures.{$index}")
-                    );
-                } else {
-                    $stockData['holder_product_picture'] = $validated['existing_holder_pictures'][$index] ?? null;
-                }
-
-                // Update or create stock
-                if (!empty($validated['stock_id'][$index])) {
-                    $stock = ProductStock::find($validated['stock_id'][$index]);
-                    if ($stock) {
-                        $stock->update($stockData);
-                        $updatedStockIds[] = $stock->id;
-                    }
-                } else {
-                    $newStock = $product->productStock()->create($stockData);
-                    $updatedStockIds[] = $newStock->id;
-                }
+            // Handle product image (either new or existing)
+            if ($request->hasFile("product_pictures.{$index}")) {
+                $stockData['product_picture'] = $this->uploadImage(
+                    $request->file("product_pictures.{$index}")
+                );
+            } elseif (isset($validated['existing_product_pictures'][$index])) {
+                $stockData['product_picture'] = $validated['existing_product_pictures'][$index];
+            } else {
+                throw new \Exception("Product image is required for color: {$color}");
             }
 
-            // Delete removed stocks
-            $toDelete = array_diff($existingStockIds, $updatedStockIds);
-            if (!empty($toDelete)) {
-                ProductStock::destroy($toDelete);
+            // Handle holder image (either new or existing)
+            if ($request->hasFile("holder_pictures.{$index}")) {
+                $stockData['holder_product_picture'] = $this->uploadImage(
+                    $request->file("holder_pictures.{$index}")
+                );
+            } elseif (isset($validated['existing_holder_pictures'][$index])) {
+                $stockData['holder_product_picture'] = $validated['existing_holder_pictures'][$index];
+            } else {
+                $stockData['holder_product_picture'] = null; // Optional field
             }
 
-            return response()->json([
-                "data" => "Product updated successfully",
-                "status" => 200
-            ], 200);
-
-        } catch (ValidationException $e) {
-            return response()->json(["data" => $e->errors(), "status" => 422], 422);
-        } catch (\Exception $e) {
-            return response()->json(["data" => $e->getMessage(), "status" => 500], 500);
+            // Update or create stock
+            if (!empty($validated['stock_id'][$index])) {
+                $stock = ProductStock::find($validated['stock_id'][$index]);
+                if ($stock) {
+                    $stock->update($stockData);
+                    $updatedStockIds[] = $stock->id;
+                }
+            } else {
+                $newStock = $product->productStock()->create($stockData);
+                $updatedStockIds[] = $newStock->id;
+            }
         }
+
+        // Delete removed stocks
+        $toDelete = array_diff($existingStockIds, $updatedStockIds);
+        if (!empty($toDelete)) {
+            ProductStock::destroy($toDelete);
+        }
+
+        return response()->json([
+            "data" => "Product updated successfully",
+            "status" => 200
+        ], 200);
+
+    } catch (ValidationException $e) {
+        return response()->json(["data" => $e->errors(), "status" => 422], 422);
+    } catch (\Exception $e) {
+        return response()->json(["data" => $e->getMessage(), "status" => 500], 500);
     }
+}
 
     public function delete($id)
     {

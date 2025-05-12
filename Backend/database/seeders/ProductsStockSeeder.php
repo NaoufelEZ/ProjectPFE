@@ -116,12 +116,12 @@ class ProductsStockSeeder extends Seeder
             ["product_id" => 13, "color" => "Blue", "holder_product_picture" =>".jpg",  "product_picture" => "00336074400-a4o.jpg", "size" => "L", "quantity" => 20],
 
             // Product 14 - Super baggy jeans
-            ["product_id" => 14, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 14, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 14, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "00337335809-a4o.jpg", "size" => "L", "quantity" => 20],
-            ["product_id" => 14, "color" => "Khaki", "holder_product_picture" =>".jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 14, "color" => "Khaki", "holder_product_picture" =>".jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 14, "color" => "Khaki", "holder_product_picture" =>".jpg",  "product_picture" => "00343074500-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 14, "color" => "Black", "holder_product_picture" =>"00352089811-p.jpg",  "product_picture" => "00352089811-a4o.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 14, "color" => "Black", "holder_product_picture" =>"00352089811-p.jpg",  "product_picture" => "00352089811-a4o.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 14, "color" => "Black", "holder_product_picture" =>"00352089811-p.jpg",  "product_picture" => "00352089811-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 14, "color" => "blue", "holder_product_picture" =>"00352089426-p.jpg.jpg",  "product_picture" => "00352089426-a4o.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 14, "color" => "blue", "holder_product_picture" =>"00352089426-p.jpg.jpg",  "product_picture" => "00352089426-a4o.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 14, "color" => "blue", "holder_product_picture" =>"00352089426-p.jpg.jpg",  "product_picture" => "00352089426-a4o.jpg", "size" => "L", "quantity" => 20],
 
             // Product 15 - Super skinny ripped jeans
             ["product_id" => 15, "color" => "Black", "holder_product_picture" =>"00361335800-p.jpg",  "product_picture" => "00333666800-a4o.jpg", "size" => "S", "quantity" => 20],
@@ -425,9 +425,9 @@ class ProductsStockSeeder extends Seeder
             ["product_id" => 55, "color" => "Black", "holder_product_picture" =>"12305560040-01-w.jpg",  "product_picture" => "12305560040-a4o.jpg", "size" => "41", "quantity" => 20],
             ["product_id" => 55, "color" => "Black", "holder_product_picture" =>"12305560040-01-w.jpg",  "product_picture" => "12305560040-a4o.jpg", "size" => "42", "quantity" => 20],
                         // Product 56 - Contrast studded sole trainers
-                        ["product_id" => 56, "color" => "Black/White", "holder_product_picture" =>".jpg",  "product_picture" => "12310560040-a4o.jpg", "size" => "40", "quantity" => 20],
-                        ["product_id" => 56, "color" => "Black/White", "holder_product_picture" =>".jpg",  "product_picture" => "12310560040-a4o.jpg", "size" => "41", "quantity" => 20],
-                        ["product_id" => 56, "color" => "Black/White", "holder_product_picture" =>".jpg",  "product_picture" => "12310560040-a4o.jpg", "size" => "42", "quantity" => 20],
+                        ["product_id" => 56, "color" => "Black", "holder_product_picture" =>"12310560040-05-w.jpg",  "product_picture" => "12310560040-a4o.jpg", "size" => "40", "quantity" => 20],
+                        ["product_id" => 56, "color" => "Black", "holder_product_picture" =>"12310560040-05-w.jpg",  "product_picture" => "12310560040-a4o.jpg", "size" => "41", "quantity" => 20],
+                        ["product_id" => 56, "color" => "Black", "holder_product_picture" =>"12310560040-05-w.jpg",  "product_picture" => "12310560040-a4o.jpg", "size" => "42", "quantity" => 20],
                        
             
                         // Product 57 - Contrast sneakers
@@ -473,9 +473,9 @@ class ProductsStockSeeder extends Seeder
                         
             
                         // Product 63 - Multi-piece skate trainers
-                        ["product_id" => 63, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "12487560040-a4o.jpg", "size" => "40", "quantity" => 20],
-                        ["product_id" => 63, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "12487560040-a4o.jpg", "size" => "41", "quantity" => 20],
-                        ["product_id" => 63, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "12487560040-a4o.jpg", "size" => "42", "quantity" => 20],
+                        ["product_id" => 63, "color" => "Black", "holder_product_picture" =>"1747087056_68226ed09a54b.webp",  "product_picture" => "12487560040-a4o.jpg", "size" => "40", "quantity" => 20],
+                        ["product_id" => 63, "color" => "Black", "holder_product_picture" =>"1747087056_68226ed09a54b.webp",  "product_picture" => "12487560040-a4o.jpg", "size" => "41", "quantity" => 20],
+                        ["product_id" => 63, "color" => "Black", "holder_product_picture" =>"1747087056_68226ed09a54b.webp",  "product_picture" => "12487560040-a4o.jpg", "size" => "42", "quantity" => 20],
                         ["product_id" => 63, "color" => "Pale Oyster", "holder_product_picture" =>"12465560131-b1o.jpg",  "product_picture" => "12465560131-a4o.jpg", "size" => "40", "quantity" => 20],
                         ["product_id" => 63, "color" => "Pale Oyster", "holder_product_picture" =>"12465560131-b1o.jpg",  "product_picture" => "12465560131-a4o.jpg", "size" => "41", "quantity" => 20],
                         ["product_id" => 63, "color" => "Pale Oyster", "holder_product_picture" =>"12465560131-b1o.jpg",  "product_picture" => "12465560131-a4o.jpg", "size" => "42", "quantity" => 20],
