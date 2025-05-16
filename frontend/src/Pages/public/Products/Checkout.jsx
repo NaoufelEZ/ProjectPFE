@@ -68,7 +68,7 @@ const Checkout = () => {
   }, [cart]);
 
   // Calculate delivery fee
-  const deliveryFee = totalPrice <= 150 ? 7 : 0;
+  const deliveryFee = totalPrice <= 150 ? 9.9 : 0;
 
   // Handle address selection
   const handleAddressSelect = (addressId) => {

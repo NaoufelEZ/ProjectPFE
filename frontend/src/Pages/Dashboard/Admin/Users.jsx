@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Badge, Button, Pagination, Form, InputGroup, Card, Dropdown, Spinner, Modal } from 'react-bootstrap';
-import { FaTrash, FaSearch, FaUserPlus, FaUserCog, FaFilter, FaEllipsisV, FaEye, FaEdit, FaSync } from 'react-icons/fa';
-import { BsThreeDotsVertical, BsCheckCircleFill, BsXCircleFill } from 'react-icons/bs';
+import { FaTrash, FaSearch, FaUserPlus, FaUserCog, FaSync } from 'react-icons/fa';
+import { BsCheckCircleFill, BsXCircleFill } from 'react-icons/bs';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import useDeleteItem from '../../../Hooks/useDeleteItem';
 import Swal from 'sweetalert2';
 import { motion } from 'framer-motion';
-import { use } from 'react';
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,8 +25,11 @@ const Users = () => {
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
   const user = useUser();
-  const roles = ["Admin", "Client", "Product Manager"];
+  const roles = user?.role === "Super Admin"
+  ? ["Client", "Product Manager", "Admin"]
+  : ["Client", "Product Manager"];
   const statusOptions = ["All", "Active", "Inactive"];
+  console.log(roles)
 
   const deleteItem = useDeleteItem();
   const cookie = new Cookies();

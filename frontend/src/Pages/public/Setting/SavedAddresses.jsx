@@ -129,9 +129,10 @@ const SavedAddresses = () => {
                   
                   <div className="address-details">
                     <p><strong>Street:</strong> {address.street}</p>
-                    <p><strong>City:</strong> {address.address || 'N/A'}</p>
+                    <p><strong>City:</strong> {address.city || 'N/A'}</p>
                     <p><strong>State:</strong> {address.state}</p>
                     <p><strong>ZIP Code:</strong> {address.zip}</p>
+                    <p><strong>Address:</strong> {address.address || 'N/A'}</p>
                     {address.country && <p><strong>Country:</strong> {address.country}</p>}
                   </div>
 

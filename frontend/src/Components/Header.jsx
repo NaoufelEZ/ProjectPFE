@@ -153,8 +153,6 @@ const Header = () => {
     }).then((response)=>setNotify(response.data.data))
     .catch(()=>null)
   },[token])
-  console.log(newProduct)
-
 
   return (
     <>

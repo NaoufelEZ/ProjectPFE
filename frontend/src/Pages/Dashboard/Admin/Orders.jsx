@@ -47,7 +47,6 @@ const Orders = () => {
     };
     fetchOrders();
   }, [token]);
-  console.log(orders)
 
   useEffect(() => {
     setOrdersFilter(
@@ -92,42 +91,42 @@ const Orders = () => {
     }
   };
 
-  const generateSinglePDF = (order) => {
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.text(`Order Details - ORD-${order.id}`, 14, 20);
-    doc.setFontSize(12);
-    doc.text(`Customer: ${order.user.first_name} ${order.user.last_name}`, 14, 35);
-    doc.text(`Order Date: ${new Date(order.order_date).toLocaleDateString()}`, 14, 42);
-    doc.text(`Status: ${order.status}`, 14, 49);
-    doc.text(`Payment Method: ${order.method_payment}`, 14, 56);
-    const addressY = 66;
-    doc.setFontSize(14);
-    doc.text('Shipping Address:', 14, addressY);
-    doc.setFontSize(12);
-    doc.text(`Name: ${order.shipping_address?.full_name || 'N/A'}`, 14, addressY + 8);
-    doc.text(`Phone: ${order.shipping_address?.phone || 'N/A'}`, 14, addressY + 15);
-    doc.text(`City: ${order.shipping_address?.city || 'N/A'}`, 14, addressY + 22);
-    doc.text(`Address: ${order.shipping_address?.address || 'N/A'}`, 14, addressY + 29);
-    const tableStartY = addressY + 40;
+  // const generateSinglePDF = (order) => {
+  //   const doc = new jsPDF();
+  //   doc.setFontSize(18);
+  //   doc.text(`Order Details - ORD-${order.id}`, 14, 20);
+  //   doc.setFontSize(12);
+  //   doc.text(`Customer: ${order.user.first_name} ${order.user.last_name}`, 14, 35);
+  //   doc.text(`Order Date: ${new Date(order.order_date).toLocaleDateString()}`, 14, 42);
+  //   doc.text(`Status: ${order.status}`, 14, 49);
+  //   doc.text(`Payment Method: ${order.method_payment}`, 14, 56);
+  //   const addressY = 66;
+  //   doc.setFontSize(14);
+  //   doc.text('Shipping Address:', 14, addressY);
+  //   doc.setFontSize(12);
+  //   doc.text(`Name: ${order.shipping_address?.full_name || 'N/A'}`, 14, addressY + 8);
+  //   doc.text(`Phone: ${order.shipping_address?.phone || 'N/A'}`, 14, addressY + 15);
+  //   doc.text(`City: ${order.shipping_address?.city || 'N/A'}`, 14, addressY + 22);
+  //   doc.text(`Address: ${order.shipping_address?.address || 'N/A'}`, 14, addressY + 29);
+  //   const tableStartY = addressY + 40;
     
-    autoTable(doc, {
-      startY: tableStartY,
-      head: [['Product', 'Quantity', 'Price', 'Total']],
-      body: order.order_items.map(item => [
-        item.product_stock.product.title,
-        item.quantity,
-        `${item.price.toFixed(2)} TND`,
-        `${(item.price * item.quantity).toFixed(2)} TND`
-      ]),
-      styles: { fontSize: 10 },
-      headStyles: { fillColor: [41, 128, 185] }
-    });
+  //   autoTable(doc, {
+  //     startY: tableStartY,
+  //     head: [['Product', 'Quantity', 'Price', 'Total']],
+  //     body: order.order_items.map(item => [
+  //       item.product_stock.product.title,
+  //       item.quantity,
+  //       `${item.price.toFixed(2)} TND`,
+  //       `${(item.price * item.quantity).toFixed(2)} TND`
+  //     ]),
+  //     styles: { fontSize: 10 },
+  //     headStyles: { fillColor: [41, 128, 185] }
+  //   });
     
-    const total = order.order_items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    doc.text(`Total: ${total.toFixed(2)} TND`, 14, doc.lastAutoTable.finalY + 10);
-    doc.save(`order-${order.id}.pdf`);
-  };
+  //   const total = order.order_items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  //   doc.text(`Total: ${total.toFixed(2)} TND`, 14, doc.lastAutoTable.finalY + 10);
+  //   doc.save(`order-${order.id}.pdf`);
+  // };
 
   const generateBulkPDF = () => {
     if (selectedOrders.length === 0) return;
@@ -187,10 +186,10 @@ const Orders = () => {
         <Row className="align-items-center mb-4">
           <Col>
           <div>
-                      <h2 className="fw-bold mb-0">
-                        <IoReceiptSharp className="me-2" /> Order Management
-                      </h2>
-                    </div>
+            <h2 className="fw-bold mb-0">
+              <IoReceiptSharp className="me-2" /> Order Management
+            </h2>
+          </div>
         </Col>
           <Col className="d-flex justify-content-end gap-2">
             {selectedOrders.length > 0 && (
@@ -253,16 +252,18 @@ const Orders = () => {
                           <td>
                             <div className="d-flex gap-2">
                               <Button variant="outline-primary" size="sm" onClick={() => handleViewOrder(order.id)}><FaEye /></Button>
+                              <Button disabled={order.status !== "Shipped" }  className="m-0 p-0 bg-transparent border border-0">
                               <PDFDownloadLink
-  document={<OrderReceiptPDF order={order} />}
-  fileName={`receipt-ORD-${order.id}.pdf`}
-  className="btn btn-sm btn-outline-success px-3 rounded-pill"
->
-  <FaFilePdf />
-</PDFDownloadLink>
+                                document={<OrderReceiptPDF order={order} />}
+                                fileName={`receipt-ORD-${order.id}.pdf`}
+                                className="btn btn-sm btn-outline-success px-3 rounded-pill"
+                              >
+                                <FaFilePdf />
+                              </PDFDownloadLink>
+                              </Button>
 
-  </div>
-</td>
+                                  </div>
+                                </td>
                         </tr>
                       ))
                     ) : (

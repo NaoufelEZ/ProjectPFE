@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import { Badge, Button, Card, Col, Container, Form, Row, Table } from "react-bootstrap";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { Helmet } from "react-helmet";
 
 const deliverySchema = Yup.object().shape({
   order_status: Yup.string().required("Status is required"),
@@ -111,6 +112,7 @@ const Order = () => {
       }
     },
   });
+  console.log(formik.values.delivery_company)
 
   const getStatus = (status) => {
     switch (status) {
@@ -168,6 +170,10 @@ const Order = () => {
   }
 
   return (
+    <>
+    <Helmet>
+      <title>Update Order | Nalouti Dashboard</title>
+    </Helmet>
     <Container className="py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Order Details</h2>
@@ -292,8 +298,12 @@ const Order = () => {
           </div>
           <div className="text-end">
             <h5>
+              <span className="text-muted me-2">Fee:</span>
+              {order.delivery_pay ? "9.9 TND" : "0"}
+            </h5>
+            <h5>
               <span className="text-muted me-2">Total Price:</span>
-              {totalPrice.toFixed(2)} TND
+              {order.delivery_pay ? (totalPrice + 9.9).toFixed(2) : totalPrice.toFixed(2) } TND
             </h5>
           </div>
         </Card.Body>
@@ -350,7 +360,7 @@ const Order = () => {
                     >
                       <option value="">Select Delivery Company</option>
                       {deliveryCompany.map((item, index) => (
-                        <option value={item.name} key={index}>
+                        <option value={item.id} key={index}>
                           {item.name}
                         </option>
                       ))}
@@ -378,6 +388,7 @@ const Order = () => {
         </Card.Body>
       </Card>
     </Container>
+    </>
   );
 };
 

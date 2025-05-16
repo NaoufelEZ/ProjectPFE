@@ -37,13 +37,11 @@ const ProductForm = () => {
   });
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isOn, setIsOn] = useState(false);
 
-  // Get unique color names from the color-name-list library
+  // Get unique color names
   const colors = [...new Map(colornames.map(color => [color.name, color])).values()]
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  // Filter colors based on search input
   const filteredColors = colors.filter(color =>
     color.name.toLowerCase().includes(colorSearch.toLowerCase())
   );
@@ -51,37 +49,29 @@ const ProductForm = () => {
   const cookie = new Cookies();
   const token = cookie.get("auth");
 
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${APIURL}/category`, {
-          headers: {
-            Accept: "application/json",
-            "x-api-key": ApiKey,
-          },
+          headers: { "x-api-key": ApiKey }
         });
         setCategory(response.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
-
     fetchCategories();
   }, []);
 
+  // Fetch subcategories when category changes
   useEffect(() => {
     const fetchSubcategories = async () => {
       if (product.category) {
         try {
           const response = await axios.get(
             `${APIURL}/admin/category/${product.category}/subcategory`,
-            {
-              headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${token}`,
-                "x-api-key": ApiKey,
-              },
-            }
+            { headers: { Authorization: `Bearer ${token}`, "x-api-key": ApiKey } }
           );
           setSubCategory(response.data.data);
         } catch (err) {
@@ -89,23 +79,17 @@ const ProductForm = () => {
         }
       }
     };
-
     fetchSubcategories();
   }, [product.category, token]);
 
+  // Fetch details when subcategory changes
   useEffect(() => {
     const fetchDetails = async () => {
       if (product.category && product.subcategory) {
         try {
           const response = await axios.get(
             `${APIURL}/admin/category/${product.category}/subcategory/${product.subcategory}`,
-            {
-              headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${token}`,
-                "x-api-key": ApiKey,
-              },
-            }
+            { headers: { Authorization: `Bearer ${token}`, "x-api-key": ApiKey } }
           );
           setDetail(response.data.data);
         } catch (error) {
@@ -113,43 +97,36 @@ const ProductForm = () => {
         }
       }
     };
-
     fetchDetails();
   }, [product.category, product.subcategory, token]);
 
+  // Fetch product data if in edit mode
   useEffect(() => {
     const fetchProduct = async () => {
       if (idProd) {
         setIsLoading(true);
         try {
           const response = await axios.get(`${APIURL}/products/product/${idProd}`, {
-            headers: {
-              Accept: "application/json",
-              "x-api-key": ApiKey,
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}`, "x-api-key": ApiKey }
           });
           
           const data = response.data.data;
-          if (!data) {
-            throw new Error("No product data received");
-          }          
           setProduct({
             title: data.title || "",
             description: data.description || "",
             price: data.price || "",
             discount: data.discount || "",
-            category: data.details.category.id || "",
-            subcategory: data.details.subcategory.id || "",
-            detail: data.details.id || "",
+            category: data.details?.category?.id || "",
+            subcategory: data.details?.subcategory?.id || "",
+            detail: data.details?.id || "",
           });
 
           const transformedColorSelects = [];
-          const uniqueColors = [...new Set(data.product_stock.map(stock => stock.color))];
+          const uniqueColors = [...new Set(data.product_stock?.map(stock => stock.color) || [])];
           
           uniqueColors.forEach(colorName => {
-            const colorItems = data.product_stock.filter(stock => stock.color === colorName);
-            const firstColorItem = colorItems[0];
+            const colorItems = data.product_stock?.filter(stock => stock.color === colorName) || [];
+            const firstColorItem = colorItems[0] || {};
             
             transformedColorSelects.push({
               name: colorName,
@@ -159,7 +136,8 @@ const ProductForm = () => {
               holderImageUrl: firstColorItem.holder_product_picture || "",
               sizes: colorItems.map(item => ({
                 size: item.size || "",
-                quantity: item.quantity || ""
+                quantity: item.quantity || "",
+                stock_id: item.id || ""
               }))
             });
           });
@@ -176,45 +154,34 @@ const ProductForm = () => {
           ]);
           
           setIsEditMode(true);
-          setMessage({ type: "success", text: "Product data loaded successfully" });
-          
-          setTimeout(() => {
-            setMessage(null);
-          }, 3000);
+          setMessage({ type: "success", text: "Product loaded successfully" });
+          setTimeout(() => setMessage(null), 3000);
           
         } catch (err) {
-          console.error("Error loading product:", err);
-          setMessage({ 
-            type: "danger", 
-            text: err.response?.data?.message || "Failed to load product data. Please try again." 
-          });
+          setMessage({ type: "danger", text: err.response?.data?.message || "Failed to load product" });
         } finally {
           setIsLoading(false);
         }
       }
     };
-
     fetchProduct();
   }, [idProd, token]);
 
+  // Helper functions
   const addColorSelect = () => {
-    setColorSelects([
-      ...colorSelects, 
-      { 
-        name: "", 
-        productImage: null, 
-        productImageUrl: "", 
-        holderImage: null,
-        holderImageUrl: "",
-        sizes: [{ size: "", quantity: "" }] 
-      }
-    ]);
+    setColorSelects([...colorSelects, { 
+      name: "", 
+      productImage: null, 
+      productImageUrl: "", 
+      holderImage: null,
+      holderImageUrl: "",
+      sizes: [{ size: "", quantity: "" }] 
+    }]);
   };
 
   const removeColorSelect = (index) => {
-    const newColorSelects = [...colorSelects];
-    newColorSelects.splice(index, 1);
-    setColorSelects(newColorSelects);
+    if (colorSelects.length <= 1) return;
+    setColorSelects(colorSelects.filter((_, i) => i !== index));
   };
 
   const handleProductChange = (e) => {
@@ -222,55 +189,54 @@ const ProductForm = () => {
   };
 
   const handleColorChange = (colorIndex, colorName) => {
-    setColorSelects(prev =>
-      prev.map((item, index) => (index === colorIndex ? { ...item, name: colorName } : item))
+    setColorSelects(prev => 
+      prev.map((item, index) => 
+        index === colorIndex ? { ...item, name: colorName } : item
+      )
     );
     setColorSearch("");
   };
 
-  const handleProductImageChange = (colorIndex, file) => {
-    setColorSelects(prev =>
-      prev.map((item, index) => (index === colorIndex ? 
-        { 
+  const handleImageChange = (colorIndex, file, type) => {
+    if (!file) return;
+    
+    if (!file.type.match('image.*')) {
+      setMessage({ type: "danger", text: "Only image files are allowed" });
+      return;
+    }
+    
+    if (file.size > 2 * 1024 * 1024) {
+      setMessage({ type: "danger", text: "Image must be less than 2MB" });
+      return;
+    }
+
+    setColorSelects(prev => 
+      prev.map((item, index) => 
+        index === colorIndex ? { 
           ...item, 
-          productImage: file, 
-          productImageUrl: file ? URL.createObjectURL(file) : item.productImageUrl 
-        } 
-        : item))
+          [type === 'product' ? 'productImage' : 'holderImage']: file,
+          [type === 'product' ? 'productImageUrl' : 'holderImageUrl']: URL.createObjectURL(file)
+        } : item
+      )
     );
   };
 
-  const handleHolderImageChange = (colorIndex, file) => {
-    setColorSelects(prev =>
-      prev.map((item, index) => (index === colorIndex ? 
-        { 
+  const clearExistingImage = (colorIndex, type) => {
+    setColorSelects(prev => 
+      prev.map((item, index) => 
+        index === colorIndex ? { 
           ...item, 
-          holderImage: file, 
-          holderImageUrl: file ? URL.createObjectURL(file) : item.holderImageUrl 
-        } 
-        : item))
-    );
-  };
-
-  const clearExistingImage = (colorIndex, imageType) => {
-    setColorSelects(prev =>
-      prev.map((item, index) => {
-        if (index === colorIndex) {
-          if (imageType === 'product') {
-            return { ...item, productImage: null, productImageUrl: "" };
-          } else if (imageType === 'holder') {
-            return { ...item, holderImage: null, holderImageUrl: "" };
-          }
-        }
-        return item;
-      })
+          [type === 'product' ? 'productImage' : 'holderImage']: null,
+          [type === 'product' ? 'productImageUrl' : 'holderImageUrl']: ""
+        } : item
+      )
     );
   };
 
   const addSizeSelect = (colorIndex) => {
-    setColorSelects(prev =>
-      prev.map((item, index) =>
-        index === colorIndex
+    setColorSelects(prev => 
+      prev.map((item, index) => 
+        index === colorIndex 
           ? { ...item, sizes: [...item.sizes, { size: "", quantity: "" }] }
           : item
       )
@@ -278,31 +244,47 @@ const ProductForm = () => {
   };
 
   const removeSizeSelect = (colorIndex, sizeIndex) => {
-    setColorSelects(prev =>
-      prev.map((colorItem, cIndex) =>
-        cIndex === colorIndex
-          ? {
-              ...colorItem,
-              sizes: colorItem.sizes.filter((_, sIndex) => sIndex !== sizeIndex),
-            }
-          : colorItem
+    setColorSelects(prev => 
+      prev.map((item, index) => 
+        index === colorIndex 
+          ? { 
+              ...item, 
+              sizes: item.sizes.filter((_, i) => i !== sizeIndex) 
+            } 
+          : item
       )
     );
   };
 
   const handleSizeChange = (colorIndex, sizeIndex, field, value) => {
-    setColorSelects(prev =>
-      prev.map((colorItem, cIndex) =>
-        cIndex === colorIndex
-          ? {
-              ...colorItem,
-              sizes: colorItem.sizes.map((sizeItem, sIndex) =>
-                sIndex === sizeIndex ? { ...sizeItem, [field]: value } : sizeItem
-              ),
-            }
-          : colorItem
+    setColorSelects(prev => 
+      prev.map((item, index) => 
+        index === colorIndex 
+          ? { 
+              ...item, 
+              sizes: item.sizes.map((size, i) => 
+                i === sizeIndex ? { ...size, [field]: value } : size
+              ) 
+            } 
+          : item
       )
     );
+  };
+
+  const validateForm = () => {
+    // Validate basic product info
+    if (!product.title || !product.description || !product.price || !product.detail) {
+      return false;
+    }
+
+    // Validate color variants
+    return colorSelects.every(color => {
+      const hasColor = !!color.name;
+      const hasImage = color.productImage || color.productImageUrl;
+      const hasValidSizes = color.sizes.every(size => size.size && size.quantity);
+      
+      return hasColor && hasImage && hasValidSizes;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -310,45 +292,85 @@ const ProductForm = () => {
     setIsLoading(true);
     setMessage(null);
 
+    if (!validateForm()) {
+      setMessage({ type: "danger", text: "Please fill all required fields" });
+      setIsLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", product.title);
     formData.append("description", product.description);
     formData.append("price", product.price);
     formData.append("discount", product.discount || "0");
     formData.append("details_id", product.detail);
-    
-    const colorNames = [];
-    const sizes = [];
-    const quantities = [];
-    
+
+    // Prepare stock data - format to match backend expectations
+    const colorsArray = [];
+    const sizesArray = [];
+    const quantityArray = [];
+    const stockIdArray = [];
+    const productPicturesArray = [];
+    const holderPicturesArray = [];
+    const existingProductPicturesArray = [];
+    const existingHolderPicturesArray = [];
+
     colorSelects.forEach((colorItem) => {
-      colorItem.sizes.forEach(sizeItem => {
-        colorNames.push(colorItem.name);
-        sizes.push(sizeItem.size);
-        quantities.push(sizeItem.quantity);
+      // For each size variant
+      colorItem.sizes.forEach((sizeItem) => {
+        colorsArray.push(colorItem.name);
+        sizesArray.push(sizeItem.size);
+        quantityArray.push(sizeItem.quantity);
+        
+        // Add stock_id if available (for edit mode)
+        if (sizeItem.stock_id) {
+          stockIdArray.push(sizeItem.stock_id);
+        }
+        
+        // Handle product images
+        if (colorItem.productImage) {
+          productPicturesArray.push(colorItem.productImage);
+          existingProductPicturesArray.push("");
+        } else if (colorItem.productImageUrl) {
+          productPicturesArray.push(null);
+          existingProductPicturesArray.push(colorItem.productImageUrl);
+        }
+        
+        // Handle holder images
+        if (colorItem.holderImage) {
+          holderPicturesArray.push(colorItem.holderImage);
+          existingHolderPicturesArray.push("");
+        } else if (colorItem.holderImageUrl) {
+          holderPicturesArray.push(null);
+          existingHolderPicturesArray.push(colorItem.holderImageUrl);
+        } else {
+          holderPicturesArray.push(null);
+          existingHolderPicturesArray.push("");
+        }
       });
-      
-      if (colorItem.productImage) {
-        formData.append(`product_pictures[]`, colorItem.productImage);
-        formData.append(`product_picture_colors[]`, colorItem.name);
-      } else if (colorItem.productImageUrl && isEditMode) {
-        formData.append(`existing_product_pictures[]`, colorItem.productImageUrl);
-        formData.append(`existing_product_picture_colors[]`, colorItem.name);
-      }
-
-      if (colorItem.holderImage) {
-        formData.append(`holder_pictures[]`, colorItem.holderImage);
-        formData.append(`holder_picture_colors[]`, colorItem.name);
-      } else if (colorItem.holderImageUrl && isEditMode) {
-        formData.append(`existing_holder_pictures[]`, colorItem.holderImageUrl);
-        formData.append(`existing_holder_picture_colors[]`, colorItem.name);
-      }
     });
-    // console.log(formData.holder_pictures[0])
 
-    colorNames.forEach(color => formData.append('colors[]', color));
-    sizes.forEach(size => formData.append('sizes[]', size));
-    quantities.forEach(qty => formData.append('quantity[]', qty));
+    // Append arrays to formData
+    colorsArray.forEach((color, index) => {
+      formData.append(`colors[${index}]`, color);
+      formData.append(`sizes[${index}]`, sizesArray[index]);
+      formData.append(`quantity[${index}]`, quantityArray[index]);
+      
+      if (stockIdArray[index]) {
+        formData.append(`stock_id[${index}]`, stockIdArray[index]);
+      }
+      
+      if (productPicturesArray[index]) {
+        formData.append(`product_pictures[${index}]`, productPicturesArray[index]);
+      }
+      
+      if (holderPicturesArray[index]) {
+        formData.append(`holder_pictures[${index}]`, holderPicturesArray[index]);
+      }
+      
+      formData.append(`existing_product_pictures[${index}]`, existingProductPicturesArray[index]);
+      formData.append(`existing_holder_pictures[${index}]`, existingHolderPicturesArray[index]);
+    });
 
     try {
       const url = isEditMode 
@@ -358,74 +380,41 @@ const ProductForm = () => {
       const response = await axios.post(url, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-          "x-api-key": ApiKey,
           Authorization: `Bearer ${token}`,
+          "x-api-key": ApiKey,
         },
       });
+
+      setMessage({ 
+        type: "success", 
+        text: response.data?.message || `Product ${isEditMode ? 'updated' : 'added'} successfully!` 
+      });
       
-      if (response.data && (response.data.success || response.data.status === "success")) {
-        setMessage({ 
-          type: "success", 
-          text: response.data.data || response.data.message || `Product ${isEditMode ? 'updated' : 'added'} successfully!` 
-        });
-        
-        setTimeout(() => {
-          navigate(-1);
-        }, 2000);
-      } else {
-        setMessage({ 
-          type: "warning", 
-          text: response.data.data || response.data.message || `Server response received but operation status unclear.` 
-        });
-      }
+      setTimeout(() => navigate(-1), 2000);
     } catch (error) {
-      console.error("Error saving product:", error);
-      
-      let errorMessage = `An error occurred while ${isEditMode ? 'updating' : 'adding'} the product`;
-      
-      if (error.response) {
-        errorMessage = error.response.data?.data || 
-                      error.response.data?.message || 
-                      `Server error (${error.response.status}): ${errorMessage}`;
-      } else if (error.request) {
-        errorMessage = "No response received from server. Please check your connection.";
-      }
-      
-      setMessage({ type: "danger", text: errorMessage });
+      const errorMsg = error.response?.data?.message || 
+                     error.message || 
+                     "Failed to save product";
+      setMessage({ type: "danger", text: errorMsg });
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const validateForm = () => {
-    const hasMissingColorName = colorSelects.some(color => !color.name);
-    
-    const hasMissingImages = !isEditMode && colorSelects.some(
-      color => (!color.productImage && !color.productImageUrl) || 
-               (!color.holderImage && !color.holderImageUrl)
-    );
-    
-    const hasMissingSizes = colorSelects.some(
-      color => color.sizes.some(size => !size.size || !size.quantity)
-    );
-    
-    return !hasMissingColorName && !hasMissingImages && !hasMissingSizes;
-  };
-
   return (
     <>
       <Helmet>
-        <title>{"Edit Product"} | Nalouti Dashboard</title>
+        <title>{isEditMode ? "Edit Product" : "Add Product"} | Dashboard</title>
       </Helmet>
       
       <Container fluid className="py-4">
         <Button 
           variant="outline-secondary" 
           onClick={() => navigate(-1)}
-          className="mb-3 d-flex align-items-center"
+          className="mb-3"
         >
-          <IoArrowBack className="me-2" /> Back to Products
+          <IoArrowBack className="me-2" /> Back
         </Button>
         
         <Card className="shadow-sm">
@@ -437,12 +426,7 @@ const ProductForm = () => {
           
           <Card.Body>
             {message && (
-              <Alert 
-                variant={message.type} 
-                onClose={() => setMessage(null)} 
-                dismissible
-                className="animate__animated animate__fadeIn"
-              >
+              <Alert variant={message.type} dismissible onClose={() => setMessage(null)}>
                 {message.text}
               </Alert>
             )}
@@ -450,18 +434,17 @@ const ProductForm = () => {
             {isLoading ? (
               <div className="text-center py-5">
                 <Spinner animation="border" variant="primary" />
-                <p className="mt-2">Loading product details...</p>
+                <p className="mt-2">Loading...</p>
               </div>
             ) : (
               <Form onSubmit={handleSubmit} encType="multipart/form-data">
                 <Row>
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Product Name <span className="text-danger">*</span></Form.Label>
+                      <Form.Label>Product Name *</Form.Label>
                       <Form.Control 
                         type="text" 
                         name="title" 
-                        placeholder="Enter Product Name" 
                         value={product.title} 
                         onChange={handleProductChange} 
                         required
@@ -471,18 +454,17 @@ const ProductForm = () => {
                   
                   <Col md={6}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Product Price <span className="text-danger">*</span></Form.Label>
+                      <Form.Label>Price *</Form.Label>
                       <InputGroup>
                         <InputGroup.Text>$</InputGroup.Text>
                         <Form.Control 
                           type="number" 
                           name="price" 
-                          placeholder="Enter Product Price" 
                           value={product.price} 
                           onChange={handleProductChange} 
-                          required
                           min="0"
                           step="0.01"
+                          required
                         />
                       </InputGroup>
                     </Form.Group>
@@ -490,12 +472,11 @@ const ProductForm = () => {
                 </Row>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Product Description <span className="text-danger">*</span></Form.Label>
+                  <Form.Label>Description *</Form.Label>
                   <Form.Control 
                     as="textarea" 
                     rows={3} 
                     name="description" 
-                    placeholder="Enter Product Description" 
                     value={product.description} 
                     onChange={handleProductChange} 
                     required
@@ -505,7 +486,7 @@ const ProductForm = () => {
                 <Row>
                   <Col md={4}>
                     <Form.Group className="mb-3">
-                      <Form.Label>Category <span className="text-danger">*</span></Form.Label>
+                      <Form.Label>Category *</Form.Label>
                       <Form.Select 
                         value={product.category} 
                         name="category" 
@@ -513,7 +494,7 @@ const ProductForm = () => {
                         required
                       >
                         <option value="">Select Category</option>
-                        {category.map((item) => (
+                        {category.map(item => (
                           <option key={item.id} value={item.id}>{item.category}</option>
                         ))}
                       </Form.Select>
@@ -523,7 +504,7 @@ const ProductForm = () => {
                   <Col md={4}>
                     {product.category && (
                       <Form.Group className="mb-3">
-                        <Form.Label>Subcategory <span className="text-danger">*</span></Form.Label>
+                        <Form.Label>Subcategory *</Form.Label>
                         <Form.Select 
                           value={product.subcategory} 
                           name="subcategory" 
@@ -531,7 +512,7 @@ const ProductForm = () => {
                           required
                         >
                           <option value="">Select Subcategory</option>
-                          {subcategory.filter((e) => e.subcategories !== "New").map((item) => (
+                          {subcategory.filter(e => e.subcategories !== "New").map(item => (
                             <option key={item.id} value={item.id}>{item.subcategories}</option>
                           ))}
                         </Form.Select>
@@ -542,15 +523,15 @@ const ProductForm = () => {
                   <Col md={4}>
                     {product.subcategory && detail.length > 0 && (
                       <Form.Group className="mb-3">
-                        <Form.Label>Category Detail <span className="text-danger">*</span></Form.Label>
+                        <Form.Label>Detail *</Form.Label>
                         <Form.Select 
                           value={product.detail} 
                           name="detail" 
                           onChange={handleProductChange}
                           required
                         >
-                          <option value="">Select Category Detail</option>
-                          {detail.map((item) => (
+                          <option value="">Select Detail</option>
+                          {detail.map(item => (
                             <option key={item.id} value={item.id}>{item.categoryDetails}</option>
                           ))}
                         </Form.Select>
@@ -569,7 +550,6 @@ const ProductForm = () => {
                           min={0} 
                           max={100}
                           name="discount" 
-                          placeholder="Enter Product Discount (%)" 
                           value={product.discount} 
                           onChange={handleProductChange} 
                         />
@@ -582,9 +562,9 @@ const ProductForm = () => {
                 <div className="mb-4">
                   <h5 className="mb-3 fw-bold">Product Variants</h5>
                   {colorSelects.map((colorItem, colorIndex) => (
-                    <Card key={colorIndex} className="mb-3 border-0 shadow-sm">
-                      <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center">
-                        <span className="fw-bold">Color {colorIndex + 1}: {colorItem.name || "New Color"}</span>
+                    <Card key={colorIndex} className="mb-3">
+                      <Card.Header className="d-flex justify-content-between align-items-center">
+                        <span>Color {colorIndex + 1}: {colorItem.name || "New"}</span>
                         <Button 
                           variant="outline-danger" 
                           size="sm" 
@@ -599,47 +579,41 @@ const ProductForm = () => {
                         <Row>
                           <Col md={6}>
                             <Form.Group className="mb-3">
-                              <Form.Label>Color <span className="text-danger">*</span></Form.Label>
+                              <Form.Label>Color *</Form.Label>
                               <Dropdown>
-                                <Dropdown.Toggle variant="outline-secondary" className="w-100 text-start">
-                                  {colorItem.name || "Select Color"}
+                                <Dropdown.Toggle variant="outline-secondary" className="w-100">
+                                  {colorItem.name || "Select color"}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="w-100">
-                                  <div className="px-3 py-2">
+                                  <div className="p-2">
                                     <Form.Control
                                       type="text"
                                       placeholder="Search colors..."
                                       value={colorSearch}
                                       onChange={(e) => setColorSearch(e.target.value)}
-                                      onClick={(e) => e.stopPropagation()}
                                       autoFocus
                                     />
                                   </div>
                                   <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                                    {filteredColors.length > 0 ? (
-                                      filteredColors.slice(0,10).map((colorObj, idx) => (
-                                        <Dropdown.Item 
-                                          key={idx} 
-                                          onClick={() => handleColorChange(colorIndex, colorObj.name)}
-                                          active={colorItem.name === colorObj.name}
-                                        >
-                                          <div className="d-flex align-items-center">
-                                            <span 
-                                              className="d-block rounded-circle me-3" 
-                                              style={{
-                                                backgroundColor: colorObj.hex,
-                                                width: "20px",
-                                                height: "20px",
-                                                border: "1px solid #ddd"
-                                              }}
-                                            ></span>
-                                            <span>{colorObj.name}</span>
-                                          </div>
-                                        </Dropdown.Item>
-                                      ))
-                                    ) : (
-                                      <Dropdown.Item disabled>No colors found</Dropdown.Item>
-                                    )}
+                                    {filteredColors.slice(0, 10).map((color, idx) => (
+                                      <Dropdown.Item 
+                                        key={idx} 
+                                        onClick={() => handleColorChange(colorIndex, color.name)}
+                                      >
+                                        <div className="d-flex align-items-center">
+                                          <span 
+                                            className="d-block rounded-circle me-3" 
+                                            style={{
+                                              backgroundColor: color.hex,
+                                              width: "20px",
+                                              height: "20px",
+                                              border: "1px solid #ddd"
+                                            }}
+                                          />
+                                          {color.name}
+                                        </div>
+                                      </Dropdown.Item>
+                                    ))}
                                   </div>
                                 </Dropdown.Menu>
                               </Dropdown>
@@ -650,42 +624,16 @@ const ProductForm = () => {
                         <Row>
                           <Col md={6}>
                             <Form.Group className="mb-3">
-                              <Form.Label>
-                                Product Image
-                                {(!isEditMode && !colorItem.productImageUrl) && (
-                                  <span className="text-danger">*</span>
-                                )}
-                              </Form.Label>
-                              {(!colorItem.productImageUrl || colorItem.productImage) ? (
-                                <div>
-                                  <Form.Control 
-                                    type="file" 
-                                    accept="image/*" 
-                                    onChange={(e) => handleProductImageChange(colorIndex, e.target.files[0])}
-                                    required={!isEditMode && !colorItem.productImageUrl}
-                                  />
-                                  {colorItem.productImage && (
-                                    <div className="mt-2">
-                                      <img
-                                        src={URL.createObjectURL(colorItem.productImage)}
-                                        alt={`New product image for ${colorItem.name || 'product'}`}
-                                        className="img-fluid rounded mt-2"
-                                        style={{ maxHeight: "150px" }}
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                              ) : (
+                              <Form.Label>Product Image *</Form.Label>
+                              {colorItem.productImageUrl ? (
                                 <div className="position-relative">
                                   <img
-                                    src={`${IMAGEURL}/products/${colorItem.productImageUrl}`}
-                                    alt={`Product image for ${colorItem.name || 'product'}`}
-                                    className="img-fluid rounded"
-                                    style={{ maxHeight: "150px" }}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      e.target.src = 'https://via.placeholder.com/150?text=No+Image';
-                                    }}
+                                    src={colorItem.productImageUrl.startsWith('blob:') 
+                                      ? colorItem.productImageUrl 
+                                      : `${IMAGEURL}/products/${colorItem.productImageUrl}`}
+                                    alt="Preview"
+                                    className="img-thumbnail"
+                                    style={{ maxHeight: '150px' }}
                                   />
                                   <Button 
                                     variant="danger" 
@@ -696,48 +644,39 @@ const ProductForm = () => {
                                     Remove
                                   </Button>
                                 </div>
+                              ) : (
+                                <>
+                                  <Form.Control 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={(e) => handleImageChange(colorIndex, e.target.files[0], 'product')}
+                                    required
+                                  />
+                                  {colorItem.productImage && (
+                                    <img
+                                      src={URL.createObjectURL(colorItem.productImage)}
+                                      alt="Preview"
+                                      className="img-thumbnail mt-2"
+                                      style={{ maxHeight: '150px' }}
+                                    />
+                                  )}
+                                </>
                               )}
                             </Form.Group>
                           </Col>
                           
                           <Col md={6}>
                             <Form.Group className="mb-3">
-                              <Form.Label>
-                                Holder Product Image
-                                {(!isEditMode && !colorItem.holderImageUrl) && (
-                                  <span className="text-danger">*</span>
-                                )}
-                              </Form.Label>
-                              {(!colorItem.holderImageUrl || colorItem.holderImage) ? (
-                                <div>
-                                  <Form.Control 
-                                    type="file" 
-                                    accept="image/*" 
-                                    onChange={(e) => handleHolderImageChange(colorIndex, e.target.files[0])}
-                                    required={!isEditMode && !colorItem.holderImageUrl}
-                                  />
-                                  {colorItem.holderImage && (
-                                    <div className="mt-2">
-                                      <img
-                                        src={URL.createObjectURL(colorItem.holderImage)}
-                                        alt={`New holder image for ${colorItem.name || 'product'}`}
-                                        className="img-fluid rounded mt-2"
-                                        style={{ maxHeight: "150px" }}
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                              ) : (
+                              <Form.Label>Holder Image</Form.Label>
+                              {colorItem.holderImageUrl ? (
                                 <div className="position-relative">
                                   <img
-                                    src={`${IMAGEURL}/products/${colorItem.holderImageUrl}`}
-                                    alt={`Holder image for ${colorItem.name || 'product'}`}
-                                    className="img-fluid rounded"
-                                    style={{ maxHeight: "150px" }}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      e.target.src = 'https://via.placeholder.com/150?text=No+Image';
-                                    }}
+                                    src={colorItem.holderImageUrl.startsWith('blob:') 
+                                      ? colorItem.holderImageUrl 
+                                      : `${IMAGEURL}/products/${colorItem.holderImageUrl}`}
+                                    alt="Preview"
+                                    className="img-thumbnail"
+                                    style={{ maxHeight: '150px' }}
                                   />
                                   <Button 
                                     variant="danger" 
@@ -748,6 +687,22 @@ const ProductForm = () => {
                                     Remove
                                   </Button>
                                 </div>
+                              ) : (
+                                <>
+                                  <Form.Control 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={(e) => handleImageChange(colorIndex, e.target.files[0], 'holder')}
+                                  />
+                                  {colorItem.holderImage && (
+                                    <img
+                                      src={URL.createObjectURL(colorItem.holderImage)}
+                                      alt="Preview"
+                                      className="img-thumbnail mt-2"
+                                      style={{ maxHeight: '150px' }}
+                                    />
+                                  )}
+                                </>
                               )}
                             </Form.Group>
                           </Col>
@@ -766,11 +721,10 @@ const ProductForm = () => {
                           </div>
                           
                           {colorItem.sizes.map((sizeItem, sizeIndex) => (
-                            <Row key={sizeIndex} className="mb-2 g-2 align-items-center">
+                            <Row key={sizeIndex} className="mb-2 g-2">
                               <Col xs={5}>
                                 <Form.Control 
-                                  type="text" 
-                                  placeholder="Size (e.g., S, M, L)" 
+                                  placeholder="Size" 
                                   value={sizeItem.size} 
                                   onChange={(e) => handleSizeChange(colorIndex, sizeIndex, "size", e.target.value)}
                                   required
@@ -812,16 +766,16 @@ const ProductForm = () => {
                   </Button>
                 </div>
 
-                <div className="d-flex justify-content-end mt-3">
+                <div className="d-flex justify-content-end">
                   <Button 
                     variant="primary" 
                     type="submit" 
-                    className="px-4 py-2"
                     disabled={isLoading || !validateForm()}
+                    className="px-4"
                   >
                     {isLoading ? (
                       <>
-                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                        <Spinner size="sm" className="me-2" />
                         Processing...
                       </>
                     ) : isEditMode ? (

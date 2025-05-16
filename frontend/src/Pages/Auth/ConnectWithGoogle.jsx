@@ -9,9 +9,7 @@ const ConnectWithGoogle = () => {
     useEffect(()=>{
         cookie.set("auth", token, { path: "/" });
         navigate("/");
-    },[token]);
-    console.log(token)
-    
+    },[token,navigate]);    
   return (
     <div>ConnectWithGoogle</div>
   )

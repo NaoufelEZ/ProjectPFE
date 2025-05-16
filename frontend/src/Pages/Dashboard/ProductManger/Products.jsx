@@ -110,12 +110,14 @@ const Products = () => {
                 <td><IoMdEye onClick={()=>handleStatusClick(item.product_stock)} color='green' role="button" size={25} /></td>
                 {user && user.role === 'Product Manager' && (
                   <td>
+                    <div className="flex">
                     <Button onClick={()=>navigate(`${item.id}`)} variant="outline-primary" size="sm" className="me-2">
                       <FaEdit />
                     </Button>
                     <Button onClick={()=>handleProductDelete(item.id)} variant="outline-danger" size="sm">
                       <FaTrash />
                     </Button>
+                    </div>
                   </td>
                 )}
               </tr>

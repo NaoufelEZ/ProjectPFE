@@ -15,7 +15,6 @@ import './Purchases.css';
 const Purchases = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [seenOrders, setSeenOrders] = useState({});
 
@@ -55,7 +54,7 @@ const Purchases = () => {
         );
         setSeenOrders(seenStatus);
       } catch (err) {
-        setError("Failed to load orders. Please try again.");
+        console.error(err)
       } finally {
         setLoading(false);
       }

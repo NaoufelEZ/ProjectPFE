@@ -62,7 +62,7 @@ const LeftBar = () => {
       path: "/dashboard",
       key: undefined
     },
-    ...(user?.role === "Admin"
+    ...((user?.role === "Admin" || user?.role === "Super Admin")
       ? [
           {
             title: "Users",
@@ -139,7 +139,7 @@ const LeftBar = () => {
       {user ? (
         <>
           <div className={`user-info ${isCollapsed ? "collapsed" : ""}`}>
-            {user.role === "Admin" ? (
+            {(user.role === "Admin" || user.role === "Super Admin") ? (
               <MdAdminPanelSettings className="user-icon" />
             ) : (
               <MdManageAccounts className="user-icon" />

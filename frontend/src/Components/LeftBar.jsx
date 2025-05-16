@@ -49,7 +49,7 @@ const LeftBar = () => {
             <NavLink className={({ isActive }) => isActive ? "text-black text-decoration-none h5" : "text-muted text-decoration-none h6"} to="/setting/saved-addresses">Saved addresses</NavLink>
             </li>
         </ul>
-        <button disabled={loading} onClick={handleLogout} role="button" className="ms-3 h6 btn border border-0 p-0">Logout</button>
+        <button disabled={loading} onClick={handleLogout} className="ms-3 h6 btn border border-0 p-0">Logout</button>
     </div>
   )
 }

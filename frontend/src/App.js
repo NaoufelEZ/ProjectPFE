@@ -113,7 +113,7 @@ function App() {
       </Route>
       </Route>
       {/* Protected Routes*/}
-      <Route element={<ReqRule allowedRule={["Admin","Product Manager"]}/>}>
+      <Route element={<ReqRule allowedRule={["Admin","Product Manager","Super Admin"]}/>}>
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="" element={<Overview />} />
           <Route path="inventory" element={<DashboardProducts />} />
@@ -122,7 +122,7 @@ function App() {
           <Route path="setting/change-password" element={<DashboardChangePassword />} />
 
         {/* Admin */}
-          <Route element={<ReqRule allowedRule={["Admin"]}/>}>
+          <Route element={<ReqRule allowedRule={["Admin","Super Admin"]}/>}>
               <Route path="users" element={<Users />}/>
               <Route path="users/add" element={<AddUsers />} />
               <Route path="users/:userId" element={<User />} />

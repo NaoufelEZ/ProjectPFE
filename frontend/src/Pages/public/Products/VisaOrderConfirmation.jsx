@@ -5,6 +5,7 @@ import { FaCheckCircle, FaCcVisa, FaTruck, FaReceipt } from 'react-icons/fa';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { Helmet } from 'react-helmet-async';
 
 const VisaOrderConfirmation = () => {
   const cookie = new Cookies();
@@ -12,10 +13,10 @@ const VisaOrderConfirmation = () => {
   const tokenAuth = cookie.get("auth"); 
   const path = window.location.href;
   const token = path.split("=")[1];
+  const navigate = useNavigate();
   useEffect(() => {
   const referenceY = window.localStorage.getItem("reference");
   setReference(referenceY);
-
   }, [token])  
   useEffect(() => {
     if (!reference) {
@@ -37,7 +38,7 @@ const VisaOrderConfirmation = () => {
           Authorization: `Bearer ${tokenAuth}`,
           "x-api-key": ApiKey,
         }
-      }).then(()=>window.localStorage.removeItem("card"))
+      }).then((response)=>{window.localStorage.removeItem("card");console.log(response)})
     })
     .catch((err) => {
       console.error("Erreur lors de la vérification ou confirmation :", err);
@@ -47,23 +48,27 @@ const VisaOrderConfirmation = () => {
   }, [token,reference]);
   
   
-  const navigate = useNavigate();
+
   const transactionId = `TXN${Math.floor(1000000000 + Math.random() * 9000000000)}`;
   
   return (
+    <>
+    <Helmet>
+      <title>Order Confirmation</title>
+    </Helmet>
     <Container className="thank-you-container">
       <div className="text-center mb-4">
         <FaCheckCircle size={60} className="text-success" />
       </div>
       
       <h1 className="text-center mb-3">PAYMENT SUCCESSFUL!</h1>
-      <p className="text-center fs-5 mb-4">Your Visa payment has been processed successfully.</p>
+      <p className="text-center fs-5 mb-4">Your Flouci payment has been processed successfully.</p>
       
       <div className="order-summary-box mb-4">
         <h2 className="h5 mb-3 text-uppercase">Transaction Details</h2>
         <p className="mb-2">
           <FaCcVisa className="me-2 text-primary" />
-          Payment method: <span className="fw-medium">Visa ending in ****</span>
+          Payment method: <span className="fw-medium">Flouci</span>
         </p>
         <p className="mb-2">
           <FaReceipt className="me-2" />
@@ -90,6 +95,7 @@ const VisaOrderConfirmation = () => {
         </Button>
       </div>
     </Container>
+    </>
   );
 };
 

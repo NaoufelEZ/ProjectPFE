@@ -7,6 +7,7 @@ import { ApiKey, APIURL } from "../../../Api/Api";
 import axios from "axios";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import useUser from "../../../Hooks/useUser";
 
 const AddUserSchema = Yup.object().shape({
   first_name:Yup.string().matches(/^[a-zA-Z]+$/,"First Name should be a alpha").min(3,"First Name Should Be At Less 3 Letter").required("First Name required"),
@@ -20,6 +21,7 @@ const AddUserSchema = Yup.object().shape({
 });
 const AddUsers = () => {
     const [error,setError] = useState(false);
+    const user = useUser();
     const navigate = useNavigate();
     const cookie = new Cookies();
     const token = cookie.get("auth");
@@ -95,7 +97,7 @@ const AddUsers = () => {
                 <Form.Label>Role</Form.Label>
                 <Form.Select name="role" onChange={formik.handleChange} value={formik.values.role} aria-label="Default select example">
                     <option disabled selected value="">Select Role</option>
-                    <option value="Admin">Admin</option>
+                    {user?.role === "Super Admin" &&<option value="Admin">Admin</option>}
                     <option value="Product Manager">Product Manager</option>
                 </Form.Select>
             </Form.Group>

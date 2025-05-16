@@ -1,21 +1,18 @@
-import { faArrowLeft, faClose } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState } from 'react';
+import  { useState }  from 'react';
 import googleLogo from '../../Assets/images/icons8-google-48.svg';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Login2.css';
-import { Button, Form, Card, Image, Container, Row, Col } from 'react-bootstrap';
+import { Button, Form, Card } from 'react-bootstrap';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'universal-cookie';
-import { ApiKey } from '../../Api/Api';
+import { ApiKey, APIURL } from '../../Api/Api';
 import Loading from '../../Components/Loading';
 import { Slide, toast, ToastContainer } from 'react-toastify';
 
 function SideLogin({ currentUse }) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const cookie = new Cookies();
 
   // Validation schema with Yup
@@ -35,7 +32,7 @@ function SideLogin({ currentUse }) {
       setLoading(true);
       try {
         const res = await axios.post(
-          'http://127.0.0.1:8000/api/v1/login',
+          `${APIURL}/login`,
           values,
           {
             headers: {
@@ -45,13 +42,12 @@ function SideLogin({ currentUse }) {
           }
         );
         cookie.set('auth', res.data.token);
-        if (res.data.data.role === 'Admin' || res.data.data.role === 'Product Manager') {
+        if (res.data.data.role === 'Admin' || res.data.data.role === 'Super Admin' || res.data.data.role === 'Product Manager') {
           nav('/dashboard');
         } else {
           nav('/');
         }
       } catch (err) {
-        setError(true);
         setLoading(false);
         notify();
       }

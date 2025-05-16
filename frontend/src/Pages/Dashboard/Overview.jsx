@@ -42,7 +42,7 @@ const Overview = () => {
   
 
   useEffect(() => {
-    if (user && user.role === "Admin") {
+    if (user && (user.role === "Admin" || user.role === "Super Admin")) {
       axios.get(`${APIURL}/users`, {
         headers: {
           Accept: "Application/json",
@@ -56,7 +56,7 @@ const Overview = () => {
         }));
       });
     }
-  }, [user]);
+  }, [user,token]);
 
   useEffect(() => {
     axios.get(`${APIURL}/products`, {
@@ -74,7 +74,7 @@ const Overview = () => {
         lowStockItems: lowStockCount
       }));
     });
-  }, [user]);
+  }, [user,token]);
   
 
   useEffect(() => {
@@ -143,7 +143,7 @@ const Overview = () => {
       }));
     }).catch(() => setError(true));
   
-  }, [user]);
+  }, [user,token]);
 
   return (
     <>
@@ -177,7 +177,7 @@ const Overview = () => {
             color="info"
           />
         </Col>
-        {user && user.role === "Admin" && (
+        {user && (user.role === "Admin" || user.role === "Super Admin") && (
           <Col lg={3} md={6} sm={12} className="mb-4">
             <StatsCard
               title="Total Customers"

@@ -46,7 +46,7 @@ const Login = () => {
           }
         );
         cookie.set("auth", res.data.token);
-        (res.data.data.role === "Admin" || res.data.data.role === "Product Manager") 
+        (res.data.data.role === "Admin" || res.data.data.role === "Super Admin" || res.data.data.role === "Product Manager") 
           ? nav("/dashboard") 
           : nav("/");
       } catch (err) {
