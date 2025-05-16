@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make("123456"),
             'email_verify' => true,
             'phone' => "24365390",
-            'role' => 'admin',
+            'role' => 'Super Admin',
         ]);
         User::factory()->create([
             'first_name' => 'Nidhal',

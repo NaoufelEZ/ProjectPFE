@@ -62,12 +62,20 @@ class UserController extends Controller
         }
     }
     // Admin
-    public function index(){
-        $user = User::all();
-        if(!$user->isEmpty()){
-            return response()->json(["data"=>$user,"status"=>200], 200);
+    public function index(Request $request){
+        $users = User::all();
+        if($users->isEmpty()){
+            return response()->json(["message"=>"Users are Empty","status"=>404], 404);
         }
-        return response()->json(["message"=>"Users are Empty","status"=>404], 404);
+        $admin = $request->user();
+        if($admin->role == "Super Admin"){
+            return response()->json(["data"=>$users,"status"=>200], 200);
+        }
+        else{
+             $users = User::whereIn("role",["Product Manager","Client"])->get();
+            return response()->json(["data"=>$users,"status"=>200], 200);
+        }
+       
     }
     public function delete($id){
         $user = User::find($id);

@@ -20,7 +20,9 @@ return new class extends Migration
             $table->foreign("address_id")->references("id")->on("addresses")->onDelete("cascade");
             $table->string("status")->default("Pending");
             $table->string("method_payment");
-            $table->string("delivery_company")->nullable();
+            $table->unsignedBigInteger("company_id")->nullable();
+            $table->foreign("company_id")->references("id")->on("delivery_company")->onDelete("cascade");
+            $table->string("delivery_company")->delete();
             $table->boolean("delivery_pay")->default(true);
             $table->boolean("dot_notify")->default(false);
             $table->timestamp("order_date")->useCurrent();

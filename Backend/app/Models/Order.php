@@ -15,7 +15,7 @@ class Order extends Model
         "user_id",
         "address_id",
         "status",
-        "delivery_company",
+        "company_id",
         "method_payment",
     ];
     public $timestamps = false;
@@ -27,5 +27,8 @@ class Order extends Model
     }
     public function address(){
         return $this->belongsTo(Address::class);
+    }
+    public function company(){
+        return $this->belongsTo(DeliveryCompany::class);
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password',64)->nullable();
             $table->boolean('email_verify')->default(false);
             $table->string('phone',8)->nullable();
-            $table->enum("role",array("Admin","Client","Product Manager"))->default("Client");
+            $table->enum("role",array("Admin","Client","Product Manager","Super Admin"))->default("Client");
             $table->string('google_id')->nullable()->unique();
             $table->string('google_token')->nullable()->unique();
             $table->timestamps();

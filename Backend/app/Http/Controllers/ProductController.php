@@ -8,7 +8,6 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\Subcategories;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller

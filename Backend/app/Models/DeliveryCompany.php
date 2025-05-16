@@ -17,4 +17,7 @@ class DeliveryCompany extends Model
         "fee",
         "duration",
     ];
+    public function Order(){
+        return $this->hasMany(Order::class);
+    }
 }

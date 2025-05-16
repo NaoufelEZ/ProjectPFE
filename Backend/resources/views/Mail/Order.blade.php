@@ -47,7 +47,8 @@
             @endforeach
         </ul>
 
-        <p><strong>Total Price:</strong> {{ $orderItems->sum(fn($item) => $item->quantity * $item->price) }} TND</p>
+        <p><strong>Fee:</strong> {{ $order->delivery_pay ? 9.9 : 0 }} TND</p>
+        <p><strong>Total Price:</strong> {{ $orderItems->sum(fn($item) => $item->quantity * $item->price) + ($order->delivery_pay ? 9.9 : 0) }} TND</p>
 
         <p>If you have any questions, please contact our support team.</p>
         

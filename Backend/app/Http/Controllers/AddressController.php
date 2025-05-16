@@ -17,7 +17,8 @@ class AddressController extends Controller
                 "state" => "required|string|max:30",
                 "zip" => "required|digits:4",
                 "street" => "required|string|max:100",
-                "is_default"=> "boolean"
+                "is_default"=> "boolean",
+                "city" => "required|string|max:100",
             ]);
             if($userValid["is_default"]){
                 Address::where("user_id",$user)->update([
@@ -27,6 +28,7 @@ class AddressController extends Controller
                     "user_id" => $user,
                     "address" => $userValid["address"],
                     "state" => $userValid["state"],
+                    "city" => $userValid["city"],
                     "zip" => $userValid["zip"],
                     "street" => $userValid["street"],
                     "is_default"=> 1,

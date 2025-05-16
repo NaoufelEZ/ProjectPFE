@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class checkAdmin
+class checkProductManager
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class checkAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->role != "Admin" and $request->user()->role != "Super Admin"){
+        if($request->user()->role != "Product Manager"){
             return response()->json(["message"=>"Forbidden","status"=>403], 403);
         }
         return $next($request);

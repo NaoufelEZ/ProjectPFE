@@ -88,7 +88,7 @@ Route::middleware('authenticateApiKey')->group(function(){
         Route::get("products/product/{id}","product");
         Route::get("/products","roleIndex");
         // private
-        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+        Route::middleware(["auth:sanctum","checkProductManager"])->group(function(){
             Route::post("/product/add","store");
             Route::post("/product/update/{id}","update");
             Route::delete("/product/delete/{id}","delete");
@@ -128,9 +128,11 @@ Route::middleware('authenticateApiKey')->group(function(){
             Route::put("order/update/check","allChecked");
             Route::put("order/confirmation/{ref}","orderConfirmation");
         });
-        // admin
-        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+        Route::middleware(["auth:sanctum","checkDashboardRole"])->group(function(){
             Route::get("orders","index");
+        });
+        // admin
+        Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
             Route::get("order/{id}","getOrder");
             Route::put("order/update/{id}","update");
             Route::put("order/checked/{id}","checked");
@@ -140,7 +142,7 @@ Route::middleware('authenticateApiKey')->group(function(){
     // category
     Route::controller(CategoryController::class)->group(function(){
         // private
-        Route::middleware(["auth:sanctum","checkAdminProductManager"])->group(function(){
+        Route::middleware(["auth:sanctum","checkProductManager"])->group(function(){
             // category
             Route::post("admin/category/add","storeCategory");
             Route::get("admin/category/{id}/subcategory","adminSubcategory");

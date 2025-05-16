@@ -63,12 +63,12 @@ class OrderController extends Controller
         }
     }
     public function index(){
-        $orders = Order::with(["user","address","orderItems.product_stock.product"])->get();
+        $orders = Order::with(["user","address","orderItems.product_stock.product","company"])->get();
       
         return response()->json(["message"=>"Succeed","data"=>$orders,"status"=>200],200);
     }
     public function getOrder($id){
-        $order = Order::with(["user","orderItems.product_stock.product","address"])->find($id);
+        $order = Order::with(["user","orderItems.product_stock.product","address","company"])->find($id);
         if(!$order){
             return response()->json(["message"=>"Order Not Found","Status"=>404],404);
         }
@@ -81,12 +81,12 @@ class OrderController extends Controller
                 return response()->json(["message"=>"Order Not Found","status"=>404],404);
             }
             $orderValidate = $request->validate([
-                "deliveryCompany"=>"nullable|string",
+                "deliveryCompany"=>"nullable|integer",
                 "deliveryStatus"=>"string|required",
             ]);
             $order->update([
                 "status" => $orderValidate["deliveryStatus"],
-                "delivery_company" => $orderValidate["deliveryCompany"],
+                "company_id" => $orderValidate["deliveryCompany"],
                 "order_update"=>now(),
             ]);
             $orderItems = OrderItems::with("product_stock")->where("order_id",$id)->get();
@@ -195,6 +195,7 @@ class OrderController extends Controller
         }
         $order->update([
             "status"=>"Shipped",
+            "company_id"=>1,
             "order_update"=>now(),
         ]);
         $orderItems = OrderItems::with("product_stock")->where("order_id",$order->id)->get();
@@ -204,5 +205,6 @@ class OrderController extends Controller
                     "quantity"=>$currentStock,
                 ]);
         }
+        Mail::to(users: $order->user->email)->send(new OrderMail($orderItems,"Shipped",$order));
     }
 }
