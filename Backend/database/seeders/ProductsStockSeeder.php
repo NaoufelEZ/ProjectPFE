@@ -187,12 +187,12 @@ class ProductsStockSeeder extends Seeder
             ["product_id" => 22, "color" => "Gray/White", "holder_product_picture" =>".jpg",  "product_picture" => "02205376800-a4o.jpg", "size" => "L", "quantity" => 20],
 
             // Product 23 - Mesh boxy fit sweater
-            ["product_id" => 23, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "02196376800-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 23, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "02196376800-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 23, "color" => "Black", "holder_product_picture" =>".jpg",  "product_picture" => "02196376800-a4o.jpg", "size" => "L", "quantity" => 20],
-            ["product_id" => 23, "color" => "White", "holder_product_picture" =>".jpg",  "product_picture" => "02194663250-a4o.jpg", "size" => "S", "quantity" => 20],
-            ["product_id" => 23, "color" => "White", "holder_product_picture" =>".jpg",  "product_picture" => "02194663250-a4o.jpg", "size" => "M", "quantity" => 20],
-            ["product_id" => 23, "color" => "White", "holder_product_picture" =>".jpg",  "product_picture" => "02194663250-a4o.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 23, "color" => "Black", "holder_product_picture" =>"1747319457_6825faa1ae8d9.jpg",  "product_picture" => "1747319457_6825faa1ae1d5.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 23, "color" => "Black", "holder_product_picture" =>"1747319457_6825faa1ae8d9.jpg",  "product_picture" => "1747319457_6825faa1ae1d5.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 23, "color" => "Black", "holder_product_picture" =>"1747319457_6825faa1ae8d9.jpg",  "product_picture" => "1747319457_6825faa1ae1d5.jpg", "size" => "L", "quantity" => 20],
+            ["product_id" => 23, "color" => "White", "holder_product_picture" =>"1747319457_6825faa1b239d.jpg",  "product_picture" => "1747319457_6825faa1b1d81.jpg", "size" => "S", "quantity" => 20],
+            ["product_id" => 23, "color" => "White", "holder_product_picture" =>"1747319457_6825faa1b239d.jpg",  "product_picture" => "1747319457_6825faa1b1d81.jpg", "size" => "M", "quantity" => 20],
+            ["product_id" => 23, "color" => "White", "holder_product_picture" =>"1747319457_6825faa1b239d.jpg",  "product_picture" => "1747319457_6825faa1b1d81.jpg", "size" => "L", "quantity" => 20],
 
             // Product 24 - Ripped rustic boxy fit sweater
             ["product_id" => 24, "color" => "Brown", "holder_product_picture" =>".jpg",  "product_picture" => "02218069711-a4o.jpg", "size" => "S", "quantity" => 20],
