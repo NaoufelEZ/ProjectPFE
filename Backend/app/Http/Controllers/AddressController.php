@@ -40,6 +40,7 @@ class AddressController extends Controller
                     "address" => $userValid["address"],
                     "state" => $userValid["state"],
                     "zip" => $userValid["zip"],
+                    "city" => $userValid["city"],
                     "street" => $userValid["street"],
                 ]);
             }

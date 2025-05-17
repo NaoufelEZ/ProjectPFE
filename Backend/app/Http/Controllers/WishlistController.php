@@ -17,13 +17,13 @@ class WishlistController extends Controller
         $wishlist = Wishlist::where("product_id",$product->id)->where("user_id",$user->id)->first();
         if($wishlist){
             $wishlist->delete();
-            return response()->json(["message" => "Product Removed from Your Wishlist", "status" => 200], 200);
+            return response()->json(["message" => "Product Removed from Your Wishlist", "status" => 202], 202);
         }
         Wishlist::create([
             "user_id"=>$user->id,
             "product_id"=>$id,
         ]);
-        return response()->json(["message"=>"Product Add To Your List","status"=>200], 200);
+        return response()->json(["message"=>"Product Add To Your List","status"=>201], 201);
     }
     public function index(Request $request) {
         $user = $request->user()->id;
