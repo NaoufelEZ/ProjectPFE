@@ -26,7 +26,7 @@ const Users = () => {
 
   const user = useUser();
   const roles = user?.role === "Super Admin"
-  ? ["Client", "Product Manager", "Admin"]
+  ? ["Client", "Product Manager", "Admin","Super Admin"]
   : ["Client", "Product Manager"];
   const statusOptions = ["All", "Active", "Inactive"];
   console.log(roles)

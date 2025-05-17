@@ -15,6 +15,7 @@ import Cookies from "universal-cookie";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { WishlistContext } from "../../../Context/WishlistContext";
 import ViewToggleIcon from "./Components/ViewToggleIcon";
+import { FaHeart, FaHeartBroken } from "react-icons/fa";
 
 const Products = () => {
   const [data, setData] = useState(null);
@@ -25,6 +26,8 @@ const Products = () => {
   const [wishlistError, setWishlisttError] = useState(false);
   const [filterProduct, setFilterProduct] = useState([]);
   const [change, setChange] = useState(false);
+  const [heart,setHeart] = useState(false);
+  const [brokenHeart,setBrokenHerat] = useState(false);
   const [viewMode, setViewMode] = useState("grid");
   const { cat, sub, detail } = useParams();
   const cookie = new Cookies();
@@ -63,12 +66,12 @@ const Products = () => {
         setWishlisttError(true);
       })
       .catch(() => setWishlisttError(false));
-  }, [change]);
+  }, [change,token]);
 
   const handleAddWishlist = async (id) => {
     setWishlistChange((prev) => prev + 1);
     try {
-      await axios.post(
+      const response = await axios.post(
         `${APIURL}/wishlist/add/${id}`,
         {},
         {
@@ -79,11 +82,27 @@ const Products = () => {
           },
         }
       );
+      if(response.status === 201){
+        setHeart(true)
+      }
+      else{
+        setBrokenHerat(true)
+      }
     } catch (err) {
       console.log(err);
     }
     setChange((prev) => !prev);
   };
+  useEffect(()=>{
+    setTimeout(()=>{
+      if(heart){
+        setHeart(false)
+      }
+      if(brokenHeart){
+        setBrokenHerat(false)
+      }
+    },2000)
+  },[heart,brokenHeart])
 
   return (
     <>
@@ -99,7 +118,9 @@ const Products = () => {
         products={data}
       />
       <Header />
-      <Container className="py-5">
+      <Container className="py-5 position-relative">
+        <div className={`heart ${heart ? "show" : ""}`}><FaHeart size={100} color="red" /></div>
+        <div className={`heart ${brokenHeart ? "show" : ""}`}><FaHeartBroken size={100} color="red" /></div>
   <div className="d-flex justify-content-between align-items-center mb-4">
     <h2 className="fw-bold text-capitalize">
       {detail.replaceAll("-", " ").toLowerCase()}
@@ -176,11 +197,11 @@ const Products = () => {
                         src={`${IMAGEURL}/products/${firstStock?.holder_product_picture}`}
                         className="first-product-image"
                       />
-                      <Card.Body>
-                        <Card.Title className="text-muted fs-4 fw-bold">
+                       <Card.Body>
+                        <Card.Title className="text-muted fs-6">
                           {product.title}
                         </Card.Title>
-                        <Card.Text className="fw-semibold fs-5">
+                        <Card.Text className="fw-semibold">
                           {product.discount === 0 ? (
                             `${product.price}.00 TND`
                           ) : (
@@ -189,6 +210,7 @@ const Products = () => {
                                 {(product.price - product.discount).toFixed(2)}{" "}
                                 TND
                               </span>
+                              <br />
                               <span className="original-price me-2">
                                 {product.price.toFixed(2)} TND
                               </span>
@@ -200,19 +222,22 @@ const Products = () => {
                         </Card.Text>
                       </Card.Body>
                       {wishlistError && (
+                        <div
+                        className="product-heart-container"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddWishlist(product.id);
+                        }}
+                      >
                         <AiFillHeart
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddWishlist(product.id);
-                          }}
                           className={`product-heart-icon ${
-                            wishlist.some(
-                              (item) => item.product_id === product.id
-                            )
+                            wishlist.some((item) => item.product_id === product.id)
                               ? "text-danger"
                               : ""
                           }`}
                         />
+                      </div>
+                      
                       )}
                     </Card>
                   </Col>

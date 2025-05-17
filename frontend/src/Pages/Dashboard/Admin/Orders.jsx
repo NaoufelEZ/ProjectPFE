@@ -163,7 +163,7 @@ const Orders = () => {
     if (selectAll) {
       setSelectedOrders([]);
     } else {
-      const allIds = currentItems.map(order => order.id);
+      const allIds = currentItems.filter((order => order.status.includes("Shipped"))).map(order => order.id);
       setSelectedOrders(allIds);
     }
     setSelectAll(!selectAll);

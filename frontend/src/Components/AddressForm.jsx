@@ -6,8 +6,6 @@ import { ApiKey, APIURL } from '../Api/Api';
 import Cookies from 'universal-cookie';
 import { useEffect, useState } from 'react';
 import dataTun from "../Assets/TunisianLocation/data.json";
-import { Helmet } from 'react-helmet-async';
-
 
 const addressSchema = Yup.object().shape({
   address: Yup.string().required("Address is required"),
@@ -83,7 +81,7 @@ const AddressForm = ({ onClose,addressAdd }) => {
           } else {
               setDeleg([]); 
           }
-      }, [formik.values.state]);
+      }, [formik.values.state,data]);
   
       useEffect(() => {
           if (formik.values.street) {
@@ -97,14 +95,14 @@ const AddressForm = ({ onClose,addressAdd }) => {
           } else {
               setCite([]); 
           }
-      }, [formik.values.street]);
+      }, [formik.values.state,formik.values.street,data]);
   
       useEffect(() => {
           if (formik.values.city) {
               const zip = data.filter((e) => e.Gov === formik.values.state && e.Deleg === formik.values.street && e.Cite === formik.values.city);
               formik.setFieldValue("zip",zip[0]?.zip)
           }
-      }, [formik.values.city,formik.values.zip]);
+      }, [formik.values.city,formik.values.zip,data,formik]);
 
   
   // const getLocation = () => {
@@ -132,9 +130,6 @@ const AddressForm = ({ onClose,addressAdd }) => {
 
   return (
     <>
-    <Helmet>
-      <title>Checkout|Nalouati Store</title>
-    </Helmet>
     <Card className="p-4 shadow-sm rounded-4">
       <Card.Header as="h5" className="border-bottom mb-4 text-center">
         Add New Address

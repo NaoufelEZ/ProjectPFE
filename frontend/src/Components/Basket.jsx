@@ -23,6 +23,7 @@ const Basket = (props) => {
     const token = cookie.get("auth")
     const {setBasketChange} = useContext(BasketContext)
     useEffect(()=>{
+        if(!token) return;
         axios.get(`${APIURL}/user`,{
             headers:{
                 Accept:"application/json",
@@ -44,7 +45,7 @@ const Basket = (props) => {
         setTotal(totalPrice);
     }, [storage]);
 
-    const deliveryFee = total <= 150 ? 7 : 0;
+    const deliveryFee = total <= 150 ? 9.9 : 0;
     const freeDeliveryThreshold = 150;
 
     const handleDelete = (productIndex) => {
@@ -70,7 +71,7 @@ const Basket = (props) => {
 
         const handleSend = async () =>{
             try{
-                const response = await axios.post(`${APIURL}/send`,{},
+                await axios.post(`${APIURL}/send`,{},
                       {
                       headers :{
                         Accept:"application/json",
@@ -85,9 +86,7 @@ const Basket = (props) => {
             }catch(err){
                 console.error(err)
             }
-
         };
-
     return (
         <>
             <div
@@ -176,7 +175,7 @@ const Basket = (props) => {
                                     <span className="total-price">{(total + deliveryFee).toFixed(2)} TND</span>
                                 </div>
 
-                                {user && !user.email_verify && (
+                                {token && !user.email_verify && (
                                     <div className="email-warning-box">
                                     <p>Please verify your email to proceed with checkout.</p>
                                     <div className="triangle"></div>

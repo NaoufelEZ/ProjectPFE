@@ -313,7 +313,7 @@ const Header = () => {
                       aria-label="React Splide Example"
                     >
                      {newProduct.slice(0, 9).map((product, index) => (
-                            <SplideSlide key={index}>
+                            <SplideSlide role="button" onClick={()=>navigate(`/product/${product.id}`)} key={index}>
                               <img
                                 width="100%"
                                 height="100%"

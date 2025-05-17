@@ -55,12 +55,14 @@ header {
   z-index: 1000;
   overflow: hidden;
   padding: 1rem 2rem;
+  display: none;
 }
 
 .mega-menu.show {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  display: block;
 }
 
 .mega-row {

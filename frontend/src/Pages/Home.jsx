@@ -13,7 +13,6 @@ const Home = () => {
   const [subcategory,setSubcategory] = useState([]);
   const [categoryDetails,setCategoryDetails] = useState([]);
   const navigate = useNavigate();
-  // const navigate = useNavigate();
   const {cat} = useParams();
   useEffect(()=>{
     axios.get(`${APIURL}/category/${cat}/subcategory`,{
@@ -41,9 +40,9 @@ const Home = () => {
     </Helmet>
       <Header navTo={cat} />
       <section  className="w-100 ">
-      <Carousel  className="w-100 position-sticky top-0 z-0" data-bs-theme="dark">
+      <Carousel   className="w-100 position-sticky top-0 z-0" data-bs-theme="dark">
       {subcategory && subcategory.filter((item) => item.subcategories !== "New").map((e,index)=>(
-        <Carousel.Item style={{height:"calc(100vh - 70px)"}} key={index}>
+        <Carousel.Item role="button" onClick={()=>navigate(`${e.subcategories}`)} style={{height:"calc(100vh - 70px)"}} key={index}>
           <img height="100%" className="d-block w-100" src={`${IMAGEURL}/categories/${e.subcategories_image}`} loading="lazy" alt=""/>
           <Carousel.Caption>
             <h1 className="text-white fw-bold text-uppercase ">{e.subcategories}</h1>
