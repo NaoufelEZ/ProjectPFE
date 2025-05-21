@@ -54,7 +54,7 @@ const AddAddress = () => {
         );
         navigate("/setting/saved-addresses")
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   });
@@ -75,7 +75,7 @@ const AddAddress = () => {
           } else {
               setDeleg([]); 
           }
-      }, [formik.values.state,data]);
+      }, [formik.values.state]);
   
       useEffect(() => {
           if (formik.values.street) {
@@ -89,14 +89,14 @@ const AddAddress = () => {
           } else {
               setCite([]); 
           }
-      }, [formik.values.street,formik.values.state,data]);
+      }, [formik.values.street,formik.values.state]);
   
       useEffect(() => {
           if (formik.values.city) {
               const zip = data.filter((e) => e.Gov === formik.values.state && e.Deleg === formik.values.street && e.Cite === formik.values.city);
               formik.setFieldValue("zip",zip[0]?.zip)
           }
-      }, [formik.values.city,formik.values.zip,data,formik]);
+      }, [formik.values.city,formik.values.zip]);
 
 
     return (

@@ -58,7 +58,7 @@ const AddressForm = ({ onClose,addressAdd }) => {
         onClose(true);
         addressAdd(prev => prev + 1);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   });
@@ -81,7 +81,7 @@ const AddressForm = ({ onClose,addressAdd }) => {
           } else {
               setDeleg([]); 
           }
-      }, [formik.values.state,data]);
+      }, [formik.values.state]);
   
       useEffect(() => {
           if (formik.values.street) {
@@ -95,14 +95,14 @@ const AddressForm = ({ onClose,addressAdd }) => {
           } else {
               setCite([]); 
           }
-      }, [formik.values.state,formik.values.street,data]);
+      }, [formik.values.state,formik.values.street]);
   
       useEffect(() => {
           if (formik.values.city) {
               const zip = data.filter((e) => e.Gov === formik.values.state && e.Deleg === formik.values.street && e.Cite === formik.values.city);
               formik.setFieldValue("zip",zip[0]?.zip)
           }
-      }, [formik.values.city,formik.values.zip,data,formik]);
+      }, [formik.values.city,formik.values.zip]);
 
   
   // const getLocation = () => {

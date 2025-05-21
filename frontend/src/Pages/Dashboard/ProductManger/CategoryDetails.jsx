@@ -129,10 +129,6 @@ const CategoryDetails = () => {
                               src={`${IMAGEURL}/categories/${item.category_details_image}`} 
                               className="rounded-circle border"
                               alt={item.categoryDetails}
-                              onError={(e) => {
-                                e.target.onerror = null; 
-                                e.target.src = "https://via.placeholder.com/50";
-                              }}
                             />
                           </td>
                           <td>

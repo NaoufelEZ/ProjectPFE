@@ -13,7 +13,7 @@ const categorySchema = Yup.object().shape({
     category:Yup.string().required("Category Is Required"),
     subcategory:Yup.string().required("Subcategory required"),
     category_details:Yup.string().matches(/^[a-zA-Z]+$/, "Category should be alphabetic").min(3,"Category should at less be 3 characters").required("Category Details required"),
-    subcategory_image:Yup.mixed()
+    category_details_image:Yup.mixed()
     .required("Subcategory Image required")
     .test("fileType", "Only images (JPG, PNG, MP4) are allowed", (value) => {
         return value && ["image/jpeg", "image/png" , "video/mp4"].includes(value.type);
@@ -23,8 +23,6 @@ const categorySchema = Yup.object().shape({
 const Detail = () => {
     const [category, setCategory] = useState([]);
     const [subcategory, setSubcategory] = useState([]);
-    const [CategoryDetails, setCategoryDetails] = useState([]);
-    const [isOn, setIsOn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const cookie = new Cookies();
@@ -46,7 +44,7 @@ const Detail = () => {
             category : "",
             subcategory : "",
             category_details : "",
-            subcategory_image: null,
+            category_details_image: null,
         },
         validationSchema:categorySchema,
         onSubmit: async (value)=>{
@@ -54,7 +52,7 @@ const Detail = () => {
             formData.append("category_id", value.category);
             formData.append("subcategory_id", value.subcategory);
             formData.append("categoryDetails", value.category_details);
-            formData.append("category_details_image", value.subcategory_image);
+            formData.append("category_details_image", value.category_details_image);
             try{
                 await axios.post(`${APIURL}/admin/category-details/add`,formData,
                     {
@@ -178,31 +176,7 @@ const Detail = () => {
                                     <Col md={12}>
                                         <Form.Group className="mb-4">
                                             <Form.Label>Category Details Image</Form.Label>
-                                            {CategoryDetails?.category_details_image ? (
-                                                <div 
-                                                    role='button' 
-                                                    onMouseEnter={() => setIsOn(true)} 
-                                                    onMouseLeave={() => setIsOn(false)} 
-                                                    className="position-relative border rounded p-2"
-                                                    style={{ width: "100%", maxWidth: "400px" }}
-                                                >
-                                                    <img 
-                                                        className="img-fluid rounded" 
-                                                        src={`${IMAGEURL}/categories/${CategoryDetails.category_details_image}`} 
-                                                        alt='category_details_image'
-                                                    />
-                                                    {isOn && (
-                                                        <div 
-                                                            onClick={() => setCategoryDetails(prev => ({ ...prev, category_details_image: null }))} 
-                                                            className="w-100 h-100 bg-dark position-absolute top-0 start-0 opacity-75 d-flex justify-content-center align-items-center"
-                                                            style={{ borderRadius: '0.25rem' }}
-                                                        >
-                                                            <IoClose size={40} color="white" />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ) : (
-                                                <>
+
                                                     <Form.Control 
                                                         name="category_details_image" 
                                                         type="file"  
@@ -215,8 +189,6 @@ const Detail = () => {
                                                     <Form.Text className="text-muted">
                                                         Upload an image for this category detail (JPEG, PNG)
                                                     </Form.Text>
-                                                </>
-                                            )}
                                         </Form.Group>
                                     </Col>
                                 </Row>

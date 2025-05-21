@@ -34,9 +34,11 @@ const Header = () => {
   const [categoryDetails, setCategoryDetails] = useState([]);
   const [categories, setCategories] = useState([]);
   const [lastNav, setLastNav] = useState(localStorage.getItem("navTo") || "");
+  const [error,setError] = useState(true);
 
   const megaMenuRef = useRef(null);
   const headerRef = useRef(null);
+
 
   const cookie = new Cookies();
   const token = cookie.get("auth");
@@ -52,6 +54,10 @@ const Header = () => {
       Boots: "/Assets/images/shoes-boots.jpg",
     },
   };
+ useEffect(()=>{
+    const nav = window.localStorage.getItem("navTo");
+    setLastNav(nav)
+  },[cat])
 
   useEffect(() => {
     if (token) {
@@ -90,11 +96,22 @@ const Header = () => {
             "x-api-key": ApiKey,
           },
         })
-        .then((response) => setSubcategory(response.data.data));
+        .then((response) => {
+          if(response.status === 200){
+          setSubcategory(response.data.data);
+          setError(false)
+        }
+        else{
+          setError(true)
+        }
+      })
+        .catch(()=>setError(true))
     }
   }, [cat, lastNav]);
+  console.log(error)
 
   useEffect(() => {
+    if(error) return
       axios
         .get(`${APIURL}/products/${cat || lastNav }/new`, {
           headers: {
@@ -106,9 +123,10 @@ const Header = () => {
           setNewProduct(response.data.data);
         })
         .catch((err) => console.error(err))
-    }, [cat]);
+    }, [cat,error]);
 
   useEffect(() => {
+    if(error) return;
     if (cat || lastNav) {
       axios
         .get(`${APIURL}/category/${cat || lastNav}/subcategory/${choseMenu.sub}`, {
@@ -152,8 +170,7 @@ const Header = () => {
       }
     }).then((response)=>setNotify(response.data.data))
     .catch(()=>null)
-  },[token])
-
+  },[token]);
   return (
     <>
       {(click.action || basket) && (
@@ -260,15 +277,13 @@ const Header = () => {
                       }
                     >
                       <div className="d-flex align-items-center">
-                        <span className={`subcategory-name ${isFeaturedCategory(element.subcategories) ? 'featured' : ''}`}>
-                          {element.subcategories}
-                        </span>
-                        {isFeaturedCategory(element.subcategories) && (
+                          <span className="subcategory-name featured">
+                            {element.subcategories}
+                          </span>
                           <div className="arrow-container">
                             <span className="arrow-line"></span>
                             <FontAwesomeIcon icon={faChevronRight} className="arrow-icon" />
                           </div>
-                        )}
                       </div>
                     </div>
                   ))}
@@ -280,7 +295,7 @@ const Header = () => {
                   <div className="details-columns">
                     <div className="details-column">
                       {categoryDetails.slice(0, Math.ceil(categoryDetails.length / 2)).map((element, index) => (
-                        <span role="button" onClick={()=>navigate(`/${ !lastNav ? choseMenu.cat : lastNav}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`)}
+                        <span role="button" onClick={()=>navigate(`/${ lastNav ? lastNav :  choseMenu.sub}/${choseMenu.sub}/${element.categoryDetails.replaceAll(" ", "-")}`)}
                           className="detail-item"
                           key={index}
                         >

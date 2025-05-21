@@ -156,7 +156,7 @@ const ProductForm = () => {
       formData.append(`colors[]`, colorItem.name);
       if (colorItem.productPicture && colorItem.holderProductPicture) {
         formData.append(`product_pictures[]`, colorItem.productPicture);
-        formData.append(`holder_product_picture[]`, colorItem.holderProductPicture);
+        formData.append(`holder_pictures[]`, colorItem.holderProductPicture);
       }
       colorItem.sizes.forEach((sizeItem) => {
         formData.append(`sizes[]`, sizeItem.size);
