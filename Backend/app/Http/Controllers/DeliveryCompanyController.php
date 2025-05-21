@@ -22,7 +22,7 @@ class DeliveryCompanyController extends Controller
             "address"=>"required|string|min:3",
             "phone"=>"required|digits:8",
             "mail"=>"required|email",
-            "fee"=>"required|integer",
+            "fee"=>"required|double",
             "duration"=>"required|integer",
         ]);
         DeliveryCompany::create([
@@ -53,7 +53,7 @@ class DeliveryCompanyController extends Controller
                 "address"=>"required|string|min:3",
                 "phone"=>"required|digits:8",
                 "mail"=>"required|email",
-                "fee"=>"required|integer",
+                "fee"=>"required|numeric",
                 "duration"=>"required|integer",
             ]);
             $company = DeliveryCompany::find($id);

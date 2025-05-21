@@ -84,11 +84,10 @@ class OrderController extends Controller
                 "deliveryCompany"=>"nullable|integer",
                 "deliveryStatus"=>"string|required",
             ]);
-            $order->update([
-                "status" => $orderValidate["deliveryStatus"],
-                "company_id" => $orderValidate["deliveryCompany"],
-                "order_update"=>now(),
-            ]);
+            $order->status = $orderValidate["deliveryStatus"];
+            $order->company_id = $orderValidate["deliveryCompany"];
+            $order->order_update = now();
+            $order->save();
             $orderItems = OrderItems::with("product_stock")->where("order_id",$id)->get();
             if($orderValidate["deliveryStatus"] == "Shipped"){
                 foreach($orderItems as $orderItem){
@@ -193,11 +192,10 @@ class OrderController extends Controller
         if(!$order){
             return response()->json(["message"=>"Order Not Found","status"=>404],404);
         }
-        $order->update([
-            "status"=>"Shipped",
-            "company_id"=>1,
-            "order_update"=>now(),
-        ]);
+            $order->status = "Shipped";
+            $order->company_id = 1;
+            $order->order_update = now();
+            $order->save();
         $orderItems = OrderItems::with("product_stock")->where("order_id",$order->id)->get();
             foreach($orderItems as $orderItem){
                 $currentStock = $orderItem->product_stock->quantity - $orderItem->quantity;

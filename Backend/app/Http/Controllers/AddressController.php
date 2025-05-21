@@ -71,14 +71,32 @@ class AddressController extends Controller
             "city" => "required|string|max:100",
             "zip" => "required|digits:4",
             "street" => "required|string|max:100",
+            "is_default"=> "boolean",
         ]);
-        $address->update([
-            "address" => $addressValid["address"],
-            "state" => $addressValid["state"],
-            "zip" => $addressValid["zip"],
-            "street" => $addressValid["street"],
-            "city" => $addressValid["city"],
-        ]);
+        if($addressValid["is_default"]){
+                Address::where("user_id",$user)->update([
+                    "is_default"=> 0,
+                ]);
+                Address::create([
+                    "user_id" => $user,
+                    "address" => $addressValid["address"],
+                    "state" => $addressValid["state"],
+                    "city" => $addressValid["city"],
+                    "zip" => $addressValid["zip"],
+                    "street" => $addressValid["street"],
+                    "is_default"=> 1,
+                ]);
+            }
+            else{
+                 Address::create([
+                    "user_id" => $user,
+                    "address" => $addressValid["address"],
+                    "state" => $addressValid["state"],
+                    "zip" => $addressValid["zip"],
+                    "city" => $addressValid["city"],
+                    "street" => $addressValid["street"],
+                ]);
+            }
         return response()->json(["data"=>"Address updated successfully","status"=>200],200);
     }catch(ValidationException $e){
         return response()->json(["data"=>$e->errors(),"status"=>422],422);
