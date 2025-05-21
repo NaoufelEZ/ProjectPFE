@@ -8,7 +8,7 @@ import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 const DeliverySchema = Yup.object().shape({
     name:Yup.string()
-    .min(2,"Name of Company Should Be At Less 3 characters")
+    .min(3,"Name of Company Should Be At Less 3 characters")
     .required("Name Company Are Required"),
     address:Yup.string()
     .min(10,"The Address of Company Should Be At Less 10 characters")
@@ -19,9 +19,10 @@ const DeliverySchema = Yup.object().shape({
     email: Yup.string()
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/, "Invalid email address")
     .required("Email is required"),
-    fee:Yup.string()
-    .matches(/^\d{1,3}$/,"Fee Should Be Number And less Then 3")
-    .required("Fee Of Company Are Required"),
+    fee:Yup.number()
+    .typeError("Fee should be a valid number")
+    .max(99, "Fee must be less than 1000")
+    .required("Fee of Company is required"),
     duration:Yup.string()
     .matches(/^\d{1,2}$/,"Duration Should Be Number")
     .required("Duration Of Company Are Required"),

@@ -206,7 +206,7 @@ const Profile = () => {
                 </Button>
               </Card.Body>
             </Card>
-            
+           { user?.google_id === null &&
             <Card className="account-card">
               <Card.Body className="d-flex align-items-center">
                 <FontAwesomeIcon icon={faLock} className="account-icon me-3" />
@@ -221,7 +221,7 @@ const Profile = () => {
                   Change
                 </Button>
               </Card.Body>
-            </Card>
+            </Card>}
           </Card.Body>
         </Card>
 

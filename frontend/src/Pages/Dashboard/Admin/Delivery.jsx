@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 
 const DeliverySchema = Yup.object().shape({
     name:Yup.string()
-    .min(2,"Name of Company Should Be At Less 3 characters")
+    .min(2,"Name of Company Should Be At Less 2 characters")
     .required("Name Company Are Required"),
     address:Yup.string()
     .min(10,"The Address of Company Should Be At Less 10 characters")
@@ -22,9 +22,10 @@ const DeliverySchema = Yup.object().shape({
     email: Yup.string()
     .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/, "Invalid email address")
     .required("Email is required"),
-    fee:Yup.string()
-    .matches(/^\d{1,3}$/,"Fee Should Be Number And less Then 3")
-    .required("Fee Of Company Are Required"),
+    fee:Yup.number()
+    .typeError("Fee should be a valid number")
+    .max(99, "Fee must be less than 1000")
+    .required("Fee of Company is required"),
     duration:Yup.string()
     .matches(/^\d{1,2}$/,"Duration Should Be Number")
     .required("Duration Of Company Are Required"),
@@ -62,7 +63,8 @@ const Delivery = () => {
         },
         validationSchema:DeliverySchema,
         onSubmit: async (values)=>{
-            await axios.post(`${APIURL}/delivery-company/update/${id}`,{
+            try{
+            await axios.put(`${APIURL}/delivery-company/update/${id}`,{
                 "name":values.name,
                 "address":values.address,
                 "phone":values.phone,
@@ -78,12 +80,15 @@ const Delivery = () => {
                 }
             });
             navigate("/dashboard/delivery-company");
+        }catch(error){
+            console.error(error);
+        }
         }
     })
   return (
     <>
     <Helmet>
-        <title>Add Delivery Company|Nalouti dashboard</title>
+        <title>Update Delivery Company|Nalouti dashboard</title>
     </Helmet>
     <div className="w-100 p-4">
     <div className="d-flex justify-content-between align-items-center mb-4">
@@ -130,7 +135,7 @@ const Delivery = () => {
                 <Form.Control.Feedback type="invalid">{formik.errors.duration}</Form.Control.Feedback>
                 <Form.Control.Feedback type="valid">Look Good</Form.Control.Feedback>
             </Form.Group>
-            <Button className="p-3 w-25" type="submit">Add</Button>
+            <Button className="p-3 w-25" type="submit">Save</Button>
         </Form>
     </div>
     </>

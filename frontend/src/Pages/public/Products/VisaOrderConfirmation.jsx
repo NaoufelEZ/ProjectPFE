@@ -46,11 +46,7 @@ const VisaOrderConfirmation = () => {
       window.location.reload();
     });
   }, [token,reference]);
-  
-  
-
-  const transactionId = `TXN${Math.floor(1000000000 + Math.random() * 9000000000)}`;
-  
+    
   return (
     <>
     <Helmet>
@@ -69,10 +65,6 @@ const VisaOrderConfirmation = () => {
         <p className="mb-2">
           <FaCcVisa className="me-2 text-primary" />
           Payment method: <span className="fw-medium">Flouci</span>
-        </p>
-        <p className="mb-2">
-          <FaReceipt className="me-2" />
-          Transaction ID: <span className="fw-medium">{transactionId}</span>
         </p>
         <p className="mb-2">
           <FaTruck className="me-2" />

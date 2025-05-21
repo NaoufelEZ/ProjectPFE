@@ -80,10 +80,6 @@ const Checkout = () => {
     setAddresses(prev => [...prev, newAddress]);
     setSelectedAddressId(newAddress.id);
   };
-  console.log(totalPrice)
-
- 
-  
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();

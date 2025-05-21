@@ -58,6 +58,7 @@ import ConnectWithGoogle from "./Pages/Auth/ConnectWithGoogle.jsx";
 import CreateAccountWithGoogle from "./Pages/Auth/CreateAccountWithGoogle.jsx";
 import Delivery from "./Pages/Dashboard/Admin/Delivery.jsx";
 import TermsAndConditions from "./Components/Footer/TermsAndConditions.jsx";
+import FixSoon from "./Pages/public/Errors/FixSoon.jsx";
 
 
 function App() {
@@ -83,7 +84,7 @@ function App() {
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route path="/password/verify/:token" element={<PasswordVerify />} />
       <Route path="/password/change/:token" element={<ChangePassword />} />
-      <Route path="/test" element={<HeaderTest />} />
+      <Route path="/fix" element={<FixSoon />} />
       <Route path="/:cat/New" element={<New />} />
       <Route path="/:cat/:sub" element={<SubcategoryPage />} />
       <Route path="/:cat/:sub/:detail" element={<Products />} />

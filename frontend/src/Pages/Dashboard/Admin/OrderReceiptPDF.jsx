@@ -162,10 +162,7 @@ const OrderReceiptPDF = ({ order }) => {
           <Text>ORDER</Text>
           <Text>Num: {order.id}</Text>
           <Text>Date:{order.order_date}</Text>
-          <Text>PAGE 1/1</Text>
-          <Text>Store: 14650</Text>
           <Text>COMP. NAME: {order.company?.name}</Text>
-          <Text>VAT: 1264642B/B/M</Text>
           <Text>ADDRESS: {companyAddress && companyAddress[3]}</Text>
           <Text>{companyAddress && companyAddress[4]}</Text>
           <Text>{companyAddress && companyAddress[companyAddress.length - 1]}</Text>
@@ -215,7 +212,7 @@ const OrderReceiptPDF = ({ order }) => {
         </View>
         <View style={styles.summaryValues}>
           <Text>{total.toFixed(2)}</Text>
-          <Text>9.90</Text>
+          <Text>{order.delivery_pay ? "9.90" : "0.00"}</Text>
           <Text>0.00</Text>
           <Text style={styles.total}>{(total + 9.9).toFixed(2)}</Text>
         </View>

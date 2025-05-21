@@ -32,12 +32,14 @@ const Home = () => {
           setSubcategory(response.data.data);
           setError(false);
         } else {
+          navigate('/fix', { replace: true });
           setSubcategory([]);
           setError(true);
         }
       })
       .catch(() => {
         setSubcategory([]);
+        navigate('/fix', { replace: true });
         setError(true);
       })
       .finally(() => setLoading(false));
