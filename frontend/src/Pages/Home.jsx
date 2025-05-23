@@ -39,7 +39,7 @@ const Home = () => {
       })
       .catch(() => {
         setSubcategory([]);
-        navigate('/fix', { replace: true });
+        window.location.href = '/fix';
         setError(true);
       })
       .finally(() => setLoading(false));

@@ -38,7 +38,7 @@ const Order = () => {
       : orderStatus === "Shipped"
       ? ["Return", "Delivered", "Shipped"]
       : orderStatus === "Delivered"
-      ? ["Return"]
+      ? ["Return","Delivered"]
       : [orderStatus];
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const Order = () => {
     enableReinitialize: true,
     initialValues: {
       order_status: order?.status || "",
-      delivery_company: order?.delivery_company || "",
+      delivery_company: order?.company_id || "",
     },
     validationSchema: deliverySchema,
     onSubmit: async (values) => {

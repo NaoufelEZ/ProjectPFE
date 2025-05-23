@@ -138,7 +138,6 @@ const ProductForm = () => {
       )
     );
   };
-  console.log(colorSelects)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -153,19 +152,17 @@ const ProductForm = () => {
     formData.append("details_id", product.detail);
 
     colorSelects.forEach((colorItem) => {
-      formData.append(`colors[]`, colorItem.name);
-      if (colorItem.productPicture && colorItem.holderProductPicture) {
-        formData.append(`product_pictures[]`, colorItem.productPicture);
-        formData.append(`holder_pictures[]`, colorItem.holderProductPicture);
-      }
-      colorItem.sizes.forEach((sizeItem) => {
-        formData.append(`sizes[]`, sizeItem.size);
-        formData.append(`quantity[]`, sizeItem.quantity);
-      });
-    });
-  console.log(formData.getAll("product_pictures[]"));
-
-
+  colorItem.sizes.forEach((sizeItem) => {
+    formData.append(`colors[]`, colorItem.name);
+    formData.append(`sizes[]`, sizeItem.size);
+    formData.append(`quantity[]`, sizeItem.quantity);
+    
+    if (colorItem.productPicture && colorItem.holderProductPicture) {
+      formData.append(`product_pictures[]`, colorItem.productPicture);
+      formData.append(`holder_pictures[]`, colorItem.holderProductPicture);
+    }
+  });
+});
     try {
       const response = await axios.post(`${APIURL}/product/add`, formData, {
         headers: {

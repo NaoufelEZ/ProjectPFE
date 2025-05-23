@@ -5,8 +5,10 @@ import {
   View,
   StyleSheet,
   Font,
+  Image,
 } from '@react-pdf/renderer';
-
+import { GenerateBarcodeBase64 } from './GenerateBarcodeBase64';
+import CryptoJS from "crypto-js";
 Font.register({
   family: 'Oswald',
   src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf',
@@ -120,7 +122,8 @@ const styles = StyleSheet.create({
   },
   barcode: {
     marginTop: 10,
-    textAlign: 'center',
+     flexDirection: 'row',
+    justifyContent:'center'
   },
   footer: {
     marginTop: 20,
@@ -138,7 +141,13 @@ const OrderReceiptPDF = ({ order }) => {
   const user = order.user || {};
   const address = order.address || {};
   const companyAddress = order.company?.address.split(",") || {};
+  
+ const input = order.reference;
+  const hash = CryptoJS.SHA256(input).toString(CryptoJS.enc.Hex); 
+  const onlyDigits = hash.replace(/\D/g, '');
+  let result = onlyDigits.slice(0, 22).padEnd(22, '0');
 
+  const barcodeBase64 = GenerateBarcodeBase64(result); 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -189,15 +198,13 @@ const OrderReceiptPDF = ({ order }) => {
             <View style={styles.checkbox}></View>
             <Text>{item.product_stock.product.title}</Text>
           </View>
-          <Text style={styles.referenceCol}>{order.reference}</Text>
+          <Text style={styles.referenceCol}>REF-{item.product_stock.id}</Text>
           <Text style={styles.sizeCol}>{item.product_stock.size}</Text>
           <Text style={styles.pcsCol}>{item.quantity}</Text>
           <Text style={styles.amountCol}>{(item.price * item.quantity).toFixed(2)}</Text>
           </View>
             ))}
       </View>
-
-
             <View style={{ alignItems: 'flex-end', marginVertical: 10 }}>
         <Text style={{ fontSize: 9 }}>UNITS {order?.length}</Text>
       </View>
@@ -207,13 +214,11 @@ const OrderReceiptPDF = ({ order }) => {
         <View style={styles.summaryLabels}>
           <Text>SUBTOTAL</Text>
           <Text>SHIPPING</Text>
-          <Text> </Text>
           <Text style={styles.total}>TOTAL</Text>
         </View>
         <View style={styles.summaryValues}>
           <Text>{total.toFixed(2)}</Text>
           <Text>{order.delivery_pay ? "9.90" : "0.00"}</Text>
-          <Text>0.00</Text>
           <Text style={styles.total}>{(total + 9.9).toFixed(2)}</Text>
         </View>
       </View>
@@ -231,8 +236,7 @@ const OrderReceiptPDF = ({ order }) => {
 
       {/* Barcode */}
       <View style={styles.barcode}>
-        <Text>|||||||||||||||||||||||||||||||||||||||||||||</Text>
-        <Text style={{ fontSize: 8 }}>9941040184017975014650</Text>
+        <Image src={barcodeBase64} style={{ width: 200, height: 50 }} />
       </View>
       </Page>
     </Document>

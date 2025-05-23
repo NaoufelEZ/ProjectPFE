@@ -1,7 +1,7 @@
 import { useEffect,useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { FaCheckCircle, FaCcVisa, FaTruck, FaReceipt } from 'react-icons/fa';
+import { FaCheckCircle, FaCcVisa, FaTruck } from 'react-icons/fa';
 import { ApiKey, APIURL } from '../../../Api/Api';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
