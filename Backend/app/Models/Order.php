@@ -17,6 +17,7 @@ class Order extends Model
         "status",
         "company_id",
         "method_payment",
+        "delivery_pay",
     ];
     public $timestamps = false;
     public function orderItems(){

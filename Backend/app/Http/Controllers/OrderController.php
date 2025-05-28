@@ -35,6 +35,7 @@ class OrderController extends Controller
                 "quantity"=>"required",
                 "price"=>"required",
                 "paymentChoose"=>"required",
+                "delivery_pay"=>"nullable|integer",
             ]);
             $ref = $this->getRandomStr();
             $user = $request->user();
@@ -43,6 +44,7 @@ class OrderController extends Controller
                 "user_id"=>$user->id,
                 "address_id"=>$orderValidation["address_id"],
                 "method_payment"=>$orderValidation["paymentChoose"],
+                "delivery_pay"=>$orderValidation["delivery_pay"],
                 "status"=> $orderValidation["paymentChoose"] == "cash" ? "Pending" : "Rejected",
             ]);
             $productsStock = $orderValidation["product_stock_id"];
