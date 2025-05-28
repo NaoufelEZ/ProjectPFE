@@ -13,7 +13,7 @@ const AddUserSchema = Yup.object().shape({
   first_name:Yup.string().matches(/^[a-zA-Z]+$/,"First Name should be a alpha").min(3,"First Name Should Be At Less 3 Letter").required("First Name required"),
   last_name:Yup.string().matches(/^[a-zA-Z]+$/,"Last Name should be a alpha").min(3,"Last Name Should Be At Less 3 Letter").required("Last Name required"),
   email:Yup.string().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/,"Invalid email address").required("Email required"),
-  password:Yup.string().min(6,"Last NameShould Be At Less 6 Letter").required("Password required"),
+  password:Yup.string().min(6,"Password Should Be At Less 6 Letters").required("Password required"),
   role: Yup.string()
   .oneOf(['Admin', 'Product Manager'], 'Invalid role')
   .required('Please select a role'),

@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import { Helmet } from "react-helmet-async";
 import { IoAdd, IoArrowBack } from "react-icons/io5";
 import {colornames} from "color-name-list";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
   const [category, setCategory] = useState([]);
@@ -22,8 +23,9 @@ const ProductForm = () => {
     subcategory: "",
     detail: "",
     price: "",
-    discount: "",
+    discount: 0,
   });
+  const navigate = useNavigate();
    const colors = [...new Map(colornames.map(color => [color.name, color])).values()]
     .sort((a, b) => a.name.localeCompare(b.name));
   
@@ -172,6 +174,7 @@ const ProductForm = () => {
           Authorization: `Bearer ${token}`
         },
       });
+      navigate("/dashboard/inventory");
       setMessage({ type: "success", text: response.data.data });
     } catch (error) {
       setMessage({

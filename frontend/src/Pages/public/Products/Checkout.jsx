@@ -69,7 +69,7 @@ const Checkout = () => {
 
   // Calculate delivery fee
   const deliveryFee = totalPrice <= 150 ? 9.9 : 0;
-
+  // 
   // Handle address selection
   const handleAddressSelect = (addressId) => {
     setSelectedAddressId(addressId);
@@ -80,6 +80,7 @@ const Checkout = () => {
     setAddresses(prev => [...prev, newAddress]);
     setSelectedAddressId(newAddress.id);
   };
+  console.log(deliveryFee === 0 ? false : true)
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -93,9 +94,11 @@ const Checkout = () => {
       alert('Please accept the Terms & Conditions');
       return;
     }
+
     const formData = new FormData();
     formData.append("user_id", user.id);
     formData.append("address_id", selectedAddressId);
+    formData.append("delivery_pay", deliveryFee === 0 ? 0 : 1);
     formData.append("paymentChoose", paymentMethod);
     cart.forEach((item) => {
         formData.append("product_stock_id[]", item.stock_id);
@@ -301,7 +304,7 @@ const Checkout = () => {
                   onChange={(e) => setAcceptTerms(e.target.checked)}
                   label={
                     <span className="small">
-                      I have read and accept the <a href="#" className="text-decoration-underline">Terms & Conditions</a> and <a href="#" className="text-decoration-underline">Privacy Policy</a>
+                      I have read and accept the <a href="#" className="text-decoration-underline">Terms & Conditions</a>
                     </span>
                   }
                 />

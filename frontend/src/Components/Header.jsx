@@ -122,7 +122,10 @@ const Header = () => {
         .then((response) => {
           setNewProduct(response.data.data);
         })
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          console.error(err)
+          window.location.href = '/fix';
+        })
     }, [cat,error]);
 
   useEffect(() => {
